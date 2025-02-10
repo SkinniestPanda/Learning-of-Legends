@@ -1,16 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>PVP Mode</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PVP Gamemode</title>
+    <link rel="stylesheet" href="pvp.css">
 </head>
+
 <body>
-    <h2>PVP Battle</h2>
-    <button onclick="start1v1()">1v1</button>
-    <button onclick="start3v3()">3v3</button>
-    <script>
-        function start1v1() { alert("Starting 1v1 Battle!"); }
-        function start3v3() { alert("Starting 3v3 Battle!"); }
-    </script>
+    <!-- Homepage -->
+    <div id="homepage" class="pvp-homepage">
+        <h1>Rankings #1257</h1>
+        <div class="play-circle">
+            <button onclick="goToPlay()">PLAY</button>
+        </div>
+        <div class="menu-buttons">
+            <button disabled>GUILD</button>
+            <button disabled>PVE</button>
+            <button disabled>SETTINGS</button>
+        </div>
+    </div>
+
+    <!-- Mode Selection -->
+    <div id="play-mode" class="hidden">
+        <h2>Choose Your Mode</h2>
+        <button onclick="start1v1()">1v1</button>
+        <button onclick="start3v3()">3v3</button>
+        <button onclick="goBack()">Back</button>
+    </div>
+
+    <!-- 1v1 Gameplay -->
+    <div id="game-1v1" class="hidden">
+        <h2>PVP 1v1 Battle</h2>
+        <div class="battlefield">
+            <div class="character player"></div>
+            <div class="question-box">2 x 3 = ?</div>
+            <div class="character enemy"></div>
+        </div>
+        <div class="answer-buttons">
+            <button onclick="checkAnswer1v1(6)">6</button>
+            <button onclick="checkAnswer1v1(9)">9</button>
+            <button onclick="checkAnswer1v1(2)">2</button>
+        </div>
+        <button onclick="goBackToMode()">Back</button>
+    </div>
+
+    <!-- 3v3 Gameplay -->
+    <div id="game-3v3" class="hidden">
+        <h2>PVP 3v3 Battle</h2>
+        <div class="battlefield">
+            <div class="character player"></div>
+            <div class="character player"></div>
+            <div class="character player"></div>
+            <div class="question-box">3 x 3 = ?</div>
+            <div class="character enemy"></div>
+            <div class="character enemy"></div>
+            <div class="character enemy"></div>
+        </div>
+        <div class="answer-buttons">
+            <button onclick="checkAnswer3v3(9)">9</button>
+            <button onclick="checkAnswer3v3(4)">4</button>
+            <button onclick="checkAnswer3v3(5)">5</button>
+        </div>
+        <button onclick="goBackToMode()">Back</button>
+    </div>
+
+    <script src="pvp.js"></script>
 </body>
+
 </html>
