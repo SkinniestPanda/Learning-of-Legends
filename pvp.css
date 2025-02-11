@@ -125,3 +125,10 @@ h2 {
     border-radius: 5px;
     cursor: pointer;
 }
+
+.timer {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: red;
+    margin-top: 10px;
+}
