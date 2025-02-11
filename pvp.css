@@ -1,3 +1,4 @@
+/* General Styling */
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f9;
@@ -25,45 +26,79 @@ h2 {
     display: none;
 }
 
+/* Battlefield Container */
 .battlefield {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    margin: 20px 0;
-    padding: 10px;
+    margin: 20px auto;
+    padding: 20px;
     background-color: #e4e4f4;
     border-radius: 10px;
     height: 200px;
+    width: 60%;
 }
 
+/* Player & Enemy Characters */
 .character {
     width: 50px;
     height: 50px;
-    background-color: #3498db;
     border-radius: 50%;
     position: relative;
+}
+
+.character.player {
+    background-color: #3498db;
 }
 
 .character.enemy {
     background-color: #e74c3c;
 }
 
+/* Health Bar */
+.health-bar {
+    width: 100px;
+    height: 10px;
+    background-color: lightgray;
+    border-radius: 5px;
+    margin-top: 10px;
+    position: relative;
+}
+
+.health-fill {
+    width: 100%;
+    height: 100%;
+    background-color: green;
+    border-radius: 5px;
+}
+
+/* Question Box */
+.question-container {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .question-box {
-    width: 150px;
-    height: 50px;
+    width: 200px;
+    height: 60px;
     background-color: #ffbb00;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 1.2rem;
+    font-weight: bold;
     border-radius: 5px;
+    margin-bottom: 15px;
+    /* Adds space between question and answers */
 }
 
+/* Answer Buttons */
 .answer-buttons {
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin-top: 20px;
 }
 
 .answer-buttons button {
@@ -73,8 +108,20 @@ h2 {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 1rem;
 }
 
 .answer-buttons button:hover {
     background-color: #0066cc;
+}
+
+/* Back Button */
+.back-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    background-color: grey;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
 }

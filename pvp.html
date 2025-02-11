@@ -33,17 +33,35 @@
     <!-- 1v1 Gameplay -->
     <div id="game-1v1" class="hidden">
         <h2>PVP 1v1 Battle</h2>
+
+        <!-- Battle Arena -->
         <div class="battlefield">
-            <div class="character player"></div>
+            <div class="player-area">
+                <div class="character player"></div>
+                <div class="health-bar player-health">
+                    <div class="health-fill"></div>
+                </div>
+            </div>
+
+            <div class="enemy-area">
+                <div class="character enemy"></div>
+                <div class="health-bar enemy-health">
+                    <div class="health-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question & Answer Section -->
+        <div class="question-container">
             <div class="question-box">2 x 3 = ?</div>
-            <div class="character enemy"></div>
+            <div class="answer-buttons">
+                <button onclick="checkAnswer1v1(6)">6</button>
+                <button onclick="checkAnswer1v1(9)">9</button>
+                <button onclick="checkAnswer1v1(2)">2</button>
+            </div>
         </div>
-        <div class="answer-buttons">
-            <button onclick="checkAnswer1v1(6)">6</button>
-            <button onclick="checkAnswer1v1(9)">9</button>
-            <button onclick="checkAnswer1v1(2)">2</button>
-        </div>
-        <button onclick="goBackToMode()">Back</button>
+
+        <button class="back-button" onclick="goBackToMode()">Back</button>
     </div>
 
     <!-- 3v3 Gameplay -->
