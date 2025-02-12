@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Teacher - Math Flash App Dashboard</title>
+  <style>
+    /* Basic styling for the teacher page */
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 20px;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      background: #007BFF;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      margin: 5px 0;
+    }
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #007BFF;
+    }
+    /* Style for the chart container */
+    #chartContainer {
+      width: 100%;
+      max-width: 400px;
+      margin: 20px auto;
+    }
+  </style>
+  <!-- Include Chart.js from a CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h2>Teacher / Parent Dashboard</h2>
+    <p>Total Questions Attempted: <span id="totalQuestions"></span></p>
+    <p>Correct Answers: <span id="correctAnswers"></span></p>
+    <p>Wrong Answers: <span id="wrongAnswers"></span></p>
+    <p>Percentage Correct: <span id="percentageCorrect"></span>%</p>
+    <h3>Breakdown by Operation:</h3>
+    <ul id="breakdownList"></ul>
+    
+    <!-- New Section: Pie Chart for Performance Analysis -->
+    <div id="chartContainer">
+      <canvas id="resultsChart"></canvas>
+    </div>
+    
+    <!-- New Section: List of Wrong Attempts -->
+    <h3>Wrong Attempts Details:</h3>
+    <ul id="wrongAttemptsList"></ul>
+    
+    <br>
+    <button id="clearDataBtn">Clear Data</button>
+    <br><br>
+    <a href="index.html">Back to Role Selection</a>
+  </div>
+  
+  <!-- Include the teacher JavaScript file -->
+  <script src="teacher.js"></script>
+</body>
+</html>

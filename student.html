@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student - Math Flash App</title>
+  <style>
+    /* Basic styling for the student page */
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 20px;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      background: #007BFF;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #feedback {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #007BFF;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Student Flash Questions</h2>
+    <p id="questionText"></p>
+    <input type="number" id="answerInput" placeholder="Enter your answer" />
+    <br>
+    <button id="submitAnswerBtn">Submit Answer</button>
+    <div id="feedback"></div>
+    <br>
+    <button id="nextQuestionBtn" style="display:none;">Next Question</button>
+    <br><br>
+    <a href="index.html">Back to Role Selection</a>
+  </div>
+  
+  <!-- Include the student JavaScript file -->
+  <script src="student.js"></script>
+</body>
+</html>
