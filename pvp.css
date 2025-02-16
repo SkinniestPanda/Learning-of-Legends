@@ -72,6 +72,7 @@ h2 {
     border-radius: 5px;
 }
 
+
 /* Question Box */
 .question-container {
     margin-top: 40px;
@@ -131,4 +132,11 @@ h2 {
     font-weight: bold;
     color: red;
     margin-top: 10px;
+}
+
+.battlefield {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: background-image 0.5s ease-in-out;
 }

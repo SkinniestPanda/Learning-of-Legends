@@ -69,15 +69,54 @@
     <!-- 3v3 Gameplay -->
     <div id="game-3v3" class="hidden">
         <h2>PVP 3v3 Battle</h2>
+        <div id="timer-3v3" class="timer">Time: 10s</div>
+
         <div class="battlefield">
-            <div class="character player"></div>
-            <div class="character player"></div>
-            <div class="character player"></div>
+            <!-- Player Team -->
+            <div class="player-area">
+                <div class="character player"></div>
+                <div class="health-bar player-health">
+                    <div class="health-fill"></div>
+                </div>
+            </div>
+            <div class="player-area">
+                <div class="character player"></div>
+                <div class="health-bar player-health">
+                    <div class="health-fill"></div>
+                </div>
+            </div>
+            <div class="player-area">
+                <div class="character player"></div>
+                <div class="health-bar player-health">
+                    <div class="health-fill"></div>
+                </div>
+            </div>
+
+            <!-- Question -->
             <div class="question-box">3 x 3 = ?</div>
-            <div class="character enemy"></div>
-            <div class="character enemy"></div>
-            <div class="character enemy"></div>
+
+            <!-- Enemy Team -->
+            <div class="enemy-area">
+                <div class="character enemy"></div>
+                <div class="health-bar enemy-health">
+                    <div class="health-fill"></div>
+                </div>
+            </div>
+            <div class="enemy-area">
+                <div class="character enemy"></div>
+                <div class="health-bar enemy-health">
+                    <div class="health-fill"></div>
+                </div>
+            </div>
+            <div class="enemy-area">
+                <div class="character enemy"></div>
+                <div class="health-bar enemy-health">
+                    <div class="health-fill"></div>
+                </div>
+            </div>
         </div>
+
+        <!-- Answer Buttons -->
         <div class="answer-buttons">
             <button onclick="checkAnswer3v3(9)">9</button>
             <button onclick="checkAnswer3v3(4)">4</button>
