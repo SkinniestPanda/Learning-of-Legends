@@ -1,14 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>PVE Mode</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Game - PVE Mode</title>
+    <link rel="stylesheet" href="pve.css">
 </head>
 <body>
-    <h2>PVE Game</h2>
-    <p id="question"></p>
-    <input type="number" id="answer">
-    <button onclick="checkAnswer()">Submit</button>
-    <script src="js/game.js"></script>
+    <div class="container">
+        <!-- Main Play Button -->
+        <button class="play-button" onclick="startGame()">Play</button>
+
+        <!-- Additional Buttons -->
+        <div class="additional-buttons">
+            <button class="guild-button">Guild</button>
+            <button class="pvp-button">PVP</button>
+            <button class="settings-button">Settings</button>
+        </div>
+    </div>
+
+    <!-- Gameplay Screen (initially hidden) -->
+    <div id="gameplay-screen" class="gameplay-screen">
+        <canvas id="game-canvas"></canvas> <!-- Add a canvas for rendering -->
+        <div class="question">
+            <p id="question-text"></p>
+            <input type="text" id="answer-input" placeholder="Your answer">
+            <button onclick="submitAnswer()">Submit</button>
+        </div>
+        <div class="timer">
+            Time left: <span id="time-left">30</span> seconds
+        </div>
+    </div>
+
+    <script src="game.js"></script>
 </body>
 </html>

@@ -1,0 +1,67 @@
+/* pve.css */
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    text-align: center;
+}
+
+.play-button {
+    padding: 15px 30px;
+    font-size: 24px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.additional-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.guild-button, .pvp-button, .settings-button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.guild-button:hover, .pvp-button:hover, .settings-button:hover, .play-button:hover {
+    opacity: 0.8;
+}
+
+.gameplay-screen {
+    display: none;
+    text-align: center;
+}
+
+#game-canvas {
+    display: block;
+    margin: 0 auto;
+    background-color: #fff;
+    border: 2px solid #000;
+}
+
+.question {
+    margin-top: 20px;
+}
+
+.timer {
+    margin-top: 20px;
+    font-size: 20px;
+}
