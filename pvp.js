@@ -213,18 +213,19 @@ function resetTimer() {
 
 // Reset game settings (for both 1v1 and 3v3)
 function resetGame() {
-    enemyHealth = 100;
-    currentEnemy = 0; // Reset enemy tracking
+    enemyHealth = 100;  // Reset main enemy health
+    currentEnemy = 0;    // Reset enemy tracking for 3v3 mode
 
-    // Reset enemy health bars
-    document.querySelectorAll("#game-3v3 .enemy-health .health-fill").forEach((bar) => {
+    // Reset all enemy health bars
+    document.querySelectorAll(".enemy-health .health-fill").forEach((bar) => {
         bar.style.width = "100%";
     });
 
-    // Reset player health bars
-    document.querySelectorAll("#game-3v3 .player-health .health-fill").forEach((bar) => {
+    // Reset all player health bars (if applicable)
+    document.querySelectorAll(".player-health .health-fill").forEach((bar) => {
         bar.style.width = "100%";
     });
 
     loadNewQuestion(); // Generate a new question after resetting
 }
+
