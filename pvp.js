@@ -1,11 +1,4 @@
-// Question and Answer Pool
-const questionPool = [
-    { question: "2 x 3 = ?", correct: 6, options: [6, 9, 2] },
-    { question: "5 + 4 = ?", correct: 9, options: [9, 3, 6] },
-    { question: "8 - 3 = ?", correct: 5, options: [5, 7, 2] },
-    { question: "6 ÷ 2 = ?", correct: 3, options: [3, 5, 1] },
-    { question: "3 x 4 = ?", correct: 12, options: [12, 9, 6] }
-];
+
 
 let currentQuestionIndex = 0;
 let enemyHealth = 100;
