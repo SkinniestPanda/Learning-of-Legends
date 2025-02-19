@@ -10,27 +10,29 @@ function loadDashboard() {
   const wrongAnswers = totalQuestions - correctAnswers;
   const percentageCorrect = totalQuestions ? ((correctAnswers / totalQuestions) * 100).toFixed(1) : 0;
   
-  // Update the HTML elements with the computed statistics.
+  // Update overall performance statistics.
   document.getElementById("totalQuestions").textContent = totalQuestions;
   document.getElementById("correctAnswers").textContent = correctAnswers;
   document.getElementById("wrongAnswers").textContent = wrongAnswers;
   document.getElementById("percentageCorrect").textContent = percentageCorrect;
   
-  // Build breakdown by arithmetic operation.
+  // Build breakdown by arithmetic operation (simple list).
   const breakdown = attempts.reduce((acc, attempt) => {
     acc[attempt.operation] = (acc[attempt.operation] || 0) + 1;
     return acc;
   }, {});
   
   const breakdownList = document.getElementById("breakdownList");
-  breakdownList.innerHTML = "";
-  for (const op in breakdown) {
-    const li = document.createElement("li");
-    li.textContent = `${op}: ${breakdown[op]} question(s)`;
-    breakdownList.appendChild(li);
+  if (breakdownList) {
+    breakdownList.innerHTML = "";
+    for (const op in breakdown) {
+      const li = document.createElement("li");
+      li.textContent = `${op}: ${breakdown[op]} question(s)`;
+      breakdownList.appendChild(li);
+    }
   }
   
-  // New: Build a list of wrong attempts with detailed info.
+  // Build a list of wrong attempts details.
   const wrongAttempts = attempts.filter(a => !a.isCorrect);
   const wrongAttemptsList = document.getElementById("wrongAttemptsList");
   wrongAttemptsList.innerHTML = "";
@@ -45,7 +47,6 @@ function loadDashboard() {
         <strong>Your Answer:</strong> ${attempt.studentAnswer}<br>
         <strong>Correct Answer:</strong> ${attempt.correctAnswer}<br>
         <strong>Attempted on:</strong> ${attemptDate.toLocaleString()}
-        <br><br>
       `;
       wrongAttemptsList.appendChild(li);
     });
@@ -53,15 +54,18 @@ function loadDashboard() {
     wrongAttemptsList.innerHTML = "<li>No wrong attempts recorded.</li>";
   }
   
-  // Render the performance pie chart.
-  renderChart(correctAnswers, wrongAnswers);
+  // Render the overall performance pie chart.
+  renderOverallChart(correctAnswers, wrongAnswers);
+  
+  // Create pie charts and text summaries for each question type.
+  createTypeCharts(attempts);
 }
 
-// Function to render the pie chart using Chart.js.
-function renderChart(correct, wrong) {
+// Function to render the overall performance pie chart.
+function renderOverallChart(correct, wrong) {
   const ctx = document.getElementById('resultsChart').getContext('2d');
   
-  // Destroy any previous chart instance to avoid duplicate charts.
+  // Destroy any previous chart instance to avoid duplicates.
   if (window.resultsChartInstance) {
     window.resultsChartInstance.destroy();
   }
@@ -87,19 +91,102 @@ function renderChart(correct, wrong) {
     options: {
       responsive: true,
       plugins: {
-        legend: {
-          position: 'top'
-        },
-        title: {
-          display: true,
-          text: 'Student Performance Analysis'
-        }
+        legend: { position: 'top' },
+        title: { display: true, text: 'Overall Student Performance' }
       }
     }
   });
 }
 
-// Set up the "Clear Data" button to remove the stored attempts.
+// Function to create pie charts and text summaries for each question type.
+function createTypeCharts(attempts) {
+  // Group attempts by question type.
+  const typeResults = {};
+  attempts.forEach(attempt => {
+    const op = attempt.operation;
+    if (!typeResults[op]) {
+      typeResults[op] = { correct: 0, wrong: 0, total: 0 };
+    }
+    typeResults[op].total++;
+    if (attempt.isCorrect) {
+      typeResults[op].correct++;
+    } else {
+      typeResults[op].wrong++;
+    }
+  });
+  
+  // Containers for the charts and text summaries.
+  const chartsContainer = document.getElementById("chartsContainer");
+  chartsContainer.innerHTML = ""; // Clear any previous charts.
+  
+  const analysisSummary = document.getElementById("analysisSummary");
+  analysisSummary.innerHTML = ""; // Clear previous summaries.
+  
+  // For each question type, create a pie chart and a text summary.
+
+for (const op in typeResults) {
+  // Create a container for the current question type.
+  const opContainer = document.createElement("div");
+  opContainer.style.marginBottom = "20px";
+  opContainer.style.border = "1px solid #ccc";
+  opContainer.style.padding = "10px";
+  
+  // Create a canvas for the pie chart.
+  const canvas = document.createElement("canvas");
+  canvas.id = `chart-${op}`;
+  // Set fixed dimensions to ensure a square chart.
+  canvas.width = 300;
+  canvas.height = 300;
+  opContainer.appendChild(canvas);
+  chartsContainer.appendChild(opContainer);
+  
+
+
+
+    
+    // Create the pie chart for this question type.
+    const ctx = canvas.getContext("2d");
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Correct', 'Wrong'],
+        datasets: [{
+          data: [typeResults[op].correct, typeResults[op].wrong],
+          backgroundColor: [
+            'rgba(75, 192, 192, 0.7)',
+            'rgba(255, 99, 132, 0.7)'
+          ],
+          borderColor: [
+            'rgba(75, 192, 192, 1)',
+            'rgba(255, 99, 132, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'top' },
+          title: { 
+            display: true, 
+            text: `Performance in ${op.charAt(0).toUpperCase() + op.slice(1)}` 
+          }
+        }
+      }
+    });
+    
+    // Create a text summary for the current question type.
+    const total = typeResults[op].total;
+    const correct = typeResults[op].correct;
+    const wrong = typeResults[op].wrong;
+    const percent = total ? ((correct / total) * 100).toFixed(1) : 0;
+    const summaryText = document.createElement("p");
+    summaryText.innerHTML = `<strong>${op.charAt(0).toUpperCase() + op.slice(1)}:</strong> Total Attempts: ${total}, Correct: ${correct}, Wrong: ${wrong}, Percentage Correct: ${percent}%`;
+    analysisSummary.appendChild(summaryText);
+  }
+}
+
+// Set up the "Clear Data" button to remove stored attempts.
 document.getElementById("clearDataBtn").addEventListener("click", () => {
   if (confirm("Are you sure you want to clear all student data?")) {
     localStorage.removeItem("attempts");

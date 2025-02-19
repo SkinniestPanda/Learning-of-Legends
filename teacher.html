@@ -13,7 +13,7 @@
     .container {
       background: #fff;
       padding: 20px;
-      max-width: 600px;
+      max-width: 2000px;
       margin: 0 auto;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -33,6 +33,10 @@
     ul {
       list-style: none;
       padding: 0;
+
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* Creates 2 columns */
+      gap: 20px; /* Adjust the gap between grid items as needed */
     }
     li {
       margin: 5px 0;
@@ -43,11 +47,34 @@
       text-decoration: none;
       color: #007BFF;
     }
-    /* Style for the chart container */
-    #chartContainer {
-      width: 100%;
-      max-width: 400px;
-      margin: 20px auto;
+    /* Containers for additional charts and summaries */
+    #chartsContainer, #analysisSummary {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* Creates 2 columns */
+      gap: 20px; /* Adjust the gap between grid items as needed */
+    }
+    
+    /* Default layout (portrait) */
+    #chartsContainer > div {
+      
+      margin-bottom: 20px;
+    }
+
+    /* Landscape layout */
+    @media (orientation: landscape) {
+      #chartsContainer {
+        display: grid;
+        /* display: flex; */
+        /* flex-wrap: wrap; */
+        /* justify-content: space-around; */
+        /* grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); */
+      }
+      /* Each chart container takes about 45% of the container's width */
+      #chartsContainer > div {
+        flex: 1 1 45%;
+        margin: 10px;
+      }
     }
   </style>
   <!-- Include Chart.js from a CDN -->
@@ -60,15 +87,16 @@
     <p>Correct Answers: <span id="correctAnswers"></span></p>
     <p>Wrong Answers: <span id="wrongAnswers"></span></p>
     <p>Percentage Correct: <span id="percentageCorrect"></span>%</p>
-    <h3>Breakdown by Operation:</h3>
-    <ul id="breakdownList"></ul>
     
-    <!-- New Section: Pie Chart for Performance Analysis -->
-    <div id="chartContainer">
-      <canvas id="resultsChart"></canvas>
-    </div>
+    <h3>Overall Performance Analysis</h3>
+    <canvas id="resultsChart" width="300" height="300" style="display:block; margin:0 auto;"></canvas>
     
-    <!-- New Section: List of Wrong Attempts -->
+    <h3>Performance by Question Type</h3>
+    <div id="chartsContainer" style="max-width: 300px"></div>
+    
+    <h3>Text Summary Analysis</h3>
+    <div id="analysisSummary"></div>
+    
     <h3>Wrong Attempts Details:</h3>
     <ul id="wrongAttemptsList"></ul>
     
@@ -78,7 +106,6 @@
     <a href="index.html">Back to Role Selection</a>
   </div>
   
-  <!-- Include the teacher JavaScript file -->
   <script src="teacher.js"></script>
 </body>
 </html>
