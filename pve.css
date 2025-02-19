@@ -53,7 +53,7 @@ body {
 #game-canvas {
     display: block;
     margin: 0 auto;
-    background-color: #fff;
+    background-color: #008CBA;
     border: 2px solid #000;
 }
 
