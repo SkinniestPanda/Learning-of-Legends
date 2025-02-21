@@ -1,4 +1,10 @@
-
+// Combine all questions into one pool
+const questionPool = [
+    ...additionQuestions,
+    ...subtractionQuestions,
+    ...multiplicationQuestions,
+    ...divisionQuestions
+];
 
 let currentQuestionIndex = 0;
 let enemyHealth = 100;
