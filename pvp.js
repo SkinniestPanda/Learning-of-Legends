@@ -75,7 +75,6 @@ function goBackToMode() {
     clearInterval(timer);
 }
 
-
 // Function to load a new random question
 function loadNewQuestion() {
     currentQuestionIndex = Math.floor(Math.random() * questionPool.length);
@@ -129,7 +128,7 @@ function checkAnswer1v1(answer) {
         if (enemyHealth <= 0) {
             setTimeout(() => {
                 alert("Victory! You won the 1v1 battle!");
-                changeBackground(); // 🌟 Change background after a win
+                changeBackground(); // Change background after a win
                 resetGame();
             }, 500);
         } else {
@@ -227,4 +226,3 @@ function resetGame() {
 
     loadNewQuestion(); // Generate a new question after resetting
 }
-

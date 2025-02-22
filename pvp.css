@@ -39,6 +39,16 @@ h2 {
     width: 60%;
 }
 
+/* Player & Enemy Areas */
+.player-area,
+.enemy-area {
+    display: flex;
+    flex-direction: column-reverse;
+    /* Moves health bar above the character */
+    align-items: center;
+    gap: 15px;
+}
+
 /* Player & Enemy Characters */
 .character {
     width: 50px;
@@ -63,6 +73,8 @@ h2 {
     border-radius: 5px;
     margin-top: 10px;
     position: relative;
+    border: 2px solid white;
+    /* White border to make it stand out */
 }
 
 .health-fill {
@@ -71,7 +83,6 @@ h2 {
     background-color: green;
     border-radius: 5px;
 }
-
 
 /* Question Box */
 .question-container {
@@ -92,7 +103,6 @@ h2 {
     font-weight: bold;
     border-radius: 5px;
     margin-bottom: 15px;
-    /* Adds space between question and answers */
 }
 
 /* Answer Buttons */
