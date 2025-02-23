@@ -92,6 +92,8 @@ class Sprite {
             this.dead = false; // Reset dead flag
         }
     }
+
+
 }
 
 // Create soldier and orc sprites with their respective animations
@@ -111,6 +113,91 @@ const soldier = new Sprite({
         },
         death: {
             imageSrc: 'images/Soldier/Soldier_Death.png', // Path to death sprite sheet
+            framesMax: 4, // Number of frames in death animation
+        },
+    },
+});
+
+// Create two allies
+const allyTop = new Sprite({
+    position: { x: -50, y: 200 }, // Positioned above the soldier
+    imageSrc: 'images/allies/Fantasy_Warrior/Idle.png', // Replace with your ally image
+    scale: 2,
+    framesMax: 10, // Number of frames in the idle animation
+    sprites: {
+        idle: {
+            imageSrc: 'images/allies/Fantasy_Warrior/Idle.png', // Replace with your ally idle image
+            framesMax: 10,
+        },
+        takeHit: {
+            imageSrc: 'images/allies/Fantasy_Warrior/Take hit.png', // Replace with your ally hit image
+            framesMax: 3, // Number of frames in hit animation
+        },
+        death: {
+            imageSrc: 'images/allies/Fantasy_Warrior/Death.png', // Replace with your ally death image
+            framesMax: 7, // Number of frames in death animation
+        },
+    },
+});
+
+const allyBottom = new Sprite({
+    position: { x: 50, y: 400 }, // Positioned below the soldier
+    imageSrc: 'images/allies/Huntress_2/Idle.png', // Replace with your ally image
+    scale: 2,
+    framesMax: 10, // Number of frames in the idle animation
+    sprites: {
+        idle: {
+            imageSrc: 'images/allies/Huntress_2/Idle.png', // Replace with your ally idle image
+            framesMax: 10,
+        },
+        takeHit: {
+            imageSrc: 'images/allies/Huntress_2/Get Hit.png', // Replace with your ally hit image
+            framesMax: 3, // Number of frames in hit animation
+        },
+        death: {
+            imageSrc: 'images/allies/Huntress_2/Death.png', // Replace with your ally death image
+            framesMax: 10, // Number of frames in death animation
+        },
+    },
+});
+
+const enemyTop = new Sprite({
+    position: { x: 700, y: 200 }, // Positioned above the orc
+    imageSrc: 'images/mobs/Goblin/Idle.png', // Replace with your enemy image
+    scale: 2,
+    framesMax: 4, // Number of frames in the idle animation
+    sprites: {
+        idle: {
+            imageSrc: 'images/mobs/Goblin/Idle.png', // Replace with your enemy idle image
+            framesMax: 4,
+        },
+        takeHit: {
+            imageSrc: 'images/mobs/Goblin/Take Hit.png', // Replace with your enemy hit image
+            framesMax: 4, // Number of frames in hit animation
+        },
+        death: {
+            imageSrc: 'images/mobs/Goblin/Death.png', // Replace with your enemy death image
+            framesMax: 4, // Number of frames in death animation
+        },
+    },
+});
+
+const enemyBottom = new Sprite({
+    position: { x: 700, y: 400 }, // Positioned below the orc
+    imageSrc: 'images/mobs/Skeleton/Idle.png', // Replace with your enemy image
+    scale: 2,
+    framesMax: 4, // Number of frames in the idle animation
+    sprites: {
+        idle: {
+            imageSrc: 'images/mobs/Skeleton/Idle.png', // Replace with your enemy idle image
+            framesMax: 4,
+        },
+        takeHit: {
+            imageSrc: 'images/mobs/Skeleton/Take Hit.png', // Replace with your enemy hit image
+            framesMax: 4, // Number of frames in hit animation
+        },
+        death: {
+            imageSrc: 'images/mobs/Skeleton/Death.png', // Replace with your enemy death image
             framesMax: 4, // Number of frames in death animation
         },
     },
@@ -140,6 +227,10 @@ const orc = new Sprite({
 // Health variables (max health is 3 for both)
 let wolfHealth = 3;
 let soldierHealth = 3;
+let allyTopHealth = 3;
+let allyBottomHealth = 3;
+let enemyTopHealth = 3;
+let enemyBottomHealth = 3;
 
 const questions = [
     { question: "2 + 6 = ?", answer: "8" },
@@ -210,15 +301,38 @@ function submitAnswer() {
             endGame();
         }
     } else {
-        // Incorrect answer: soldier takes damage
-        soldierHealth--;
-        if (soldierHealth > 0) {
-            soldier.takeHit(); // Play hit animation
+        // Incorrect answer: soldier or allies take damage
+        const randomTarget = Math.floor(Math.random() * 3); // Randomly choose between soldier, allyTop, or allyBottom
+        if (randomTarget === 0) {
+            soldierHealth--;
+            if (soldierHealth > 0) {
+                soldier.takeHit(); // Play hit animation
+            } else {
+                soldier.die(); // Play death animation
+                setTimeout(() => {
+                    endGame();
+                }, 2000);
+            }
+        } else if (randomTarget === 1) {
+            allyTopHealth--;
+            if (allyTopHealth > 0) {
+                allyTop.takeHit(); // Play hit animation
+            } else {
+                allyTop.die(); // Play death animation
+                setTimeout(() => {
+                    endGame();
+                }, 2000);
+            }
         } else {
-            soldier.die(); // Play death animation
-            setTimeout(() => {
-                endGame();
-            }, 2000);
+            allyBottomHealth--;
+            if (allyBottomHealth > 0) {
+                allyBottom.takeHit(); // Play hit animation
+            } else {
+                allyBottom.die(); // Play death animation
+                setTimeout(() => {
+                    endGame();
+                }, 2000);
+            }
         }
     }
     document.getElementById('answer-input').value = '';
@@ -243,10 +357,18 @@ function endGame() {
     timeLeft = 30;
     wolfHealth = 3;
     soldierHealth = 3;
+    allyTopHealth = 3;
+    allyBottomHealth = 3;
+    enemyTopHealth = 3;
+    enemyBottomHealth = 3;
 
     // Reset sprites to idle mode
     soldier.resetToIdle();
     orc.resetToIdle();
+    allyTop.resetToIdle();
+    allyBottom.resetToIdle();
+    enemyTop.resetToIdle();
+    enemyBottom.resetToIdle();
 
     document.getElementById('time-left').textContent = timeLeft;
     document.querySelector('.container').style.display = 'block';
@@ -258,13 +380,27 @@ function animate() {
     requestAnimationFrame(animate);
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
 
-    // Update sprite animations
+    // Draw allies first (behind the soldier)
+    allyTop.update();
+    allyBottom.update();
+
+    // Draw enemies first (behind the soldier)
+    enemyTop.update();
+    enemyBottom.update();
+
+    // Draw the soldier
     soldier.update();
+
+    // Draw the orc
     orc.update();
 
-    // Draw health bars above the soldier and the orc
+    // Draw health bars for all characters
     drawHealthBar(soldier, soldierHealth, 3);
     drawHealthBar(orc, wolfHealth, 3);
+    drawHealthBar(allyTop, allyTopHealth, 3);
+    drawHealthBar(allyBottom, allyBottomHealth, 3);
+    drawHealthBar(enemyTop, enemyTopHealth, 3);
+    drawHealthBar(enemyBottom, enemyBottomHealth, 3);
 }
 
 // Initialize the game when the DOM is loaded
