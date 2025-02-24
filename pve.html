@@ -27,6 +27,12 @@
             <input type="text" id="answer-input" placeholder="Your answer">
             <button onclick="submitAnswer()">Submit</button>
         </div>
+        <div id="target-selection" style="display: none;">
+            <p>Select a target:</p>
+            <button onclick="selectTarget('orc')">Orc</button>
+            <button onclick="selectTarget('enemyTop')">Enemy Top</button>
+            <button onclick="selectTarget('enemyBottom')">Enemy Bottom</button>
+        </div>
         <div class="timer">
             Time left: <span id="time-left">30</span> seconds
         </div>

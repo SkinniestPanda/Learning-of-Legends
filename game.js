@@ -4,6 +4,13 @@ const ctx = canvas.getContext('2d');
 canvas.width = 1024; // Set canvas width
 canvas.height = 576; // Set canvas height
 
+let selectedTarget = null; // Track the selected target
+let animationId; // Variable to store the animation loop ID
+
+let turnOrder = ['soldier', 'orc','allyTop','allyBottom','enemyTop','enemyBottom']; // Define the order of turns
+let currentTurnIndex = 0; // Track whose turn it is
+let isPlayerTurn = true; // Track if it's the player's turn
+
 // Sprite class for handling animations
 class Sprite {
     constructor({ position, imageSrc, scale = 1, framesMax = 1, sprites }) {
@@ -105,6 +112,10 @@ const soldier = new Sprite({
     sprites: {
         idle: {
             imageSrc: 'images/Soldier/Soldier_Idle.png',
+            framesMax: 6,
+        },
+        attack: {
+            imageSrc: 'images/Soldier/Soldier_Attack.png', // Add attack animation
             framesMax: 6,
         },
         takeHit: {
@@ -232,6 +243,15 @@ let allyBottomHealth = 3;
 let enemyTopHealth = 3;
 let enemyBottomHealth = 3;
 
+function selectTarget(target) {
+    if (isPlayerTurn) {
+        selectedTarget = target;
+        document.getElementById('question-text').textContent = questions[currentQuestionIndex].question;
+        document.getElementById('answer-input').style.display = 'block';
+        document.getElementById('submit-button').style.display = 'block';
+    }
+}
+
 const questions = [
     { question: "2 + 6 = ?", answer: "8" },
     { question: "7 - 3 = ?", answer: "4" },
@@ -269,6 +289,7 @@ function drawHealthBar(sprite, currentHealth, maxHealth) {
 function startGame() {
     document.querySelector('.container').style.display = 'none';
     document.getElementById('gameplay-screen').style.display = 'block';
+    document.getElementById('target-selection').style.display = 'block';
     loadQuestion();
     startTimer();
     animate();
@@ -284,58 +305,95 @@ function loadQuestion() {
 function submitAnswer() {
     const userAnswer = document.getElementById('answer-input').value;
     if (userAnswer === questions[currentQuestionIndex].answer) {
-        // Correct answer: orc takes damage
-        wolfHealth--;
-        if (wolfHealth > 0) {
-            orc.takeHit(); // Play hit animation
-        } else {
-            orc.die(); // Play death animation
-            setTimeout(() => {
-                endGame();
-            }, 2000); // Wait for death animation to finish
-        }
-        currentQuestionIndex++;
-        if (currentQuestionIndex < questions.length) {
-            loadQuestion();
-        } else {
-            endGame();
+        // Correct answer: attack the selected target
+        if (selectedTarget === 'orc') {
+            wolfHealth--;
+            if (wolfHealth > 0) {
+                orc.takeHit(); // Play hit animation
+            } else {
+                orc.die(); // Play death animation
+                setTimeout(() => {
+                    endGame();
+                }, 2000); // Wait for death animation to finish
+            }
+        } else if (selectedTarget === 'enemyTop') {
+            enemyTopHealth--;
+            if (enemyTopHealth > 0) {
+                enemyTop.takeHit(); // Play hit animation
+            } else {
+                enemyTop.die(); // Play death animation
+                setTimeout(() => {
+                    endGame();
+                }, 2000);
+            }
+        } else if (selectedTarget === 'enemyBottom') {
+            enemyBottomHealth--;
+            if (enemyBottomHealth > 0) {
+                enemyBottom.takeHit(); // Play hit animation
+            } else {
+                enemyBottom.die(); // Play death animation
+                setTimeout(() => {
+                    endGame();
+                }, 2000);
+            }
         }
     } else {
-        // Incorrect answer: soldier or allies take damage
-        const randomTarget = Math.floor(Math.random() * 3); // Randomly choose between soldier, allyTop, or allyBottom
-        if (randomTarget === 0) {
-            soldierHealth--;
-            if (soldierHealth > 0) {
-                soldier.takeHit(); // Play hit animation
-            } else {
-                soldier.die(); // Play death animation
-                setTimeout(() => {
-                    endGame();
-                }, 2000);
-            }
-        } else if (randomTarget === 1) {
-            allyTopHealth--;
-            if (allyTopHealth > 0) {
-                allyTop.takeHit(); // Play hit animation
-            } else {
-                allyTop.die(); // Play death animation
-                setTimeout(() => {
-                    endGame();
-                }, 2000);
-            }
+        // Incorrect answer: player takes damage
+        soldierHealth--;
+        if (soldierHealth > 0) {
+            soldier.takeHit(); // Play hit animation
         } else {
-            allyBottomHealth--;
-            if (allyBottomHealth > 0) {
-                allyBottom.takeHit(); // Play hit animation
-            } else {
-                allyBottom.die(); // Play death animation
-                setTimeout(() => {
-                    endGame();
-                }, 2000);
-            }
+            soldier.die(); // Play death animation
+            setTimeout(() => {
+                endGame();
+            }, 2000);
         }
     }
+
+    // Reset for the next turn
     document.getElementById('answer-input').value = '';
+    document.getElementById('answer-input').style.display = 'none';
+    document.getElementById('submit-button').style.display = 'none';
+    selectedTarget = null;
+
+    // Move to the next turn
+    currentTurnIndex = (currentTurnIndex + 1) % turnOrder.length;
+    isPlayerTurn = turnOrder[currentTurnIndex] === 'soldier';
+
+    if (!isPlayerTurn) {
+        // Enemy's turn (AI logic)
+        setTimeout(() => {
+            enemyTurn();
+        }, 1000);
+    }
+}
+
+async function attackAnimation(attacker, target) {
+    const originalX = attacker.position.x;
+    const attackDistance = 50; // Distance to move toward the target
+
+    // Move toward the target
+    while (attacker.position.x < target.position.x - attackDistance) {
+        attacker.position.x += 5;
+        await new Promise(resolve => setTimeout(resolve, 16)); // 60 FPS
+    }
+
+    // Play attack animation (you can add an attack sprite if needed)
+    attacker.image = attacker.sprites.attack.image;
+    attacker.framesMax = attacker.sprites.attack.framesMax;
+    attacker.framesCurrent = 0;
+
+    // Wait for the attack animation to finish
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // Move back to the original position
+    while (attacker.position.x > originalX) {
+        attacker.position.x -= 5;
+        await new Promise(resolve => setTimeout(resolve, 16)); // 60 FPS
+    }
+
+    // Reset to idle animation
+    attacker.resetToIdle();
 }
 
 // Start the countdown timer
@@ -352,6 +410,7 @@ function startTimer() {
 // End the game and reset state
 function endGame() {
     clearInterval(timerInterval);
+    cancelAnimationFrame(animationId); // Stop the animation loop
     alert('Game over!');
     currentQuestionIndex = 0;
     timeLeft = 30;
@@ -377,7 +436,7 @@ function endGame() {
 
 // Animation loop: updates sprites and draws health bars
 function animate() {
-    requestAnimationFrame(animate);
+    animationId = requestAnimationFrame(animate);
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
 
     // Draw allies first (behind the soldier)
@@ -385,8 +444,8 @@ function animate() {
     allyBottom.update();
 
     // Draw enemies first (behind the soldier)
-    enemyTop.update();
-    enemyBottom.update();
+    if (enemyTop) enemyTop.update();
+    if (enemyBottom) enemyBottom.update();
 
     // Draw the soldier
     soldier.update();
@@ -399,8 +458,32 @@ function animate() {
     drawHealthBar(orc, wolfHealth, 3);
     drawHealthBar(allyTop, allyTopHealth, 3);
     drawHealthBar(allyBottom, allyBottomHealth, 3);
-    drawHealthBar(enemyTop, enemyTopHealth, 3);
-    drawHealthBar(enemyBottom, enemyBottomHealth, 3);
+    if (enemyTop) drawHealthBar(enemyTop, enemyTopHealth, 3);
+    if (enemyBottom) drawHealthBar(enemyBottom, enemyBottomHealth, 3);
+}
+
+function enemyTurn() {
+    const targets = ['soldier']; // Enemies can only attack the soldier
+    const target = targets[Math.floor(Math.random() * targets.length)];
+
+    if (target === 'soldier') {
+        // Enemy attacks the soldier
+        attackAnimation(orc, soldier).then(() => {
+            soldierHealth--;
+            if (soldierHealth > 0) {
+                soldier.takeHit(); // Play hit animation
+            } else {
+                soldier.die(); // Play death animation
+                setTimeout(() => {
+                    endGame();
+                }, 2000);
+            }
+
+            // Move to the next turn
+            currentTurnIndex = (currentTurnIndex + 1) % turnOrder.length;
+            isPlayerTurn = turnOrder[currentTurnIndex] === 'soldier';
+        });
+    }
 }
 
 // Initialize the game when the DOM is loaded
