@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Parent Registration</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Include auth.js so its functions are available -->
+  <script src="auth.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h2>Parent Registration</h2>
+    <form id="registerForm">
+      <input type="text" id="parentName" placeholder="Your Name" required>
+      <input type="email" id="parentEmail" placeholder="Email Address" required>
+      <input type="password" id="parentPassword" placeholder="Password" required>
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+      <button type="submit">Create Account</button>
+    </form>
+    <p>Already have an account? <a href="parent_login.html">Login Here</a></p>
+    <p><a href="index.html">Back to Role Selection</a></p>
+  </div>
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('parentName').value;
+      const email = document.getElementById('parentEmail').value;
+      const password = document.getElementById('parentPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+      }
+      
+      // Now registerParent is defined because auth.js is loaded first.
+      const result = registerParent(name, email, password);
+      alert(result.message);
+      if (result.success) {
+        window.location.href = "parent_login.html";
+      }
+    });
+  </script>
+</body>
+</html>

@@ -65,6 +65,16 @@ const questions = [
     // Show the "Next Question" button so the student can continue.
     document.getElementById("nextQuestionBtn").style.display = "inline-block";
   }
+
+  function recordAnswer(question, answer, status) {
+    // Retrieve previously recorded answers or start with an empty array.
+    let results = JSON.parse(localStorage.getItem("studentResults")) || [];
+    // Push the new answer into the array.
+    results.push({ question, answer, status });
+    // Save the updated results back to localStorage.
+    localStorage.setItem("studentResults", JSON.stringify(results));
+  }
+  
   
   // Set up event listeners.
   document.getElementById("submitAnswerBtn").addEventListener("click", checkAnswer);

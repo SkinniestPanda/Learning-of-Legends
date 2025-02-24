@@ -33,10 +33,9 @@
     ul {
       list-style: none;
       padding: 0;
-
       display: grid;
-      grid-template-columns: repeat(2, 1fr); /* Creates 2 columns */
-      gap: 20px; /* Adjust the gap between grid items as needed */
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
     }
     li {
       margin: 5px 0;
@@ -51,30 +50,8 @@
     #chartsContainer, #analysisSummary {
       margin-top: 20px;
       display: grid;
-      grid-template-columns: repeat(2, 1fr); /* Creates 2 columns */
-      gap: 20px; /* Adjust the gap between grid items as needed */
-    }
-    
-    /* Default layout (portrait) */
-    #chartsContainer > div {
-      
-      margin-bottom: 20px;
-    }
-
-    /* Landscape layout */
-    @media (orientation: landscape) {
-      #chartsContainer {
-        display: grid;
-        /* display: flex; */
-        /* flex-wrap: wrap; */
-        /* justify-content: space-around; */
-        /* grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); */
-      }
-      /* Each chart container takes about 45% of the container's width */
-      #chartsContainer > div {
-        flex: 1 1 45%;
-        margin: 10px;
-      }
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
     }
   </style>
   <!-- Include Chart.js from a CDN -->
@@ -87,6 +64,18 @@
     <p>Correct Answers: <span id="correctAnswers"></span></p>
     <p>Wrong Answers: <span id="wrongAnswers"></span></p>
     <p>Percentage Correct: <span id="percentageCorrect"></span>%</p>
+    <!-- Text Analysis Summary -->
+    <p>Performance Analysis: <span id="textAnalysis"></span></p>
+    
+    <!-- Dropdown filter for question type -->
+    <label for="filterDropdown">Filter by Question Type:</label>
+    <select id="filterDropdown">
+      <option value="all">All</option>
+      <option value="addition">Addition</option>
+      <option value="subtraction">Subtraction</option>
+      <option value="multiplication">Multiplication</option>
+      <option value="division">Division</option>
+    </select>
     
     <h3>Overall Performance Analysis</h3>
     <canvas id="resultsChart" width="300" height="300" style="display:block; margin:0 auto;"></canvas>
@@ -99,6 +88,9 @@
     
     <h3>Wrong Attempts Details:</h3>
     <ul id="wrongAttemptsList"></ul>
+    
+    <h3>Questions Answered:</h3>
+    <ul id="questionsAnsweredList"></ul>
     
     <br>
     <button id="clearDataBtn">Clear Data</button>
