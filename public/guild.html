@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Guild Mode</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <!-- Add this navigation section -->
+    <div class="nav-bar">
+        <a href="/" class="nav-link">Home</a>
+        <div class="user-info">
+            <span id="userDisplay">Not logged in</span>
+            <button id="logoutBtn" class="logout-btn" style="display: none;">Logout</button>
+        </div>
+    </div>
+    <div class="container">
+        <h2>Guild Mode</h2>
+        
+        <!-- Create Guild Section -->
+        <div id="createGuildSection" style="display: none;">
+            <h3>Create a Guild</h3>
+            <input type="text" id="guildName" placeholder="Guild Name">
+            <input type="password" id="guildPassword" placeholder="Guild Password">
+            <input type="text" id="guildDescription" placeholder="Guild Description">
+            <button onclick="createGuild()">Create Guild</button>
+        </div>
+
+        <!-- Join Guild Section -->
+        <div id="joinGuildSection">
+            <h3>Join a Guild</h3>
+            <input type="text" id="guildId" placeholder="Guild ID">
+            <input type="password" id="joinPassword" placeholder="Guild Password">
+            <button onclick="joinGuild()">Join Guild</button>
+        </div>
+
+        <!-- Current Guild Info -->
+        <div id="guildInfo">
+            <h3>Current Guild</h3>
+            <div id="currentGuildDetails"></div>
+            <button onclick="leaveGuild()" id="leaveGuildBtn">Leave Guild</button>
+        </div>
+
+        <!-- All Guilds Section -->
+        <div id="allGuildsSection">
+            <h3>All Guilds</h3>
+            <div id="guildsList"></div>
+            <button onclick="refreshGuilds()">Refresh Guilds List</button>
+        </div>
+
+        <!-- Guild Details Modal -->
+        <div id="guildDetailsModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3>Guild Details</h3>
+                <div id="guildDetailsContent"></div>
+                <div id="guildActions">
+                    <button id="deleteGuildBtn" onclick="deleteGuild()" class="danger-button">Delete Guild</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Guild Members Modal -->
+        <div id="guildMembersModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('guildMembersModal')">&times;</span>
+                <h3>Guild Members</h3>
+                <div id="guildMembersContent"></div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/sessionCheck.js"></script>
+    <script src="/js/session.js"></script>
+    <script src="/js/guild.js"></script>
+</body>
+</html> 
