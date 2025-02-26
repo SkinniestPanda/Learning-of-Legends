@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Game - PVE Mode</title>
+    <link rel="stylesheet" href="css/pve.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Main Play Button -->
+        <button class="play-button" onclick="startGame()">Play</button>
+
+        <!-- Additional Buttons -->
+        <div class="additional-buttons">
+            <button class="guild-button">Guild</button>
+            <button class="pvp-button">PVP</button>
+            <button class="settings-button">Settings</button>
+        </div>
+    </div>
+
+    <!-- Gameplay Screen (initially hidden) -->
+    <div id="gameplay-screen" class="gameplay-screen">
+        <canvas id="game-canvas"></canvas> <!-- Add a canvas for rendering -->
+        <div class="question">
+            <p id="question-text"></p>
+            <input type="text" id="answer-input" placeholder="Your answer">
+            <button onclick="submitAnswer()" id="submit-button">Submit</button>
+        </div>
+        <div id="answer-timer" style="display: none;">
+            Time left to answer: <span id="answer-time-left">10</span> seconds
+        </div>
+        <!-- New timer element for overall game time -->
+        <div class="timer">
+        Game Time Left: <span id="time-left">30</span> seconds
+        </div>
+        <div id="target-selection" style="display: none;">
+            <p>Select a target:</p>
+            <button onclick="selectTarget('orc')">Orc</button>
+            <button onclick="selectTarget('enemyTop')">Enemy Top</button>
+            <button onclick="selectTarget('enemyBottom')">Enemy Bottom</button>
+        </div>
+    </div>
+
+    <script src="js/game.js"></script>
+</body>
+</html>
