@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PVP Gamemode</title>
+    <link rel="stylesheet" href="css/pvp.css">
+    <script src="questions/addition.js"></script>
+    <script src="questions/subtraction.js"></script>
+    <script src="questions/multiplication.js"></script>
+    <script src="questions/division.js"></script>
+</head>
+
+<body>
+    <!-- Homepage -->
+    <div id="homepage" class="pvp-homepage">
+        <h1>Rankings #1257</h1>
+        <div class="play-circle">
+            <button onclick="goToPlay()">PLAY</button>
+        </div>
+        <div class="menu-buttons">
+            <button disabled>GUILD</button>
+            <button disabled>PVE</button>
+            <button disabled>SETTINGS</button>
+        </div>
+    </div>
+
+    <!-- Mode Selection -->
+    <div id="play-mode" class="hidden">
+        <h2>Choose Your Mode</h2>
+        <button onclick="start1v1()">1v1</button>
+        <button onclick="start3v3()">3v3</button>
+        <button onclick="goBack()">Back</button>
+    </div>
+
+    <!-- 1v1 Gameplay -->
+    <div id="game-1v1" class="hidden">
+        <h2>PVP 1v1 Battle</h2>
+        <div id="timer" class="timer">Time: 10s</div>
+
+        <!-- Battle Arena -->
+        <div class="battlefield">
+            <div class="player-area">
+                <div class="character player"></div>
+                <div class="health-bar player-health">
+                    <div class="health-fill"></div>
+                </div>
+            </div>
+
+            <div class="enemy-area">
+                <div class="character enemy"></div>
+                <div class="health-bar enemy-health">
+                    <div class="health-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question & Answer Section -->
+        <div class="question-container">
+            <div class="question-box">2 x 3 = ?</div>
+            <div class="answer-buttons">
+                <button onclick="checkAnswer1v1(6)">6</button>
+                <button onclick="checkAnswer1v1(9)">9</button>
+                <button onclick="checkAnswer1v1(2)">2</button>
+            </div>
+        </div>
+
+        <button class="back-button" onclick="goBackToMode()">Back</button>
+    </div>
+
+    <!-- 3v3 Gameplay -->
+    <div id="game-3v3" class="hidden">
+        <h2>PVP 3v3 Battle</h2>
+        <div id="timer-3v3" class="timer">Time: 10s</div>
+
+        <div class="battlefield">
+            <!-- Player Team -->
+            <div class="player-area">
+                <div class="character player"></div>
+                <div class="health-bar player-health">
+                    <div class="health-fill"></div>
+                </div>
+            </div>
+            <div class="player-area">
+                <div class="character player"></div>
+                <div class="health-bar player-health">
+                    <div class="health-fill"></div>
+                </div>
+            </div>
+            <div class="player-area">
+                <div class="character player"></div>
+                <div class="health-bar player-health">
+                    <div class="health-fill"></div>
+                </div>
+            </div>
+
+            <!-- Question -->
+            <div class="question-box">3 x 3 = ?</div>
+
+            <!-- Enemy Team -->
+            <div class="enemy-area">
+                <div class="character enemy"></div>
+                <div class="health-bar enemy-health">
+                    <div class="health-fill"></div>
+                </div>
+            </div>
+            <div class="enemy-area">
+                <div class="character enemy"></div>
+                <div class="health-bar enemy-health">
+                    <div class="health-fill"></div>
+                </div>
+            </div>
+            <div class="enemy-area">
+                <div class="character enemy"></div>
+                <div class="health-bar enemy-health">
+                    <div class="health-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer Buttons -->
+        <div class="answer-buttons">
+            <button onclick="checkAnswer3v3(9)">9</button>
+            <button onclick="checkAnswer3v3(4)">4</button>
+            <button onclick="checkAnswer3v3(5)">5</button>
+        </div>
+        <button onclick="goBackToMode()">Back</button>
+    </div>
+
+    <!-- Include the question pool from a separate file -->
+    <script src="js/pvp.js"></script>
+</body>
+
+</html>

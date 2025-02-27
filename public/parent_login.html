@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Parent Login</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="auth.js"></script> 
+</head>
+<body>
+  <div class="login-container">
+    <h2>Parent Login</h2>
+    <form id="loginForm">
+      <input type="email" id="loginEmail" placeholder="Email Address" required>
+      <input type="password" id="loginPassword" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+    <p>Don't have an account? <a href="parent_register.html">Register Here</a></p>
+    <p><a href="index.html">Back to Role Selection</a></p>
+  </div>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      const result = loginParent(email, password);
+      if (result.success) {
+        window.location.href = "parent_home.html";
+      } else {
+        alert(result.message);
+      }
+    });
+
+  </script>
+</body>
+</html>
