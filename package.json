@@ -1,0 +1,28 @@
+{
+  "name": "learning-of-legends",
+  "version": "1.0.0",
+  "description": "Team 66 Group Project",
+  "main": "charts.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SkinniestPanda/Learning-of-Legends.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SkinniestPanda/Learning-of-Legends/issues"
+  },
+  "homepage": "https://github.com/SkinniestPanda/Learning-of-Legends#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.3",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "sqlite3": "^5.1.7"
+  }
+}
