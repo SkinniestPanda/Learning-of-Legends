@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Teacher - Math Flash App Dashboard</title>
-  <style>
+  <link rel="stylesheet" href="style.css">
+  <!-- <style>
     /* Basic styling for the teacher page */
     body {
       font-family: Arial, sans-serif;
@@ -53,7 +54,7 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 20px;
     }
-  </style>
+  </style> -->
   <!-- Include Chart.js from a CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -65,7 +66,8 @@
     <p>Wrong Answers: <span id="wrongAnswers"></span></p>
     <p>Percentage Correct: <span id="percentageCorrect"></span>%</p>
     <!-- Text Analysis Summary -->
-    <p>Performance Analysis: <span id="textAnalysis"></span></p>
+    <p>Performance Analysis: <br>
+      <span id="textAnalysis"></span></p>
     
     <!-- Dropdown filter for question type -->
     <label for="filterDropdown">Filter by Question Type:</label>
