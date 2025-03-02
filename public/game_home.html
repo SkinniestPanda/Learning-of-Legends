@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wargroove-Style Home</title>
+  <!-- Include a retro font (optional) -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/game_home.css">
+</head>
+<body class="wg-bg">
+  <!-- Background Music -->
+  <audio id="bg-music" autoplay loop>
+    <source src="music/ALittleR&R.ogg" type="audio/ogg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <div class="menu-wrapper">
+    <h1 class="game-logo-text">My Game Title</h1>
+    <ul class="menu-items">
+      <li><button onclick="alert('Story Mode')">STORY</button></li>
+      <li><button onclick="alert('Multiplayer Mode')">MULTIPLAYER</button></li>
+      <li><button onclick="alert('Custom Content')">CUSTOM CONTENT</button></li>
+      <li><button onclick="alert('Extras')">EXTRAS</button></li>
+      <!-- The Options button now toggles the settings modal -->
+      <li><button onclick="toggleSettings()">OPTIONS</button></li>
+      <li><button onclick="alert('Exit Game')">EXIT</button></li>
+    </ul>
+  </div>
+
+  <!-- Floating Settings Modal -->
+  <div id="settingsModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="toggleSettings()">&times;</span>
+      <h2>Settings</h2>
+      <div class="settings-row">
+        <label for="musicToggle">Background Music:</label>
+        <input type="checkbox" id="musicToggle">
+      </div>
+      <div class="settings-row">
+        <label for="musicVolume">Music Volume:</label>
+        <input type="range" id="musicVolume" min="0" max="100" value="50">
+      </div>
+      <button id="saveSettingsBtn">Save Settings</button>
+    </div>
+  </div>
+
+  <script>
+
+    let audioCtx;
+    // References for settings modal and controls
+    const settingsModal = document.getElementById("settingsModal");
+    const musicToggle = document.getElementById("musicToggle");
+    const musicVolume = document.getElementById("musicVolume");
+
+    const bgMusic = document.getElementById("bg-music");
+
+    // Load saved settings from localStorage
+    const savedMusicOn = localStorage.getItem("musicOn");
+    const savedMusicVolume = localStorage.getItem("musicVolume");
+    if (savedMusicOn !== null) {
+      musicToggle.checked = (savedMusicOn === 'true');
+    } else {
+      musicToggle.checked = true;
+    }
+    if (savedMusicVolume !== null) {
+      musicVolume.value = savedMusicVolume;
+    }
+
+    // Immediately update background music when the slider is adjusted
+    musicVolume.addEventListener('input', () => {
+      if (bgMusic) {
+        bgMusic.volume = musicVolume.value / 100;
+      }
+    });
+
+    // Immediately update background music mute state when checkbox is toggled
+    musicToggle.addEventListener('input', () => {
+      if (bgMusic) {
+        bgMusic.muted = !musicToggle.checked;
+      }
+    });
+
+    // Toggle settings modal display
+    function toggleSettings() {
+      settingsModal.style.display = (settingsModal.style.display === "block") ? "none" : "block";
+    }
+
+    // Save settings when button is clicked
+    document.getElementById("saveSettingsBtn").addEventListener("click", () => {
+      localStorage.setItem("musicOn", musicToggle.checked);
+      localStorage.setItem("musicVolume", musicVolume.value);
+
+      // Update the background music element if present
+      const bgMusic = document.getElementById("bg-music");
+      if (bgMusic) {
+        bgMusic.muted = !musicToggle.checked;
+        bgMusic.volume = musicVolume.value / 100;
+      }
+      alert("Settings Saved!");
+      toggleSettings();
+    });
+
+    // On page load, apply saved settings to the background music
+    window.addEventListener("load", () => {
+      const bgMusic = document.getElementById("bg-music");
+      const musicOn = localStorage.getItem("musicOn");
+      const musicVol = localStorage.getItem("musicVolume");
+      if (musicOn !== null) {
+        bgMusic.muted = (musicOn !== 'true');
+      }
+      if (musicVol !== null) {
+        bgMusic.volume = musicVol / 100;
+      }
+    });
+
+  // On first user interaction, create or resume the AudioContext
+  document.addEventListener('click', function resumeAudio() {
+    // If we haven't created an AudioContext yet, create one and connect the audio element.
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const audioElement = document.getElementById('bg-music');
+      // Create a MediaElementSource from the audio element and connect it to the context's destination.
+      const track = audioCtx.createMediaElementSource(audioElement);
+      track.connect(audioCtx.destination);
+    }
+    
+    // If the AudioContext is suspended, resume it.
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume().then(() => {
+        console.log('AudioContext resumed!');
+      });
+    }
+    
+    // Optionally, you can also start playback if it hasn't started.
+    const bgMusic = document.getElementById('bg-music');
+    if (bgMusic.paused) {
+      bgMusic.play().catch(err => console.error("Playback error:", err));
+    }
+    
+    // Remove the event listener after the first interaction.
+    document.removeEventListener('click', resumeAudio);
+  });
+  </script>
+</body>
+</html>
