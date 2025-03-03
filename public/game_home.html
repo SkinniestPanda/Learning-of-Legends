@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Wargroove-Style Home</title>
-  <!-- Include a retro font (optional) -->
+  <title>Learning of Legends</title>
+  <!-- retro font -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/game_home.css">
 </head>
@@ -56,7 +56,29 @@
     </div>
   </div>
 
+  <script src="/js/session.js"></script>
   <script>
+    //login 
+    document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            const loginLink = document.querySelector('a[href="/login.html"]');
+            
+            if (token) {
+                if (loginLink) {
+                    loginLink.href = '#';
+                    loginLink.textContent = 'My Account';
+                }
+            } else {
+                const protectedPages = ['/guild.html', '/pve.html', '/pvp.html', '/statistics.html', '/settings.html'];
+                const currentPath = window.location.pathname;
+                
+                if (protectedPages.includes(currentPath)) {
+                    window.location.href = '/login.html';
+                }
+            }
+        });
+
+    //////////
 
     let audioCtx;
     // References for settings modal and controls
