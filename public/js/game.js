@@ -7,9 +7,9 @@ canvas.height = 576; // Set canvas height
 let selectedTarget = null; // Track the selected target
 let animationId; // Variable to store the animation loop ID
 
-let turnOrder = ['soldier', 'orc','allyTop','allyBottom','enemyTop','enemyBottom']; // Define the order of turns
-let currentTurnIndex = 0; // Track whose turn it is
-let isPlayerTurn = true; // Track if it's the player's turn
+// Turn order: order of turns for all characters (player, allies, enemies)
+let turnOrder = ['soldier', 'orc', 'allyTop', 'allyBottom', 'enemyTop', 'enemyBottom'];
+let currentTurnIndex = 0; // Track whose turn it islet isPlayerTurn = true; // Will be true if the current turn is soldier's turn
 
 let answerTimer; // Variable to store the answer timer
 const answerTimeLimit = 10; // Time limit for answering the question (in seconds)
@@ -17,8 +17,16 @@ let answerTimeLeft = answerTimeLimit; // Time left to answer the question
 
 // Sprite class for handling animations
 class Sprite {
-    constructor({ position, imageSrc, scale = 1, framesMax = 1, sprites }) {
+    constructor({
+        position,
+        offset = { x: 0, y: 0 },
+        imageSrc,
+        scale = 1,
+        framesMax = 1,
+        sprites
+    }) {
         this.position = position;
+        this.offset = offset;
         this.width = 50;
         this.height = 150;
         this.image = new Image();
@@ -48,8 +56,8 @@ class Sprite {
             0,
             this.image.width / this.framesMax,
             this.image.height,
-            this.position.x,
-            this.position.y,
+            this.position.x + this.offset.x,
+            this.position.y + this.offset.y,
             (this.image.width / this.framesMax) * this.scale,
             this.image.height * this.scale
         );
@@ -103,13 +111,12 @@ class Sprite {
             this.dead = false; // Reset dead flag
         }
     }
-
-
 }
 
 // Create soldier and orc sprites with their respective animations
 const soldier = new Sprite({
     position: { x: 100, y: 300 },
+    offset: { x:0, y: 0 },
     imageSrc: 'images/Soldier/Soldier_Idle.png',
     scale: 2,
     framesMax: 6, // Number of frames in the idle animation
@@ -135,7 +142,8 @@ const soldier = new Sprite({
 
 // Create two allies
 const allyTop = new Sprite({
-    position: { x: -50, y: 200 }, // Positioned above the soldier
+    position: { x: 100, y: 200 }, // Positioned above the soldier
+    offset: { x:-110, y: -20 },
     imageSrc: 'images/allies/Fantasy_Warrior/Idle.png', // Replace with your ally image
     scale: 2,
     framesMax: 10, // Number of frames in the idle animation
@@ -161,6 +169,7 @@ const allyTop = new Sprite({
 
 const allyBottom = new Sprite({
     position: { x: 50, y: 400 }, // Positioned below the soldier
+    offset: { x:0, y: 0},
     imageSrc: 'images/allies/Huntress_2/Idle.png', // Replace with your ally image
     scale: 2,
     framesMax: 10, // Number of frames in the idle animation
@@ -170,7 +179,7 @@ const allyBottom = new Sprite({
             framesMax: 10,
         },
         attack: {
-            imageSrc: 'images/Soldier/Soldier_Attack.png', // Add attack animation
+            imageSrc: 'images/allies/Huntress_2/Attack.png', // Add attack animation
             framesMax: 6,
         },
         takeHit: {
@@ -186,6 +195,7 @@ const allyBottom = new Sprite({
 
 const enemyTop = new Sprite({
     position: { x: 700, y: 200 }, // Positioned above the orc
+    offset: { x:0, y: 0},
     imageSrc: 'images/mobs/Goblin/Idle.png', // Replace with your enemy image
     scale: 2,
     framesMax: 4, // Number of frames in the idle animation
@@ -195,8 +205,8 @@ const enemyTop = new Sprite({
             framesMax: 4,
         },
         attack: {
-            imageSrc: 'images/Soldier/Soldier_Attack.png', // Add attack animation
-            framesMax: 6,
+            imageSrc: 'images/mobs/Goblin/Attack.png', // Add attack animation
+            framesMax: 8,
         },
         takeHit: {
             imageSrc: 'images/mobs/Goblin/Take Hit.png', // Replace with your enemy hit image
@@ -211,6 +221,7 @@ const enemyTop = new Sprite({
 
 const enemyBottom = new Sprite({
     position: { x: 700, y: 400 }, // Positioned below the orc
+    offset: { x:0, y: 0},
     imageSrc: 'images/mobs/Skeleton/Idle.png', // Replace with your enemy image
     scale: 2,
     framesMax: 4, // Number of frames in the idle animation
@@ -220,8 +231,8 @@ const enemyBottom = new Sprite({
             framesMax: 4,
         },
         attack: {
-            imageSrc: 'images/Soldier/Soldier_Attack.png', // Add attack animation
-            framesMax: 6,
+            imageSrc: 'images/mobs/Skeleton/Attack.png', // Add attack animation
+            framesMax: 8,
         },
         takeHit: {
             imageSrc: 'images/mobs/Skeleton/Take Hit.png', // Replace with your enemy hit image
@@ -236,6 +247,7 @@ const enemyBottom = new Sprite({
 
 const orc = new Sprite({
     position: { x: 700, y: 300 },
+    offset: { x:0, y: 0},
     imageSrc: 'images/Orc/Orc_Idle.png',
     scale: 2,
     framesMax: 6, // Number of frames in the idle animation
@@ -245,7 +257,7 @@ const orc = new Sprite({
             framesMax: 6,
         },
         attack: {
-            imageSrc: 'images/Soldier/Soldier_Attack.png', // Add attack animation
+            imageSrc: 'images/Orc/Orc_Attack01.png', // Add attack animation
             framesMax: 6,
         },
         takeHit: {
@@ -259,13 +271,20 @@ const orc = new Sprite({
     },
 });
 
-// Health variables (max health is 3 for both)
+// Health variables (max health is 3 for each)
 let wolfHealth = 3;
 let soldierHealth = 3;
 let allyTopHealth = 3;
 let allyBottomHealth = 3;
 let enemyTopHealth = 3;
 let enemyBottomHealth = 3;
+
+// New array for enemy questions – used after a wrong answer / enemy attack
+const enemyQuestions = [
+    { question: "12 - 5 = ?", answer: "7" },
+    { question: "3 * 3 = ?", answer: "9" },
+    { question: "15 / 3 = ?", answer: "5" }
+];
 
 function selectTarget(target) {
     if (isPlayerTurn) {
@@ -295,6 +314,7 @@ function startAnswerTimer() {
     }, 1000);
 }
 
+// Modified to trigger turn progression on timeout
 function handleAnswerTimeout() {
     document.getElementById('answer-input').value = '';
     document.getElementById('answer-input').style.display = 'none';
@@ -302,27 +322,9 @@ function handleAnswerTimeout() {
     document.getElementById('question-text').textContent = 'Time is up!';
     selectedTarget = null;
 
-    // Player takes damage for failing to answer
-    soldierHealth--;
-    if (soldierHealth > 0) {
-        soldier.takeHit(); // Play hit animation
-    } else {
-        soldier.die(); // Play death animation
-        setTimeout(() => {
-            endGame();
-        }, 2000);
-    }
-
-    // Move to the next turn
+    // Advance turn order
     currentTurnIndex = (currentTurnIndex + 1) % turnOrder.length;
-    isPlayerTurn = turnOrder[currentTurnIndex] === 'soldier';
-
-    if (!isPlayerTurn) {
-        // Enemy's turn (AI logic)
-        setTimeout(() => {
-            enemyTurn();
-        }, 1000);
-    }
+    processTurn();
 }
 
 const questions = [
@@ -340,34 +342,214 @@ let timerInterval;
 function drawHealthBar(sprite, currentHealth, maxHealth) {
     const barWidth = 50 * sprite.scale; // Adjust width as needed
     const barHeight = 10;
-    // Calculate sprite's drawn width based on current frame width and scale
     let spriteWidth = (sprite.image.width / sprite.framesMax) * sprite.scale;
-    // Center the health bar above the sprite
     let x = sprite.position.x + (spriteWidth - barWidth) / 2;
     let y = sprite.position.y - 20; // 20 pixels above the sprite
 
-    // Draw the background (red for missing health)
+    // Draw missing health (red)
     ctx.fillStyle = 'red';
     ctx.fillRect(x, y, barWidth, barHeight);
-    // Draw the current health (green overlay)
+    // Draw current health (green)
     const healthWidth = barWidth * (currentHealth / maxHealth);
     ctx.fillStyle = 'green';
     ctx.fillRect(x, y, healthWidth, barHeight);
-    // Draw border
     ctx.strokeStyle = 'black';
     ctx.strokeRect(x, y, barWidth, barHeight);
+}
+
+// NEW: Function to draw the turn order at the top of the canvas
+function drawTurnOrder() {
+    const xStart = 20; // Starting x-coordinate for icons
+    const yStart = 10; // y-coordinate for icons
+    const iconSize = 40; // Width and height for each icon
+    const spacing = 60; // Horizontal spacing between icons
+    let x = xStart;
+    
+    for (let i = 0; i < turnOrder.length; i++) {
+        let charName = turnOrder[i];
+        let sprite;
+        // Map turnOrder string to sprite object
+        switch(charName) {
+            case 'soldier':
+                sprite = soldier;
+                break;
+            case 'orc':
+                sprite = orc;
+                break;
+            case 'allyTop':
+                sprite = allyTop;
+                break;
+            case 'allyBottom':
+                sprite = allyBottom;
+                break;
+            case 'enemyTop':
+                sprite = enemyTop;
+                break;
+            case 'enemyBottom':
+                sprite = enemyBottom;
+                break;
+            default:
+                continue;
+        }
+        // Highlight current turn with a yellow border
+        if (i === currentTurnIndex) {
+            ctx.strokeStyle = 'yellow';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(x, yStart, iconSize, iconSize);
+        }
+        // Draw the sprite's first idle frame as an icon (scaled down)
+        ctx.drawImage(
+            sprite.image,
+            0, 0,
+            sprite.image.width / sprite.framesMax, sprite.image.height,
+            x, yStart,
+            iconSize, iconSize
+        );
+        // Draw the character's name below the icon
+        ctx.fillStyle = 'black';
+        ctx.font = '12px Arial';
+        ctx.fillText(charName, x, yStart + iconSize + 12);
+        x += spacing;
+    }
+}
+
+// NEW: Process the current turn based on the turnOrder
+function processTurn() {
+    const currentTurn = turnOrder[currentTurnIndex];
+    if (currentTurn === 'soldier') {
+        // Player's turn: show target selection and load question
+        isPlayerTurn = true;
+        document.getElementById('target-selection').style.display = 'block';
+        loadQuestion();
+    } else if (currentTurn === 'orc' || currentTurn === 'enemyTop' || currentTurn === 'enemyBottom') {
+        // Enemy turn: trigger enemy attack for the specific enemy
+        isPlayerTurn = false;
+        let activeEnemy;
+        if (currentTurn === 'orc') {
+            activeEnemy = orc;
+        } else if (currentTurn === 'enemyTop') {
+            activeEnemy = enemyTop;
+        } else if (currentTurn === 'enemyBottom') {
+            activeEnemy = enemyBottom;
+        }
+        enemyTurn(activeEnemy);
+    } else if (currentTurn === 'allyTop' || currentTurn === 'allyBottom') {
+        // Ally turn: trigger ally attack for the specific ally
+        isPlayerTurn = false;
+        let activeAlly = (currentTurn === 'allyTop') ? allyTop : allyBottom;
+        alliedTurn(activeAlly);
+    }
+}
+
+// NEW: Modified enemyTurn accepts an optional activeEnemy parameter
+async function enemyTurn(activeEnemy) {
+    let attacker = activeEnemy;
+    // Choose a random target from player characters: soldier, allyTop, allyBottom
+    const playerTargets = [];
+    if (!soldier.dead) playerTargets.push(soldier);
+    if (!allyTop.dead) playerTargets.push(allyTop);
+    if (!allyBottom.dead) playerTargets.push(allyBottom);
+    if (playerTargets.length === 0) return;
+    const target = playerTargets[Math.floor(Math.random() * playerTargets.length)];
+
+    await attackAnimation(attacker, target);
+
+    // Apply damage to the chosen target
+    if (target === soldier) {
+        soldierHealth--;
+        if (soldierHealth > 0) {
+            soldier.takeHit();
+        } else {
+            soldier.die();
+            setTimeout(() => {
+                endGame();
+            }, 2000);
+        }
+    } else if (target === allyTop) {
+        allyTopHealth--;
+        if (allyTopHealth > 0) {
+            allyTop.takeHit();
+        } else {
+            allyTop.die();
+        }
+    } else if (target === allyBottom) {
+        allyBottomHealth--;
+        if (allyBottomHealth > 0) {
+            allyBottom.takeHit();
+        } else {
+            allyBottom.die();
+        }
+    }
+    
+    // Advance turn order and process the next turn
+    currentTurnIndex = (currentTurnIndex + 1) % turnOrder.length;
+    processTurn();
+}
+
+// NEW: Function for ally turns – allies automatically attack a random enemy
+async function alliedTurn(activeAlly) {
+    let attacker = activeAlly;
+    // Choose a random target from enemy characters: orc, enemyTop, enemyBottom
+    const enemyTargets = [];
+    if (!orc.dead) enemyTargets.push(orc);
+    if (enemyTop && !enemyTop.dead) enemyTargets.push(enemyTop);
+    if (enemyBottom && !enemyBottom.dead) enemyTargets.push(enemyBottom);
+    if (enemyTargets.length === 0) return;
+    const target = enemyTargets[Math.floor(Math.random() * enemyTargets.length)];
+    
+    await attackAnimation(attacker, target);
+
+    // Apply damage to the chosen enemy target
+    if (target === orc) {
+        wolfHealth--;
+        if (wolfHealth > 0) {
+            orc.takeHit();
+        } else {
+            orc.die();
+            setTimeout(() => {
+                endGame();
+            }, 2000);
+        }
+    } else if (target === enemyTop) {
+        enemyTopHealth--;
+        if (enemyTopHealth > 0) {
+            enemyTop.takeHit();
+        } else {
+            enemyTop.die();
+            setTimeout(() => {
+                endGame();
+            }, 2000);
+        }
+    } else if (target === enemyBottom) {
+        enemyBottomHealth--;
+        if (enemyBottomHealth > 0) {
+            enemyBottom.takeHit();
+        } else {
+            enemyBottom.die();
+            setTimeout(() => {
+                endGame();
+            }, 2000);
+        }
+    }
+    
+    // Advance turn order and process the next turn
+    currentTurnIndex = (currentTurnIndex + 1) % turnOrder.length;
+    processTurn();
 }
 
 // Start the game
 function startGame() {
     document.querySelector('.container').style.display = 'none';
     document.getElementById('gameplay-screen').style.display = 'block';
-    document.getElementById('target-selection').style.display = 'block';// Show target selection
-
-    document.getElementById('answer-timer').style.display = 'none'; // Hide answer timer
+    // Initially hide target selection and answer timer (will be shown in processTurn)
+    document.getElementById('target-selection').style.display = 'none';
+    document.getElementById('answer-timer').style.display = 'none';
+    // Load the first question (if needed) and start the timer and animation
     loadQuestion();
     startTimer();
     animate();
+    // Begin processing the first turn (should be soldier by default)
+    processTurn();
 }
 
 // Load the current question text
@@ -376,76 +558,67 @@ function loadQuestion() {
     questionText.textContent = questions[currentQuestionIndex].question;
 }
 
-// Handle answer submission and update health accordingly
-function submitAnswer() {
+// Modified submitAnswer to update turn order after soldier's turn
+async function submitAnswer() {
     clearInterval(answerTimer); // Stop the answer timer
 
     const userAnswer = document.getElementById('answer-input').value;
     if (userAnswer === questions[currentQuestionIndex].answer) {
-        // Correct answer: attack the selected target
+        // Correct answer: soldier attacks the selected target
         if (selectedTarget === 'orc') {
+            await attackAnimation(soldier, orc);
             wolfHealth--;
             if (wolfHealth > 0) {
-                orc.takeHit(); // Play hit animation
+                orc.takeHit();
             } else {
-                orc.die(); // Play death animation
+                orc.die();
                 setTimeout(() => {
                     endGame();
-                }, 2000); // Wait for death animation to finish
+                }, 2000);
             }
         } else if (selectedTarget === 'enemyTop') {
+            await attackAnimation(soldier, enemyTop);
             enemyTopHealth--;
             if (enemyTopHealth > 0) {
-                enemyTop.takeHit(); // Play hit animation
+                enemyTop.takeHit();
             } else {
-                enemyTop.die(); // Play death animation
+                enemyTop.die();
                 setTimeout(() => {
                     endGame();
                 }, 2000);
             }
         } else if (selectedTarget === 'enemyBottom') {
+            await attackAnimation(soldier, enemyBottom);
             enemyBottomHealth--;
             if (enemyBottomHealth > 0) {
-                enemyBottom.takeHit(); // Play hit animation
+                enemyBottom.takeHit();
             } else {
-                enemyBottom.die(); // Play death animation
+                enemyBottom.die();
                 setTimeout(() => {
                     endGame();
                 }, 2000);
             }
         }
-    } else {
-        // Incorrect answer: player takes damage
-        soldierHealth--;
-        if (soldierHealth > 0) {
-            soldier.takeHit(); // Play hit animation
-        } else {
-            soldier.die(); // Play death animation
-            setTimeout(() => {
-                endGame();
-            }, 2000);
-        }
-
-        // Reset for the next turn
+        // Clear UI after a correct answer
         document.getElementById('answer-input').value = '';
         document.getElementById('answer-input').style.display = 'none';
         document.getElementById('submit-button').style.display = 'none';
         document.getElementById('question-text').textContent = '';
-        selectedTarget = null;
-
-        // Move to the next turn
-        currentTurnIndex = (currentTurnIndex + 1) % turnOrder.length;
-        isPlayerTurn = turnOrder[currentTurnIndex] === 'soldier';
-
-        if (!isPlayerTurn) {
-            // Enemy's turn (AI logic)
-            setTimeout(() => {
-                enemyTurn();
-            }, 1000);
-        }
+    } else {
+        // Incorrect answer: simply clear the input and notify the player
+        document.getElementById('answer-input').value = '';
+        document.getElementById('answer-input').style.display = 'none';
+        document.getElementById('submit-button').style.display = 'none';
+        document.getElementById('question-text').textContent = 'Wrong Answer!';
     }
+    // Advance turn order and process the next turn
+    currentTurnIndex = (currentTurnIndex + 1) % turnOrder.length;
+    processTurn();
 }
 
+// Modified attackAnimation function:
+// The attacker walks up to the target, then stays there to complete the full attack animation.
+// Once the attack animation is finished, the sprite resets to idle and then walks back.
 async function attackAnimation(attacker, target) {
     const originalX = attacker.position.x;
     const attackDistance = 50; // Distance to move toward the target
@@ -456,22 +629,23 @@ async function attackAnimation(attacker, target) {
         await new Promise(resolve => setTimeout(resolve, 16)); // 60 FPS
     }
 
-    // Play attack animation (you can add an attack sprite if needed)
+    // Start the attack animation at the target
     attacker.image = attacker.sprites.attack.image;
     attacker.framesMax = attacker.sprites.attack.framesMax;
     attacker.framesCurrent = 0;
 
-    // Wait for the attack animation to finish
+    // Wait for the attack animation to finish fully while staying at the target position.
+    // (You can adjust the delay to match the duration of your attack animation.)
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    // Move back to the original position
+    // Now reset to idle animation before walking back.
+    attacker.resetToIdle();
+
+    // Move back to the original position while showing idle animation
     while (attacker.position.x > originalX) {
         attacker.position.x -= 5;
         await new Promise(resolve => setTimeout(resolve, 16)); // 60 FPS
     }
-
-    // Reset to idle animation
-    attacker.resetToIdle();
 }
 
 // Start the countdown timer
@@ -492,6 +666,7 @@ function endGame() {
     cancelAnimationFrame(animationId); // Stop the animation loop
     alert('Game over!');
 
+    // Reset all game state variables, including health, so the health bars display as full.
     currentQuestionIndex = 0;
     timeLeft = 30;
     wolfHealth = 3;
@@ -520,14 +695,14 @@ function endGame() {
     document.getElementById('answer-timer').style.display = 'none';
 
     // Show the home screen and hide the gameplay screen
-    document.querySelector('.container').style.display = 'block'; // Show home screen
-    document.getElementById('gameplay-screen').style.display = 'none'; // Hide gameplay screen
+    document.querySelector('.container').style.display = 'block';
+    document.getElementById('gameplay-screen').style.display = 'none';
 
     // Re-enable the play button
     document.getElementById('play-button').disabled = false;
 }
 
-// Animation loop: updates sprites and draws health bars
+// Animation loop: updates sprites and draws health bars, then overlays the turn order display
 function animate() {
     animationId = requestAnimationFrame(animate);
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
@@ -536,11 +711,11 @@ function animate() {
     allyTop.update();
     allyBottom.update();
 
-    // Draw enemies first (behind the soldier)
+    // Draw enemies (behind the soldier)
     if (enemyTop) enemyTop.update();
     if (enemyBottom) enemyBottom.update();
 
-    // Update sprite animations
+    // Update main characters
     soldier.update();
     orc.update();
 
@@ -551,33 +726,11 @@ function animate() {
     drawHealthBar(allyBottom, allyBottomHealth, 3);
     if (enemyTop) drawHealthBar(enemyTop, enemyTopHealth, 3);
     if (enemyBottom) drawHealthBar(enemyBottom, enemyBottomHealth, 3);
+
+    // Draw the turn order bar on top
+    drawTurnOrder();
 }
 
-function enemyTurn() {
-    const targets = ['soldier']; // Enemies can only attack the soldier
-    const target = targets[Math.floor(Math.random() * targets.length)];
-
-    if (target === 'soldier') {
-        // Enemy attacks the soldier
-        attackAnimation(orc, soldier).then(() => {
-            soldierHealth--;
-            if (soldierHealth > 0) {
-                soldier.takeHit(); // Play hit animation
-            } else {
-                soldier.die(); // Play death animation
-                setTimeout(() => {
-                    endGame();
-                }, 2000);
-            }
-
-            // Move to the next turn
-            currentTurnIndex = (currentTurnIndex + 1) % turnOrder.length;
-            isPlayerTurn = turnOrder[currentTurnIndex] === 'soldier';
-        });
-    }
-}
-
-// Initialize the game when the DOM is loaded
 document.addEventListener("DOMContentLoaded", function () {
     startGame();
 });
