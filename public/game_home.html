@@ -15,15 +15,27 @@
   </audio>
 
   <div class="menu-wrapper">
-    <h1 class="game-logo-text">My Game Title</h1>
+    <h1 class="game-logo-text">Learning Of Legends</h1>
     <ul class="menu-items">
-      <li><button onclick="alert('Story Mode')">STORY</button></li>
+      <!-- <li><button onclick="alert('Story Mode')">STORY</button></li>
       <li><button onclick="alert('Multiplayer Mode')">MULTIPLAYER</button></li>
+      <li><button onclick="href/login.html">MULTIPLAYER</button></li>
       <li><button onclick="alert('Custom Content')">CUSTOM CONTENT</button></li>
       <li><button onclick="alert('Extras')">EXTRAS</button></li>
-      <!-- The Options button now toggles the settings modal -->
+
+      The Options button now toggles the settings modal 
       <li><button onclick="toggleSettings()">OPTIONS</button></li>
-      <li><button onclick="alert('Exit Game')">EXIT</button></li>
+      <li><button onclick="alert('Exit Game')">EXIT</button></li> -->
+      <ul class="menu-items">
+        <li><button onclick="window.location.href='/login.html'">LOGIN</button></li>
+        <li><button onclick="window.location.href='/pve.html'">STORY</button></li>
+        <li><button onclick="window.location.href='/pvp.html'">MULTIPLAYER</button></li>
+        <li><button onclick="window.location.href='/custom-content.html'">CUSTOM CONTENT</button></li>
+        <li><button onclick="window.location.href='/extras.html'">EXTRAS</button></li>
+        <li><button onclick="toggleSettings()">OPTIONS</button></li>
+        <li><button onclick="window.location.href='/exit.html'">EXIT</button></li>
+      </ul>
+      
     </ul>
   </div>
 
