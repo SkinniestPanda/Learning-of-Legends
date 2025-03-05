@@ -167,7 +167,7 @@ ul li {
 
 /* Full-Screen Background for Home Page */
 .wg-bg {
-  background: url("/public/images/background/landscape.webp") no-repeat center center / cover;
+  background: url("/images/background/landscape.webp") no-repeat center center / cover;
   width: 100%;
   min-height: 100vh;
   display: flex;
