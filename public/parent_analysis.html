@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Parent Analysis</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Include Chart.js from a CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Navigation bar styles */
+    .nav-bar {
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      margin-right: 15px;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+    }
+    .logout-btn {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    /* Container styles for analysis page */
+    .container {
+      background: #fff;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 20px auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    /* Grid layout for question type charts */
+    #chartsContainer {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      justify-items: center;
+    }
+    #chartsContainer div {
+      width: 200px;
+      height: 200px;
+    }
+    #chartsContainer h4 {
+      text-align: center;
+      margin-bottom: 5px;
+    }
+    /* Style for dropdown filter */
+    #filterContainer {
+      margin-bottom: 20px;
+    }
+    #filterContainer label {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <div>
+      <a href="/" class="nav-link">Home</a>
+      <a href="/parent_home.html" class="nav-link">Dashboard</a>
+      <a href="/parent_analysis.html" class="nav-link">Analysis</a>
+      <a href="/settings.html" class="nav-link">Settings</a>
+    </div>
+    <div class="user-info">
+      <span id="userDisplay"></span>
+      <button onclick="logout()" class="logout-btn">Logout</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>Your Child's Performance Analysis</h2>
+    
+    <!-- Overall Statistics -->
+    <p>Total Questions Attempted: <span id="totalQuestions"></span></p>
+    <p>Correct Answers: <span id="correctAnswers"></span></p>
+    <p>Wrong Answers: <span id="wrongAnswers"></span></p>
+    <p>Percentage Correct: <span id="percentageCorrect"></span>%</p>
+    
+    <!-- Text Summary Analysis -->
+    <h3>Performance Summary</h3>
+    <p id="textAnalysis"></p>
+    
+    <!-- Dropdown Filter -->
+    <div id="filterContainer">
+      <label for="filterDropdown">Filter by Question Type:</label>
+      <select id="filterDropdown">
+        <option value="all">All</option>
+        <option value="addition">Addition</option>
+        <option value="subtraction">Subtraction</option>
+        <option value="multiplication">Multiplication</option>
+        <option value="division">Division</option>
+      </select>
+    </div>
+    
+    <!-- Overall Performance Chart -->
+    <h3>Overall Performance</h3>
+    <canvas id="resultsChart" width="300" height="300" style="display:block; margin:0 auto;"></canvas>
+    
+    <!-- Type-Specific Charts -->
+    <h3>Performance by Question Type</h3>
+    <div id="chartsContainer"></div>
+    
+    <!-- Detailed Analysis Summary for Types -->
+    <h3>Detailed Breakdown</h3>
+    <div id="analysisSummary"></div>
+    
+    <!-- Wrong Attempts Details -->
+    <h3>Wrong Attempts Details:</h3>
+    <ul id="wrongAttemptsList"></ul>
+    
+    <!-- Questions Answered -->
+    <h3>Questions Answered:</h3>
+    <ul id="questionsAnsweredList"></ul>
+    
+    <br>
+    <button id="clearDataBtn">Clear Data</button>
+  </div>
+  
+  <script>
+    function logout() {
+      localStorage.clear();
+      window.location.href = '/login.html';
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('token');
+      const username = localStorage.getItem('username');
+      const role = localStorage.getItem('role');
+      
+      if (!token || role !== 'parent') {
+        window.location.href = '/login.html';
+        return;
+      }
+      
+      const userDisplay = document.getElementById('userDisplay');
+      if (userDisplay) {
+        userDisplay.textContent = `${username || 'Parent'} (${role})`;
+      }
+    });
+  </script>
+  
+  <script src="/js/parent_analysis.js"></script>
+</body>
+</html>

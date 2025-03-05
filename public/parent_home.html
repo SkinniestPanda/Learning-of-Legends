@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Parent Home</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .nav-bar {
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      margin-right: 15px;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+    }
+    .logout-btn {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .child-result {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+    }
+    .no-children {
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      text-align: center;
+      color: #666;
+    }
+    .view-stats-btn {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <div>
+      <a href="/" class="nav-link">Home</a>
+      <a href="/parent_home.html" class="nav-link">Dashboard</a>
+      <a href="/parent_analysis.html" class="nav-link">Analysis</a>
+      <a href="/settings.html" class="nav-link">Settings</a>
+    </div>
+    <div class="user-info">
+      <span id="userDisplay"></span>
+      <button onclick="logout()" class="logout-btn">Logout</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>Welcome, Parent!</h2>
+    <h3>Your Children</h3>
+    <div id="childrenContainer">
+      <!-- Child information will be dynamically loaded here -->
+      <div class="loading">Loading your children's information...</div>
+    </div>
+  </div>
+
+  <script>
+    function logout() {
+      localStorage.clear();
+      window.location.href = '/login.html';
+    }
+    
+    async function loadChildren() {
+      const token = localStorage.getItem('token');
+      const container = document.getElementById('childrenContainer');
+      
+      try {
+        const response = await fetch('/api/auth/my-children', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to load children');
+        }
+        
+        const data = await response.json();
+        container.innerHTML = '';
+        
+        if (data.children && data.children.length > 0) {
+          data.children.forEach(child => {
+            const childDiv = document.createElement('div');
+            childDiv.className = 'child-result';
+            
+            // For now, we'll just show basic info. In a real app, you'd fetch statistics
+            childDiv.innerHTML = `
+              <h4>${child.username}</h4>
+              <p>Account Created: ${new Date(child.created_at).toLocaleDateString()}</p>
+              <p>Last Login: ${child.last_login ? new Date(child.last_login).toLocaleDateString() : 'Never'}</p>
+              <button class="view-stats-btn" onclick="viewChildStats(${child.id})">View Statistics</button>
+            `;
+            container.appendChild(childDiv);
+          });
+        } else {
+          container.innerHTML = `
+            <div class="no-children">
+              <p>You don't have any children assigned to your account yet.</p>
+              <p>Please contact an administrator to assign your children to your account.</p>
+            </div>
+          `;
+        }
+      } catch (error) {
+        container.innerHTML = `
+          <div class="no-children">
+            <p>Error loading children: ${error.message}</p>
+          </div>
+        `;
+      }
+    }
+    
+    function viewChildStats(childId) {
+      // In a real app, you'd redirect to a page showing detailed stats for this child
+      alert(`Viewing statistics for child ID: ${childId}`);
+      // For example:
+      // window.location.href = `/parent_analysis.html?childId=${childId}`;
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('token');
+      const username = localStorage.getItem('username');
+      const role = localStorage.getItem('role');
+      
+      if (!token || role !== 'parent') {
+        window.location.href = '/login.html';
+        return;
+      }
+      
+      const userDisplay = document.getElementById('userDisplay');
+      if (userDisplay) {
+        userDisplay.textContent = `${username || 'Parent'} (${role})`;
+      }
+      
+      // Load children from the API
+      loadChildren();
+    });
+  </script>
+</body>
+</html>

@@ -4,21 +4,85 @@
     <meta charset="UTF-8">
     <title>Admin Dashboard - Learning of Legends</title>
     <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .admin-section {
+            margin-bottom: 30px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        .danger-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .success-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
     <div class="nav-bar">
         <a href="/" class="nav-link">Home</a>
-        <a href="/logout" class="nav-link">Logout</a>
+        <a href="#" class="nav-link" onclick="logout()">Logout</a>
     </div>
     <div class="admin-container">
         <h2>Admin Dashboard</h2>
-        <div id="usersList">
+        
+        <div class="admin-section" id="usersList">
             <h3>Users Management</h3>
             <table id="usersTable">
                 <thead>
                     <tr>
                         <th>Username</th>
-                        <th>Email</th>
                         <th>Role</th>
                         <th>Created</th>
                         <th>Last Login</th>
@@ -28,7 +92,43 @@
                 <tbody></tbody>
             </table>
         </div>
+        
+        <div class="admin-section" id="parentChildSection">
+            <h3>Parent-Child Relationships</h3>
+            
+            <div class="form-group">
+                <h4>Assign Child to Parent</h4>
+                <div class="form-group">
+                    <label for="parentSelect">Select Parent:</label>
+                    <select id="parentSelect"></select>
+                </div>
+                <div class="form-group">
+                    <label for="childSelect">Select Child:</label>
+                    <select id="childSelect"></select>
+                </div>
+                <button onclick="assignChild()" class="success-button">Assign Child to Parent</button>
+            </div>
+            
+            <h4>Current Relationships</h4>
+            <table id="relationshipsTable">
+                <thead>
+                    <tr>
+                        <th>Parent</th>
+                        <th>Child</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
+    <script>
+        function logout() {
+            localStorage.clear();
+            window.location.href = '/login.html';
+        }
+    </script>
     <script src="/js/admin.js"></script>
 </body>
 </html> 
