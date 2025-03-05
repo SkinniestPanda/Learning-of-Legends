@@ -3,48 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <title>Parent Analysis</title>
-  <link rel="stylesheet" href="css/style.css">
-  <!-- Include Chart.js from a CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    /* Container styles for analysis page */
-    .container {
+ <style>
+    /* Basic styling for the teacher page */
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 20px;
+      
+    }
+    .wide-container {
       background: #fff;
       padding: 20px;
-      max-width: 1200px;
-      margin: 20px auto;
+      max-width: 2000px;
+      margin: 0 auto;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    nav a {
-      margin-right: 10px;
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      background: #007BFF;
+      color: #fff;
+      cursor: pointer;
     }
-    /* Grid layout for question type charts */
-    #chartsContainer {
+    button:hover {
+      background: #0056b3;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 20px;
-      justify-items: center;
     }
-    #chartsContainer div {
-      width: 200px;
-      height: 200px;
+    li {
+      margin: 5px 0;
     }
-    #chartsContainer h4 {
-      text-align: center;
-      margin-bottom: 5px;
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #007BFF;
     }
-    /* Style for dropdown filter */
-    #filterContainer {
-      margin-bottom: 20px;
-    }
-    #filterContainer label {
-      margin-right: 10px;
+    /* Containers for additional charts and summaries */
+    #chartsContainer, #analysisSummary {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
     }
   </style>
+   <!-- Include Chart.js from a CDN -->
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="container">
+  <div class="container wide-container">
     <h2>Your Child's Performance Analysis</h2>
     
     <!-- Overall Statistics -->
@@ -96,10 +111,10 @@
       <a href="parent_home.html">Home</a> |
       <a href="parent_settings.html">Settings</a> |
       <a href="parent_login.html">Logout</a> |
-      <a href="index.html">Back to Role Selection</a>
+      <a href="test_JY.html">Back to Role Selection</a>
     </nav>
   </div>
   
-  <script src="parent_analysis.js"></script>
+  <script src="js/parent_analysis.js"></script>
 </body>
 </html>
