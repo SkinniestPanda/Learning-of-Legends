@@ -3,12 +3,9 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
 
-<<<<<<< HEAD
 //jy
 const attemptsRouter = require('./routes/attempts');
 
-=======
->>>>>>> origin/branch_cheehean
 // Middleware
 app.use(bodyParser.json());
 app.use(express.static('public'));
@@ -34,13 +31,10 @@ const authRouter = require('./routes/auth');
 app.use('/api/guild', guildRouter);
 app.use('/api/auth', authRouter);
 
-<<<<<<< HEAD
 //JY
 // Use the attempts API routes
 app.use('/api/attempts', attemptsRouter);
 
-=======
->>>>>>> origin/branch_cheehean
 // Serve static files
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -48,10 +42,6 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-<<<<<<< HEAD
     console.log(`Server is running on port http://localhost:${PORT}`);
 
-=======
-    console.log(`Server is running on port ${PORT}`);
->>>>>>> origin/branch_cheehean
 }); 
