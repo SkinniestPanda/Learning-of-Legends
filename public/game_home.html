@@ -39,22 +39,28 @@
     </ul>
   </div>
 
+  <!-- settings  -->
+   
   <!-- Floating Settings Modal -->
-  <div id="settingsModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="toggleSettings()">&times;</span>
-      <h2>Settings</h2>
-      <div class="settings-row">
-        <label for="musicToggle">Background Music:</label>
-        <input type="checkbox" id="musicToggle">
-      </div>
-      <div class="settings-row">
-        <label for="musicVolume">Music Volume:</label>
-        <input type="range" id="musicVolume" min="0" max="100" value="50">
-      </div>
-      <button id="saveSettingsBtn">Save Settings</button>
+<!-- Inside the settings modal section of game_home.html -->
+<div id="settingsModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="toggleSettings()">&times;</span>
+    <h2>Settings</h2>
+    <div class="settings-row">
+      <label for="musicToggle">Background Music:</label>
+      <input type="checkbox" id="musicToggle">
     </div>
+    <div class="settings-row">
+      <label for="musicVolume">Music Volume:</label>
+      <input type="range" id="musicVolume" min="0" max="100" value="50">
+    </div>
+    <button id="saveSettingsBtn">Save Settings</button>
+    <!-- Button to navigate to the Terms & Conditions page -->
+    <button onclick="window.location.href='terms.html'">Terms & Conditions</button>
   </div>
+</div>
+
 
   <script src="/js/session.js"></script>
   <script>

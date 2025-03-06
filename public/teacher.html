@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Teacher - Math Flash App Dashboard</title>
+  <!-- Include Chart.js from a CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    /* Basic styling for the teacher page */
     body {
       font-family: Arial, sans-serif;
       background: #f4f4f4;
@@ -13,11 +14,16 @@
     .container {
       background: #fff;
       padding: 20px;
-      max-width: 2000px;
+      max-width: 1400px; /* narrower than 2000px for better readability */
       margin: 0 auto;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
+    /* Headings */
+    h2, h3 {
+      margin-top: 0;
+    }
+    /* Buttons */
     button {
       margin: 5px;
       padding: 10px 20px;
@@ -30,71 +36,144 @@
     button:hover {
       background: #0056b3;
     }
-    ul {
-      list-style: none;
-      padding: 0;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-    }
-    li {
-      margin: 5px 0;
-    }
+    /* Links */
     a {
       display: inline-block;
       margin-top: 20px;
       text-decoration: none;
       color: #007BFF;
     }
-    /* Containers for additional charts and summaries */
-    #chartsContainer, #analysisSummary {
-      margin-top: 20px;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
+    /* Overall stats layout */
+    .stats-row {
+      display: flex;
+      flex-wrap: wrap;
       gap: 20px;
+      margin-bottom: 20px;
+    }
+    .stats-row p {
+      margin: 0;
+    }
+    /* Charts layout container: side by side for overall chart & type charts */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* 2 columns: left for overall chart, right for type charts */
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .chart-box {
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
+    .chart-box canvas {
+      display: block;
+      margin: 0 auto;
+    }
+    /* Type charts container inside the second column */
+    #chartsContainer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    #chartsContainer > div {
+      width: 180px;
+      text-align: center;
+    }
+    #analysisSummary, #wrongAttemptsList, #questionsAnsweredList {
+      margin-top: 20px;
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 15px;
+    }
+    #analysisSummary p {
+      margin: 0 0 10px;
+      line-height: 1.5;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    ul li {
+      margin-bottom: 10px;
+      background: #fff;
+      border-radius: 4px;
+      padding: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    #filterContainer {
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+    #filterContainer select {
+      padding: 5px 10px;
+      font-size: 14px;
     }
   </style>
-  <!-- Include Chart.js from a CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="container">
     <h2>Teacher / Parent Dashboard</h2>
-    <p>Total Questions Attempted: <span id="totalQuestions"></span></p>
-    <p>Correct Answers: <span id="correctAnswers"></span></p>
-    <p>Wrong Answers: <span id="wrongAnswers"></span></p>
-    <p>Percentage Correct: <span id="percentageCorrect"></span>%</p>
-    <!-- Text Analysis Summary -->
-    <p>Performance Analysis: <span id="textAnalysis"></span></p>
     
-    <!-- Dropdown filter for question type -->
-    <label for="filterDropdown">Filter by Question Type:</label>
-    <select id="filterDropdown">
-      <option value="all">All</option>
-      <option value="addition">Addition</option>
-      <option value="subtraction">Subtraction</option>
-      <option value="multiplication">Multiplication</option>
-      <option value="division">Division</option>
-    </select>
-    
-    <h3>Overall Performance Analysis</h3>
-    <canvas id="resultsChart" width="300" height="300" style="display:block; margin:0 auto;"></canvas>
-    
-    <h3>Performance by Question Type</h3>
-    <div id="chartsContainer" style="max-width: 300px"></div>
-    
+    <div class="stats-row">
+      <p>Total Questions Attempted: <span id="totalQuestions"></span></p>
+      <p>Correct Answers: <span id="correctAnswers"></span></p>
+      <p>Wrong Answers: <span id="wrongAnswers"></span></p>
+      <p>Percentage Correct: <span id="percentageCorrect"></span>%</p>
+    </div>
+
+    <div id="filterContainer">
+      <label for="filterDropdown">Filter by Question Type:</label>
+      <select id="filterDropdown">
+        <option value="all">All</option>
+        <option value="addition">Addition</option>
+        <option value="subtraction">Subtraction</option>
+        <option value="multiplication">Multiplication</option>
+        <option value="division">Division</option>
+      </select>
+    </div>
+
+    <div class="charts-grid">
+      <!-- Left column: Overall Performance Chart -->
+      <div class="chart-box">
+        <h3>Overall Performance Analysis</h3>
+        <canvas id="resultsChart" width="300" height="300"></canvas>
+      </div>
+      <!-- Right column: Performance by Question Type -->
+      <div class="chart-box">
+        <h3>Performance by Question Type</h3>
+        <div id="chartsContainer"></div>
+      </div>
+    </div>
+
+    <!-- Text Summary Analysis -->
     <h3>Text Summary Analysis</h3>
     <div id="analysisSummary"></div>
-    
-    <h3>Wrong Attempts Details:</h3>
-    <ul id="wrongAttemptsList"></ul>
-    
-    <h3>Questions Answered:</h3>
-    <ul id="questionsAnsweredList"></ul>
-    
-    <br>
+
+    <!-- Wrong Attempts Details Section -->
+    <h3>
+      Wrong Attempts Details:
+      <button id="toggleWrongAttempts">Expand</button>
+    </h3>
+    <div id="wrongAttemptsContainer" style="display: none;">
+      <ul id="wrongAttemptsList"></ul>
+    </div>
+
+    <!-- Questions Answered Section -->
+    <h3>
+      Questions Answered:
+      <button id="toggleQuestionsAnswered">Expand</button>
+    </h3>
+    <div id="questionsAnsweredContainer" style="display: none;">
+      <ul id="questionsAnsweredList"></ul>
+    </div>
+
+
+    <!-- <br>
     <button id="clearDataBtn">Clear Data</button>
-    <br><br>
+    <br><br> -->
     <a href="test_JY.html">Back to Role Selection</a>
   </div>
   
