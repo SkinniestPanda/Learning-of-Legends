@@ -1,27 +1,14 @@
-const additionQuestions = [
-    { question: "2 + 3 = ?", options: [6, 5, 7, 4], correct: 5 },
-    { question: "6 + 2 = ?", options: [7, 4, 9, 8], correct: 8 },
-    { question: "4 + 5 = ?", options: [10, 8, 9, 7], correct: 9 },
-    { question: "3 + 6 = ?", options: [8, 7, 6, 9], correct: 9 },
-    { question: "1 + 7 = ?", options: [6, 7, 8, 9], correct: 8 },
-    { question: "5 + 4 = ?", options: [9, 8, 10, 7], correct: 9 },
-    { question: "2 + 8 = ?", options: [10, 11, 9, 12], correct: 10 },
-    { question: "7 + 3 = ?", options: [9, 11, 12, 10], correct: 10 },
-    { question: "6 + 5 = ?", options: [10, 11, 12, 8], correct: 11 },
-    { question: "9 + 2 = ?", options: [11, 12, 14, 10], correct: 11 },
-    { question: "4 + 7 = ?", options: [8, 11, 10, 12], correct: 11 },
-    { question: "8 + 1 = ?", options: [11, 8, 10, 9], correct: 9 },
-    { question: "12 + 15 = ?", options: [26, 28, 27, 25], correct: 27 },
-    { question: "23 + 14 = ?", options: [37, 36, 35, 38], correct: 37 },
-    { question: "45 + 32 = ?", options: [78, 75, 76, 77], correct: 77 },
-    { question: "11 + 19 = ?", options: [29, 28, 31, 30], correct: 30 },
-    { question: "56 + 21 = ?", options: [78, 80, 77, 79], correct: 77 },
-    { question: "34 + 12 = ?", options: [44, 47, 45, 46], correct: 46 },
-    { question: "28 + 39 = ?", options: [68, 70, 67, 69], correct: 67 },
-    { question: "17 + 25 = ?", options: [41, 44, 42, 43], correct: 42 },
-    { question: "66 + 14 = ?", options: [81, 78, 79, 80], correct: 80 },
-    { question: "31 + 48 = ?", options: [81, 82, 80, 79], correct: 79 },
-    { question: "27 + 33 = ?", options: [59, 61, 60, 58], correct: 60 },
-    { question: "15 + 28 = ?", options: [44, 42, 45, 43], correct: 43 },
-    { question: "53 + 22 = ?", options: [77, 75, 76, 74], correct: 75 }
-];
+// addition.js
+export const additionQuestions = [
+    { id: 1, question: "5 + 3 = ?", correctAnswer: 8, options: [7, 8, 9, 10], operation: "addition" },
+    { id: 2, question: "12 + 7 = ?", correctAnswer: 19, options: [18, 19, 20, 21], operation: "addition" },
+    { id: 3, question: "9 + 6 = ?", correctAnswer: 15, options: [14, 15, 16, 17], operation: "addition" },
+    { id: 4, question: "3 + 4 = ?", correctAnswer: 7, options: [6, 7, 8, 9], operation: "addition" },
+    { id: 5, question: "10 + 15 = ?", correctAnswer: 25, options: [23, 24, 25, 26], operation: "addition" },
+    { id: 6, question: "8 + 8 = ?", correctAnswer: 16, options: [15, 16, 17, 18], operation: "addition" },
+    { id: 7, question: "7 + 9 = ?", correctAnswer: 16, options: [15, 16, 17, 18], operation: "addition" },
+    { id: 8, question: "14 + 6 = ?", correctAnswer: 20, options: [18, 19, 20, 21], operation: "addition" },
+    { id: 9, question: "11 + 3 = ?", correctAnswer: 14, options: [13, 14, 15, 16], operation: "addition" },
+    { id: 10, question: "20 + 5 = ?", correctAnswer: 25, options: [24, 25, 26, 27], operation: "addition" }
+  ];
+  

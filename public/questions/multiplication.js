@@ -1,27 +1,14 @@
-const multiplicationQuestions = [
-    { question: "2 × 2 = ?", options: [4, 2, 5, 3], correct: 4 },
-    { question: "3 × 3 = ?", options: [8, 9, 10, 6], correct: 9 },
-    { question: "4 × 2 = ?", options: [6, 9, 8, 7], correct: 8 },
-    { question: "5 × 2 = ?", options: [8, 10, 11, 9], correct: 10 },
-    { question: "6 × 3 = ?", options: [18, 17, 16, 15], correct: 18 },
-    { question: "7 × 2 = ?", options: [14, 13, 15, 12], correct: 14 },
-    { question: "8 × 2 = ?", options: [14, 15, 16, 17], correct: 16 },
-    { question: "3 × 4 = ?", options: [11, 10, 13, 12], correct: 12 },
-    { question: "5 × 3 = ?", options: [15, 16, 13, 14], correct: 15 },
-    { question: "4 × 5 = ?", options: [20, 21, 19, 18], correct: 20 },
-    { question: "6 × 5 = ?", options: [29, 28, 30, 31], correct: 30 },
-    { question: "7 × 3 = ?", options: [21, 23, 22, 20], correct: 21 },
-    { question: "9 × 2 = ?", options: [16, 17, 18, 15], correct: 18 },
-    { question: "8 × 3 = ?", options: [25, 23, 22, 24], correct: 24 },
-    { question: "9 × 4 = ?", options: [31, 30, 32, 36], correct: 36 },
-    { question: "5 × 6 = ?", options: [31, 30, 28, 29], correct: 30 },
-    { question: "7 × 5 = ?", options: [34, 37, 35, 36], correct: 35 },
-    { question: "8 × 4 = ?", options: [31, 32, 33, 30], correct: 32 },
-    { question: "9 × 3 = ?", options: [26, 27, 25, 28], correct: 27 },
-    { question: "10 × 2 = ?", options: [15, 16, 20, 21], correct: 20 },
-    { question: "11 × 2 = ?", options: [20, 21, 22, 23], correct: 22 },
-    { question: "12 × 2 = ?", options: [24, 22, 25, 23], correct: 24 },
-    { question: "10 × 3 = ?", options: [28, 30, 27, 31], correct: 30 },
-    { question: "11 × 3 = ?", options: [30, 34, 33, 31], correct: 33 },
-    { question: "12 × 3 = ?", options: [34, 36, 37, 35], correct: 36 }
-];
+// multiplication.js
+export const multiplicationQuestions = [
+    { id: 1, question: "3 x 4 = ?", correctAnswer: 12, options: [10, 11, 12, 13], operation: "multiplication" },
+    { id: 2, question: "5 x 2 = ?", correctAnswer: 10, options: [8, 9, 10, 11], operation: "multiplication" },
+    { id: 3, question: "6 x 3 = ?", correctAnswer: 18, options: [16, 17, 18, 19], operation: "multiplication" },
+    { id: 4, question: "4 x 4 = ?", correctAnswer: 16, options: [15, 16, 17, 18], operation: "multiplication" },
+    { id: 5, question: "7 x 3 = ?", correctAnswer: 21, options: [20, 21, 22, 23], operation: "multiplication" },
+    { id: 6, question: "8 x 2 = ?", correctAnswer: 16, options: [14, 15, 16, 17], operation: "multiplication" },
+    { id: 7, question: "9 x 3 = ?", correctAnswer: 27, options: [25, 26, 27, 28], operation: "multiplication" },
+    { id: 8, question: "6 x 5 = ?", correctAnswer: 30, options: [28, 29, 30, 31], operation: "multiplication" },
+    { id: 9, question: "4 x 7 = ?", correctAnswer: 28, options: [27, 28, 29, 30], operation: "multiplication" },
+    { id: 10, question: "8 x 3 = ?", correctAnswer: 24, options: [22, 23, 24, 25], operation: "multiplication" }
+  ];
+  

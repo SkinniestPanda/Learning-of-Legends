@@ -1,27 +1,14 @@
-const subtractionQuestions = [
-    { question: "9 - 3 = ?", options: [7, 4, 6, 5], correct: 6 },
-    { question: "8 - 2 = ?", options: [5, 6, 7, 4], correct: 6 },
-    { question: "7 - 4 = ?", options: [2, 4, 1, 3], correct: 3 },
-    { question: "6 - 5 = ?", options: [0, 1, 2, 3], correct: 1 },
-    { question: "9 - 7 = ?", options: [2, 3, 1, 4], correct: 2 },
-    { question: "10 - 6 = ?", options: [3, 5, 4, 6], correct: 4 },
-    { question: "15 - 8 = ?", options: [5, 6, 8, 7], correct: 7 },
-    { question: "12 - 4 = ?", options: [7, 9, 8, 6], correct: 8 },
-    { question: "14 - 9 = ?", options: [6, 7, 5, 4], correct: 5 },
-    { question: "18 - 7 = ?", options: [9, 12, 10, 11], correct: 11 },
-    { question: "21 - 13 = ?", options: [9, 8, 7, 6], correct: 8 },
-    { question: "30 - 15 = ?", options: [15, 14, 12, 13], correct: 15 },
-    { question: "27 - 18 = ?", options: [9, 10, 7, 8], correct: 9 },
-    { question: "25 - 9 = ?", options: [17, 15, 14, 16], correct: 16 },
-    { question: "40 - 22 = ?", options: [16, 18, 17, 15], correct: 18 },
-    { question: "33 - 11 = ?", options: [20, 23, 22, 21], correct: 22 },
-    { question: "50 - 29 = ?", options: [20, 21, 19, 18], correct: 21 },
-    { question: "64 - 42 = ?", options: [19, 20, 21, 22], correct: 22 },
-    { question: "72 - 31 = ?", options: [38, 40, 41, 39], correct: 41 },
-    { question: "55 - 24 = ?", options: [28, 29, 30, 31], correct: 31 },
-    { question: "90 - 45 = ?", options: [42, 44, 43, 45], correct: 45 },
-    { question: "81 - 33 = ?", options: [49, 47, 46, 48], correct: 48 },
-    { question: "68 - 27 = ?", options: [38, 39, 41, 40], correct: 41 },
-    { question: "100 - 59 = ?", options: [42, 41, 39, 40], correct: 41 },
-    { question: "99 - 55 = ?", options: [44, 42, 43, 45], correct: 44 }
-];
+// subtraction.js
+export const subtractionQuestions = [
+    { id: 1, question: "10 - 4 = ?", correctAnswer: 6, options: [5, 6, 7, 8], operation: "subtraction" },
+    { id: 2, question: "15 - 7 = ?", correctAnswer: 8, options: [7, 8, 9, 10], operation: "subtraction" },
+    { id: 3, question: "20 - 5 = ?", correctAnswer: 15, options: [14, 15, 16, 17], operation: "subtraction" },
+    { id: 4, question: "9 - 3 = ?", correctAnswer: 6, options: [5, 6, 7, 8], operation: "subtraction" },
+    { id: 5, question: "12 - 6 = ?", correctAnswer: 6, options: [5, 6, 7, 8], operation: "subtraction" },
+    { id: 6, question: "18 - 9 = ?", correctAnswer: 9, options: [8, 9, 10, 11], operation: "subtraction" },
+    { id: 7, question: "14 - 5 = ?", correctAnswer: 9, options: [8, 9, 10, 11], operation: "subtraction" },
+    { id: 8, question: "16 - 8 = ?", correctAnswer: 8, options: [7, 8, 9, 10], operation: "subtraction" },
+    { id: 9, question: "13 - 4 = ?", correctAnswer: 9, options: [8, 9, 10, 11], operation: "subtraction" },
+    { id: 10, question: "11 - 2 = ?", correctAnswer: 9, options: [8, 9, 10, 11], operation: "subtraction" }
+  ];
+  
