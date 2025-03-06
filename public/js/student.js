@@ -1,17 +1,37 @@
 // student.js
 
-const questions = [
-  { id: 1, question: "5 + 3 = ?", correctAnswer: 8, operation: "addition" },
-  { id: 2, question: "10 - 4 = ?", correctAnswer: 6, operation: "subtraction" },
-  { id: 3, question: "3 * 4 = ?", correctAnswer: 12, operation: "multiplication" },
-  { id: 4, question: "16 / 4 = ?", correctAnswer: 4, operation: "division" }
+// If using ES modules:
+import { additionQuestions } from '../questions/addition.js';
+import { subtractionQuestions } from '../questions/subtraction.js';
+import { multiplicationQuestions } from '../questions/multiplication.js';
+import { divisionQuestions } from '../questions/division.js';
+
+// Merge all questions into one array
+let questions = [
+  ...additionQuestions,
+  ...subtractionQuestions,
+  ...multiplicationQuestions,
+  ...divisionQuestions
 ];
+
+// Shuffle the questions array using Fisher-Yates algorithm
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    // Swap elements array[i] and array[j]
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+// Shuffle the questions array
+questions = shuffle(questions);
 
 let currentQuestionIndex = 0;
 
 function loadQuestion() {
   if (currentQuestionIndex >= questions.length) {
-    currentQuestionIndex = 0;
+    currentQuestionIndex = 0; // Optionally, you can reshuffle if you want a new order for each cycle
   }
   const currentQuestion = questions[currentQuestionIndex];
   document.getElementById("questionText").textContent = currentQuestion.question;
@@ -37,8 +57,8 @@ async function recordAttempt(attempt) {
 function checkAnswer() {
   const currentQuestion = questions[currentQuestionIndex];
   const answer = Number(document.getElementById("answerInput").value);
-  const isCorrect = (answer === currentQuestion.correctAnswer);
-
+  const isCorrect = answer === currentQuestion.correctAnswer;
+  
   const feedbackEl = document.getElementById("feedback");
   if (isCorrect) {
     feedbackEl.textContent = "Correct!";
@@ -48,20 +68,18 @@ function checkAnswer() {
     feedbackEl.style.color = "red";
   }
   
-  // Build attempt object (adjust studentId as needed)
   const attempt = {
-    studentId: "student_001",  // In a real app, obtain dynamically.
+    studentId: "student_001", // Replace with a dynamic identifier if available
     question: currentQuestion.question,
     correctAnswer: currentQuestion.correctAnswer,
     studentAnswer: answer,
     isCorrect: isCorrect,
     operation: currentQuestion.operation,
+    source: "questions/" + currentQuestion.operation + ".js", // Optional: indicates file source
     timestamp: Date.now()
   };
 
-  // Record attempt to the database via API
   recordAttempt(attempt);
-  
   document.getElementById("nextQuestionBtn").style.display = "block";
 }
 
