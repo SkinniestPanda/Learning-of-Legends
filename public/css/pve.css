@@ -6,62 +6,98 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f0f0;
+    background-color: #222;
     font-family: Arial, sans-serif;
+    color: white;
 }
 
 .container {
     text-align: center;
 }
 
-.play-button {
-    padding: 15px 30px;
-    font-size: 24px;
-    background-color: #4CAF50;
+#gameplay-screen {
+    display: none;
+    text-align: center;
+}
+
+canvas {
+    border: 2px solid #444;
+    background-color: #333;
+}
+
+#target-selection, #soldier-attack-selection {
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #444;
     color: white;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 20px;
+    transition: background-color 0.3s ease;
 }
 
-.additional-buttons {
+button:hover {
+    background-color: #555;
+}
+
+button:active {
+    background-color: #666;
+}
+
+/* Quiz UI styling (similar to your PvP mode) */
+.question-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.question-box {
+    width: 300px;
+    height: 80px;
+    background-color: #ffbb00;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.answer-buttons {
     display: flex;
     justify-content: center;
     gap: 10px;
 }
 
-.guild-button, .pvp-button, .settings-button {
+.answer-buttons button {
     padding: 10px 20px;
-    font-size: 18px;
-    background-color: #008CBA;
+    background-color: #0984e3;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 1rem;
 }
 
-.guild-button:hover, .pvp-button:hover, .settings-button:hover, .play-button:hover {
-    opacity: 0.8;
-}
-
-.gameplay-screen {
-    display: none;
-    text-align: center;
-}
-
-#game-canvas {
-    display: block;
-    margin: 0 auto;
-    background-color: #008CBA;
-    border: 2px solid #000;
-}
-
-.question {
-    margin-top: 20px;
+.answer-buttons button:hover {
+    background-color: #0066cc;
 }
 
 .timer {
-    margin-top: 20px;
-    font-size: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: red;
+    margin-top: 10px;
+}
+
+/* Utility class to hide elements */
+.hidden {
+    display: none;
 }
