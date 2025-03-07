@@ -19,11 +19,38 @@ function authenticateToken(req, res, next) {
 }
 
 function authenticateAdmin(req, res, next) {
-    if (req.user && req.user.role === 'admin') {
-        next();
-    } else {
-        res.status(403).json({ error: "Admin access required" });
-    }
+    authenticateToken(req, res, () => {
+        if (req.user && req.user.role === 'admin') {
+            next();
+        } else {
+            res.status(403).json({ error: "Admin access required" });
+        }
+    });
 }
 
-module.exports = { authenticateToken, authenticateAdmin }; 
+function authenticateStudent(req, res, next) {
+    authenticateToken(req, res, () => {
+        if (req.user && (req.user.role === 'student' || req.user.role === 'admin')) {
+            next();
+        } else {
+            res.status(403).json({ error: "Student access required" });
+        }
+    });
+}
+
+function authenticateParent(req, res, next) {
+    authenticateToken(req, res, () => {
+        if (req.user && (req.user.role === 'parent' || req.user.role === 'admin')) {
+            next();
+        } else {
+            res.status(403).json({ error: "Parent access required" });
+        }
+    });
+}
+
+module.exports = { 
+    authenticateToken, 
+    authenticateAdmin,
+    authenticateStudent,
+    authenticateParent
+}; 

@@ -5,9 +5,9 @@ const { authenticateToken } = require('../middleware/auth');
 
 // Create a new guild
 router.post('/create', authenticateToken, (req, res) => {
-    // Check if user is admin
-    if (req.user.role !== 'admin') {
-        return res.status(403).json({ error: "Only administrators can create guilds" });
+    // Allow both students and admins to create guilds
+    if (req.user.role !== 'student' && req.user.role !== 'admin') {
+        return res.status(403).json({ error: "Only students and administrators can create guilds" });
     }
 
     const { name, password, description } = req.body;

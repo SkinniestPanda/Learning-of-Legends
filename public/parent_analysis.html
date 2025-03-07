@@ -3,10 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <title>Parent Analysis</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
   <!-- Include Chart.js from a CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
+    /* Navigation bar styles */
+    .nav-bar {
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      margin-right: 15px;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+    }
+    .logout-btn {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
     /* Container styles for analysis page */
     .container {
       background: #fff;
@@ -15,9 +42,6 @@
       margin: 20px auto;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    nav a {
-      margin-right: 10px;
     }
     /* Grid layout for question type charts */
     #chartsContainer {
@@ -44,6 +68,19 @@
   </style>
 </head>
 <body>
+  <div class="nav-bar">
+    <div>
+      <a href="/" class="nav-link">Home</a>
+      <a href="/parent_home.html" class="nav-link">Dashboard</a>
+      <a href="/parent_analysis.html" class="nav-link">Analysis</a>
+      <a href="/settings.html" class="nav-link">Settings</a>
+    </div>
+    <div class="user-info">
+      <span id="userDisplay"></span>
+      <button onclick="logout()" class="logout-btn">Logout</button>
+    </div>
+  </div>
+
   <div class="container">
     <h2>Your Child's Performance Analysis</h2>
     
@@ -91,15 +128,31 @@
     
     <br>
     <button id="clearDataBtn">Clear Data</button>
-    <br><br>
-    <nav>
-      <a href="parent_home.html">Home</a> |
-      <a href="parent_settings.html">Settings</a> |
-      <a href="parent_login.html">Logout</a> |
-      <a href="index.html">Back to Role Selection</a>
-    </nav>
   </div>
   
-  <script src="parent_analysis.js"></script>
+  <script>
+    function logout() {
+      localStorage.clear();
+      window.location.href = '/login.html';
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('token');
+      const username = localStorage.getItem('username');
+      const role = localStorage.getItem('role');
+      
+      if (!token || role !== 'parent') {
+        window.location.href = '/login.html';
+        return;
+      }
+      
+      const userDisplay = document.getElementById('userDisplay');
+      if (userDisplay) {
+        userDisplay.textContent = `${username || 'Parent'} (${role})`;
+      }
+    });
+  </script>
+  
+  <script src="/js/parent_analysis.js"></script>
 </body>
 </html>

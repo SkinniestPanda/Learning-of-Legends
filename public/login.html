@@ -5,18 +5,17 @@
     <title>Login - Learning of Legends</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
-    <div class="nav-bar">
-        <a href="/" class="nav-link">Home</a>
-    </div>
+<body class = "loginregister">
+
     <div class="login-container">
-        <h2>Login</h2>
         <form id="loginForm">
-            <input type="text" id="username" placeholder="Username" required>
-            <input type="password" id="password" placeholder="Password" required>
-            <button type="submit">Login</button>
+            <input type="text" id="username" class="input-field" placeholder="Username" required>
+            <input type="password" id="password" class="input-field" placeholder="Password" required>
+            <button type="submit" class="loginbtn" ></button>
         </form>
+        
         <p>Don't have an account? <a href="/register.html">Register here</a></p>
+        <p>Forgot your password? <a href="/reset-password.html">Reset it here</a></p>
     </div>
     <script src="/js/auth.js"></script>
 </body>

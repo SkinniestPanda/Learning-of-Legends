@@ -1,228 +1,292 @@
-// Combine all questions into one pool
-const questionPool = [
-    ...additionQuestions,
-    ...subtractionQuestions,
-    ...multiplicationQuestions,
-    ...divisionQuestions
-];
+// PVP Game System for Math Challenge
+// This script handles 1v1 matchmaking and gameplay
 
-let currentQuestionIndex = 0;
-let enemyHealth = 100;
-let timeLeft = 10;
-let timer;
-let currentMode = "1v1"; // Track if in 1v1 or 3v3 mode
+// Socket connection for real-time communication
+let socket;
+let inQueue = false;
+let currentGame = null;
+let playerHealth = 10;
+let opponentHealth = 10;
+let currentQuestion = null;
+let gameMode = '1v1'; // Default to 1v1 mode
 
-function goToPlay() {
-    document.getElementById('homepage').classList.add('hidden');
-    document.getElementById('play-mode').classList.remove('hidden');
+// Connect to the server when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    // Load the socket.io client library dynamically
+    const script = document.createElement('script');
+    script.src = 'https://cdn.socket.io/4.5.4/socket.io.min.js';
+    script.onload = initializeSocket;
+    document.head.appendChild(script);
+    
+    // Setup UI event listeners
+    setupEventListeners();
+});
+
+function initializeSocket() {
+    // Connect to the same host that served the page
+    socket = io();
+    
+    // Setup socket event listeners
+    socket.on('connect', () => {
+        console.log('Connected to server');
+        updateStatus('Connected to server');
+    });
+    
+    socket.on('matchFound', handleMatchFound);
+    socket.on('questionUpdate', handleQuestionUpdate);
+    socket.on('opponentAnswer', handleOpponentAnswer);
+    socket.on('gameOver', handleGameOver);
+    socket.on('opponentDisconnect', handleOpponentDisconnect);
 }
 
-function goBack() {
-    document.getElementById('play-mode').classList.add('hidden');
-    document.getElementById('homepage').classList.remove('hidden');
+function setupEventListeners() {
+    // These functions are already defined in the HTML
+    // We're just ensuring they have the proper implementation
+    window.goToPlay = () => {
+        document.getElementById('homepage').classList.add('hidden');
+        document.getElementById('play-mode').classList.remove('hidden');
+    };
+    
+    window.goBack = () => {
+        document.getElementById('play-mode').classList.add('hidden');
+        document.getElementById('homepage').classList.remove('hidden');
+        leaveQueue();
+    };
+    
+    window.goBackToMode = () => {
+        document.getElementById('game-1v1').classList.add('hidden');
+        document.getElementById('game-3v3').classList.add('hidden');
+        document.getElementById('play-mode').classList.remove('hidden');
+        endGame();
+    };
+    
+    window.start1v1 = () => {
+        gameMode = '1v1';
+        joinQueue();
+    };
+    
+    window.start3v3 = () => {
+        gameMode = '3v3';
+        // For now, we'll just implement 1v1 mode
+        alert('3v3 mode is not implemented yet');
+    };
+    
+    window.checkAnswer1v1 = (answer) => {
+        submitAnswer(answer);
+    };
 }
 
-// Generate Background Image Paths Automatically (1.png to 32.png)
-const backgrounds = Array.from({ length: 32 }, (_, i) => `images/background/${i + 1}.png`);
-let lastBackground = null; // Stores the last used background
-
-function changeBackground() {
-    let newBackground;
-
-    do {
-        newBackground = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-    } while (newBackground === lastBackground);
-
-    lastBackground = newBackground;
-
-    // Apply to the correct battlefield
-    if (currentMode === "1v1") {
-        document.querySelector("#game-1v1 .battlefield").style.backgroundImage = `url(${newBackground})`;
-    } else {
-        document.querySelector("#game-3v3 .battlefield").style.backgroundImage = `url(${newBackground})`;
-    }
+// Matchmaking functions
+function joinQueue() {
+    if (!socket || inQueue) return;
+    
+    inQueue = true;
+    socket.emit('joinQueue', { mode: gameMode });
+    updateStatus('Joining queue for ' + gameMode + '...');
+    
+    // Show loading/waiting UI
+    document.getElementById('play-mode').innerHTML = `
+        <h2>Finding Opponent...</h2>
+        <div class="loader"></div>
+        <button onclick="leaveQueue()">Cancel</button>
+    `;
 }
 
-// Function to Set Random Background
-function setRandomBackground(mode) {
-    const battlefield = document.querySelector(`#${mode} .battlefield`);
-    const randomBg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-    battlefield.style.backgroundImage = `url(${randomBg})`;
+function leaveQueue() {
+    if (!socket || !inQueue) return;
+    
+    socket.emit('leaveQueue');
+    inQueue = false;
+    updateStatus('Left queue');
+    
+    // Restore the play mode UI
+    document.getElementById('play-mode').innerHTML = `
+        <h2>Choose Your Mode</h2>
+        <button onclick="start1v1()">1v1</button>
+        <button onclick="start3v3()">3v3</button>
+        <button onclick="goBack()">Back</button>
+    `;
 }
 
-// Start 1v1 Mode with Random Background
-function start1v1() {
+// Game event handlers
+function handleMatchFound(data) {
+    inQueue = false;
+    currentGame = data.gameId;
+    updateStatus('Match found! Game starting...');
+    
+    // Show the game UI
     document.getElementById('play-mode').classList.add('hidden');
     document.getElementById('game-1v1').classList.remove('hidden');
-    setRandomBackground('game-1v1'); // Set background for 1v1
-    currentMode = "1v1";
-    resetGame();
+    
+    // Reset health bars
+    playerHealth = 10;
+    opponentHealth = 10;
+    updateHealthBars();
 }
 
-// Start 3v3 Mode with Random Background
-function start3v3() {
-    document.getElementById('play-mode').classList.add('hidden');
-    document.getElementById('game-3v3').classList.remove('hidden');
-    setRandomBackground('game-3v3'); // Set background for 3v3
-    currentMode = "3v3";
-    resetGame();
-}
-
-function goBackToMode() {
-    document.getElementById('game-1v1').classList.add('hidden');
-    document.getElementById('game-3v3').classList.add('hidden');
-    document.getElementById('play-mode').classList.remove('hidden');
-    clearInterval(timer);
-}
-
-// Function to load a new random question
-function loadNewQuestion() {
-    currentQuestionIndex = Math.floor(Math.random() * questionPool.length);
-    const questionData = questionPool[currentQuestionIndex];
-
-    let questionBox;
-    let answerButtonsContainer;
-
-    if (currentMode === "1v1") {
-        questionBox = document.querySelector("#game-1v1 .question-box");
-        answerButtonsContainer = document.querySelector("#game-1v1 .answer-buttons");
-    } else {
-        questionBox = document.querySelector("#game-3v3 .question-box");
-        answerButtonsContainer = document.querySelector("#game-3v3 .answer-buttons");
-    }
-
-    if (questionBox) {
-        questionBox.textContent = questionData.question;
-    }
-
-    // Clear previous buttons
-    if (answerButtonsContainer) {
-        answerButtonsContainer.innerHTML = "";
-    }
-
-    // Generate new buttons for answer choices
-    questionData.options.forEach(option => {
-        const btn = document.createElement("button");
-        btn.textContent = option;
-
-        if (currentMode === "1v1") {
-            btn.onclick = () => checkAnswer1v1(option);
-        } else {
-            btn.onclick = () => checkAnswer3v3(option);
-        }
-
-        answerButtonsContainer.appendChild(btn);
+function handleQuestionUpdate(data) {
+    currentQuestion = data.question;
+    
+    // Update the question display
+    const questionBox = document.querySelector('.question-box');
+    questionBox.textContent = data.question.question;
+    
+    // Create answer buttons
+    const answerButtons = document.querySelector('.answer-buttons');
+    answerButtons.innerHTML = ''; // Clear previous buttons
+    
+    data.question.options.forEach(option => {
+        const button = document.createElement('button');
+        button.textContent = option;
+        button.onclick = () => submitAnswer(option);
+        answerButtons.appendChild(button);
     });
-
-    resetTimer(); // Reset timer when a new question appears
+    
+    // Start or reset the timer
+    startTimer(10); // 10 second timer for each question
 }
 
-// 1v1 Answer Check
-function checkAnswer1v1(answer) {
-    const questionData = questionPool[currentQuestionIndex];
-
-    if (answer === questionData.correct) {
-        enemyHealth -= 50;
-        document.querySelector(".enemy-health .health-fill").style.width = `${enemyHealth}%`;
-
-        if (enemyHealth <= 0) {
-            setTimeout(() => {
-                alert("Victory! You won the 1v1 battle!");
-                changeBackground(); // Change background after a win
-                resetGame();
-            }, 500);
+function handleOpponentAnswer(data) {
+    if (data.correct) {
+        // Opponent answered correctly, reduce player health
+        playerHealth--;
+        
+        // Show attack animation
+        showAttackAnimation('opponent');
+        
+        if (playerHealth <= 0) {
+            // Player lost
+            socket.emit('gameOver', { winner: false });
+            endGame('lose');
         } else {
-            loadNewQuestion();
+            updateHealthBars();
         }
-    } else {
-        alert("Incorrect! Try again.");
     }
 }
 
-let currentEnemy = 0; // Track which enemy's health to decrease
+function handleGameOver(data) {
+    const result = data.winner ? 'win' : 'lose';
+    endGame(result);
+}
 
-// 3v3 Answer Check
-function checkAnswer3v3(answer) {
-    const questionData = questionPool[currentQuestionIndex];
+function handleOpponentDisconnect() {
+    updateStatus('Opponent disconnected. You win!');
+    endGame('win');
+}
 
-    if (answer === questionData.correct) {
-        const enemyBars = document.querySelectorAll("#game-3v3 .enemy-health .health-fill");
-
-        if (currentEnemy < enemyBars.length) {
-            // Get current enemy health width
-            let currentHealth = parseInt(enemyBars[currentEnemy].style.width) || 100;
-
-            // Reduce health by 50%
-            currentHealth -= 50;
-            enemyBars[currentEnemy].style.width = `${currentHealth}%`;
-
-            // If current enemy reaches 0%, move to the next one
-            if (currentHealth <= 0) {
-                currentEnemy++;
-
-                // If all enemies are defeated, declare victory
-                if (currentEnemy >= enemyBars.length) {
-                    setTimeout(() => {
-                        alert("Victory! Your team won the 3v3 battle!");
-                        resetGame();  // Reset health and game state
-                        setTimeout(changeBackground, 300); // Change background after reset
-                    }, 500);
-                    return;
-                }
-            }
-            loadNewQuestion();
+// Game mechanics
+function submitAnswer(answer) {
+    if (!currentQuestion || !currentGame) return;
+    
+    const isCorrect = answer === currentQuestion.correct;
+    socket.emit('submitAnswer', {
+        gameId: currentGame,
+        answer: answer,
+        correct: isCorrect
+    });
+    
+    if (isCorrect) {
+        // Player answered correctly, reduce opponent health
+        opponentHealth--;
+        
+        // Show attack animation
+        showAttackAnimation('player');
+        
+        if (opponentHealth <= 0) {
+            // Player won
+            socket.emit('gameOver', { winner: true });
+            endGame('win');
+        } else {
+            updateHealthBars();
         }
-    } else {
-        alert("Incorrect! Try again.");
     }
 }
 
-// Timer function (shared for 1v1 and 3v3)
-function startTimer() {
-    timeLeft = 10;
+function updateHealthBars() {
+    const playerHealthBar = document.querySelector('.player-health .health-fill');
+    const enemyHealthBar = document.querySelector('.enemy-health .health-fill');
+    
+    playerHealthBar.style.width = (playerHealth / 10 * 100) + '%';
+    enemyHealthBar.style.width = (opponentHealth / 10 * 100) + '%';
+}
 
-    if (currentMode === "1v1") {
-        document.getElementById("timer").textContent = `Time: ${timeLeft}s`;
-    } else {
-        document.getElementById("timer-3v3").textContent = `Time: ${timeLeft}s`;
+function showAttackAnimation(attacker) {
+    const attackerElement = document.querySelector(`.character.${attacker}`);
+    attackerElement.classList.add('attack');
+    
+    setTimeout(() => {
+        attackerElement.classList.remove('attack');
+    }, 500);
+}
+
+function startTimer(seconds) {
+    const timerElement = document.getElementById('timer');
+    let timeLeft = seconds;
+    
+    // Clear any existing timer
+    if (window.gameTimer) {
+        clearInterval(window.gameTimer);
     }
-
-    timer = setInterval(() => {
+    
+    // Update timer display and start countdown
+    timerElement.textContent = `Time: ${timeLeft}s`;
+    
+    window.gameTimer = setInterval(() => {
         timeLeft--;
-
-        if (currentMode === "1v1") {
-            document.getElementById("timer").textContent = `Time: ${timeLeft}s`;
-        } else {
-            document.getElementById("timer-3v3").textContent = `Time: ${timeLeft}s`;
-        }
-
+        timerElement.textContent = `Time: ${timeLeft}s`;
+        
         if (timeLeft <= 0) {
-            clearInterval(timer);
-            alert("Time's up! New question loaded.");
-            loadNewQuestion(); // Load a new question instead of ending the game
+            clearInterval(window.gameTimer);
+            // Time's up, opponent gets a free hit
+            socket.emit('timeUp', { gameId: currentGame });
         }
     }, 1000);
 }
 
-function resetTimer() {
-    clearInterval(timer);
-    startTimer();
+function endGame(result) {
+    // Clear any ongoing game state
+    currentGame = null;
+    clearInterval(window.gameTimer);
+    
+    // Show game result
+    const gameUI = document.getElementById('game-1v1');
+    
+    if (result) {
+        const resultMessage = result === 'win' ? 'You Won!' : 'You Lost!';
+        gameUI.innerHTML += `
+            <div class="game-result">
+                <h2>${resultMessage}</h2>
+                <button onclick="goBackToMode()">Back to Menu</button>
+            </div>
+        `;
+    }
 }
 
-// Reset game settings (for both 1v1 and 3v3)
-function resetGame() {
-    enemyHealth = 100;  // Reset main enemy health
-    currentEnemy = 0;    // Reset enemy tracking for 3v3 mode
+function updateStatus(message) {
+    console.log('Status: ' + message);
+    // Could also update a status display in the UI if desired
+}
 
-    // Reset all enemy health bars
-    document.querySelectorAll(".enemy-health .health-fill").forEach((bar) => {
-        bar.style.width = "100%";
-    });
+// Helper function to get random questions from the available question sets
+function getRandomQuestions(count = 10) {
+    // Combine all question types
+    const allQuestions = [
+        ...additionQuestions,
+        ...subtractionQuestions,
+        ...multiplicationQuestions,
+        ...divisionQuestions
+    ];
+    
+    // Shuffle and pick the requested number
+    return shuffleArray(allQuestions).slice(0, count);
+}
 
-    // Reset all player health bars (if applicable)
-    document.querySelectorAll(".player-health .health-fill").forEach((bar) => {
-        bar.style.width = "100%";
-    });
-
-    loadNewQuestion(); // Generate a new question after resetting
+// Fisher-Yates shuffle algorithm
+function shuffleArray(array) {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
 }

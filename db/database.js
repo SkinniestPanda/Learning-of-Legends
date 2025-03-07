@@ -7,8 +7,7 @@ db.serialize(() => {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT UNIQUE NOT NULL,
         password TEXT NOT NULL,
-        email TEXT UNIQUE NOT NULL,
-        role TEXT DEFAULT 'user',
+        role TEXT DEFAULT 'student',
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         last_login DATETIME
     )`);
@@ -33,6 +32,17 @@ db.serialize(() => {
         FOREIGN KEY (guild_id) REFERENCES guilds(id) ON DELETE CASCADE,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
         UNIQUE(guild_id, user_id)
+    )`);
+    
+    // Parent-child relationships table
+    db.run(`CREATE TABLE IF NOT EXISTS parent_child (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        parent_id INTEGER NOT NULL,
+        child_id INTEGER NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (parent_id) REFERENCES users(id) ON DELETE CASCADE,
+        FOREIGN KEY (child_id) REFERENCES users(id) ON DELETE CASCADE,
+        UNIQUE(parent_id, child_id)
     )`);
 });
 

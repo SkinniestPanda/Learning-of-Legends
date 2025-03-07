@@ -3,18 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <title>Student - Math Flash App</title>
+  <link rel="stylesheet" href="/css/style.css">
   <style>
     /* Basic styling for the student page */
     body {
       font-family: Arial, sans-serif;
       background: #f4f4f4;
-      margin: 20px;
+      margin: 0;
     }
     .container {
       background: #fff;
       padding: 20px;
       max-width: 600px;
-      margin: 0 auto;
+      margin: 20px auto;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
@@ -40,9 +41,50 @@
       text-decoration: none;
       color: #007BFF;
     }
+    .nav-bar {
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      margin-right: 15px;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+    }
+    .logout-btn {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
   </style>
 </head>
 <body>
+  <div class="nav-bar">
+    <div>
+      <a href="/" class="nav-link">Home</a>
+      <a href="/guild.html" class="nav-link">Guild</a>
+      <a href="/pve.html" class="nav-link">PVE</a>
+      <a href="/pvp.html" class="nav-link">PVP</a>
+      <a href="/statistics.html" class="nav-link">Statistics</a>
+      <a href="/settings.html" class="nav-link">Settings</a>
+    </div>
+    <div class="user-info">
+      <span id="userDisplay"></span>
+      <button onclick="logout()" class="logout-btn">Logout</button>
+    </div>
+  </div>
+  
   <div class="container">
     <h2>Student Flash Questions</h2>
     <p id="questionText"></p>
@@ -52,11 +94,32 @@
     <div id="feedback"></div>
     <br>
     <button id="nextQuestionBtn" style="display:none;">Next Question</button>
-    <br><br>
-    <a href="index.html">Back to Role Selection</a>
   </div>
   
+  <script>
+    function logout() {
+      localStorage.clear();
+      window.location.href = '/login.html';
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('token');
+      const username = localStorage.getItem('username');
+      const role = localStorage.getItem('role');
+      
+      if (!token || role !== 'student') {
+        window.location.href = '/login.html';
+        return;
+      }
+      
+      const userDisplay = document.getElementById('userDisplay');
+      if (userDisplay) {
+        userDisplay.textContent = `${username || 'Student'} (${role})`;
+      }
+    });
+  </script>
+  
   <!-- Include the student JavaScript file -->
-  <script src="js/student.js"></script>
+  <script src="/js/student.js"></script>
 </body>
 </html>
