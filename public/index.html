@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Learning of Legends</title>
     <link rel="stylesheet" href="css/style.css">
+    <audio id="bg-music" autoplay loop>
+        <source src="music/ALittleR&R.ogg" type="audio/ogg">
+        Your browser does not support the audio element.
+      </audio>
     <style>
         .nav-container {
             width: 600px;
@@ -47,6 +51,8 @@
             font-size: 0.9em;
             color: #666;
         }
+
+        
     </style>
 </head>
 <body>
@@ -82,10 +88,30 @@
                 <h3>Statistics</h3>
                 <p>View your progress</p>
             </a>
-            <a href="/settings.html" class="nav-item">
+            <a onclick="toggleSettings()" class="nav-item">
                 <h3>Settings</h3>
                 <p>Customize your experience</p>
             </a>
+        </div>
+    </div>
+
+    <!-- Floating Settings Modal         -->
+    <!-- Inside the settings modal section of game_home.html -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+        <span class="close" onclick="toggleSettings()">&times;</span>
+        <h2>Settings</h2>
+        <div class="settings-row">
+            <label for="musicToggle">Background Music:</label>
+            <input type="checkbox" id="musicToggle">
+        </div>
+        <div class="settings-row">
+            <label for="musicVolume">Music Volume:</label>
+            <input type="range" id="musicVolume" min="0" max="100" value="50">
+        </div>
+        <button id="saveSettingsBtn">Save Settings</button>
+        <!-- Button to navigate to the Terms & Conditions page -->
+        <button onclick="window.location.href='terms.html'">Terms & Conditions</button>
         </div>
     </div>
 
@@ -109,6 +135,109 @@
                 }
             }
         });
+
+
+        ////////// background music //////////
+
+        let audioCtx;
+            // References for settings modal and controls
+            const settingsModal = document.getElementById("settingsModal");
+            const musicToggle = document.getElementById("musicToggle");
+            const musicVolume = document.getElementById("musicVolume");
+
+            const bgMusic = document.getElementById("bg-music");
+
+            // Load saved settings from localStorage
+            const savedMusicOn = localStorage.getItem("musicOn");
+            const savedMusicVolume = localStorage.getItem("musicVolume");
+            if (savedMusicOn !== null) {
+            musicToggle.checked = (savedMusicOn === 'true');
+            } else {
+            musicToggle.checked = true;
+            }
+            if (savedMusicVolume !== null) {
+            musicVolume.value = savedMusicVolume;
+            }
+
+            // Immediately update background music when the slider is adjusted
+            musicVolume.addEventListener('input', () => {
+            if (bgMusic) {
+                bgMusic.volume = musicVolume.value / 100;
+            }
+            });
+
+            // Immediately update background music mute state when checkbox is toggled
+            musicToggle.addEventListener('input', () => {
+            if (bgMusic) {
+                bgMusic.muted = !musicToggle.checked;
+            }
+            });
+
+            // Toggle settings modal display
+            function toggleSettings() {
+            settingsModal.style.display = (settingsModal.style.display === "block") ? "none" : "block";
+            }
+
+            // Save settings when button is clicked
+            document.getElementById("saveSettingsBtn").addEventListener("click", () => {
+            localStorage.setItem("musicOn", musicToggle.checked);
+            localStorage.setItem("musicVolume", musicVolume.value);
+
+            // Update the background music element if present
+            const bgMusic = document.getElementById("bg-music");
+            if (bgMusic) {
+                bgMusic.muted = !musicToggle.checked;
+                bgMusic.volume = musicVolume.value / 100;
+            }
+            alert("Settings Saved!");
+            toggleSettings();
+            });
+
+            // On page load, apply saved settings to the background music
+            window.addEventListener("load", () => {
+            const bgMusic = document.getElementById("bg-music");
+            const musicOn = localStorage.getItem("musicOn");
+            const musicVol = localStorage.getItem("musicVolume");
+            if (musicOn !== null) {
+                bgMusic.muted = (musicOn !== 'true');
+            }
+            if (musicVol !== null) {
+                bgMusic.volume = musicVol / 100;
+            }
+            });
+
+        // On first user interaction, create or resume the AudioContext
+        document.addEventListener('click', function resumeAudio() {
+            // If we haven't created an AudioContext yet, create one and connect the audio element.
+            if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const audioElement = document.getElementById('bg-music');
+            // Create a MediaElementSource from the audio element and connect it to the context's destination.
+            const track = audioCtx.createMediaElementSource(audioElement);
+            track.connect(audioCtx.destination);
+            }
+            
+            // If the AudioContext is suspended, resume it.
+            if (audioCtx.state === 'suspended') {
+            audioCtx.resume().then(() => {
+                console.log('AudioContext resumed!');
+            });
+            }
+            
+            // Optionally, you can also start playback if it hasn't started.
+            const bgMusic = document.getElementById('bg-music');
+            if (bgMusic.paused) {
+            bgMusic.play().catch(err => console.error("Playback error:", err));
+            }
+            
+            // Remove the event listener after the first interaction.
+            document.removeEventListener('click', resumeAudio);
+        });
+
+
     </script>
+
+
+
 </body>
 </html> 
