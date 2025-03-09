@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game</title>
+  <link rel="stylesheet" href="css/pve.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to the Game!</h1>
+    <button id="play-button" onclick="startGame()">Play</button>
+  </div>
+
+  <div id="gameplay-screen">
+    <canvas id="game-canvas"></canvas>
+
+    <div id="target-selection">
+      <p>Select a target:</p>
+      <button onclick="selectTarget('orc')">Orc</button>
+      <button onclick="selectTarget('enemyTop')">Enemy Top</button>
+      <button onclick="selectTarget('enemyBottom')">Enemy Bottom</button>
+    </div>
+
+    <!-- SoldierTop Attack Selection UI -->
+    <div id="soldier-attack-selection">
+      <p>Choose your attack:</p>
+      <button onclick="chooseSoldierAttack('attack1')">Attack 1</button>
+      <button onclick="chooseSoldierAttack('attack2')">Attack 2</button>
+      <button onclick="chooseSoldierAttack('attack3')">Attack 3</button>
+    </div>
+
+    <!-- AllyTop Attack Selection UI -->
+    <div id="allyTop-attack-selection" class="attack-selection hidden">
+        <p>Choose your attack for Ally Top:</p>
+        <button onclick="chooseAllyTopAttack('attack1')">Attack 1</button>
+        <button onclick="chooseAllyTopAttack('attack2')">Attack 2</button>
+        <button onclick="chooseAllyTopAttack('attack3')">Attack 3</button>
+    </div>
+
+    <!-- AllyBottom Attack Selection UI -->
+    <div id="allyBottom-info" class="attack-selection hidden">
+        <p>Ally Bottom always uses Attack 3.</p>
+    </div>
+
+    <!-- Quiz Container (hidden by default) -->
+    <div id="quiz-container" class="question-container hidden">
+      <div id="quiz-question" class="question-box"></div>
+      <div id="quiz-answer-buttons" class="answer-buttons"></div>
+      <div id="quiz-timer" class="timer hidden"></div>
+    </div>
+  </div>
+
+   <!-- Include your question files -->
+   <script src="questions/addition.js"></script>
+   <script src="questions/subtraction.js"></script>
+   <script src="questions/multiplication.js"></script>
+   <script src="questions/division.js"></script>
+
+  <!-- game files -->
+  <script src="js/gameInit.js"></script>
+  <script src="js/sprites.js"></script>
+  <script src="js/gameLogic.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/animation.js"></script>
+</body>
+</html>

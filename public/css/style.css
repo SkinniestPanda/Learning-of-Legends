@@ -1,0 +1,584 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container for login, settings, and guild pages */
+.container {
+    width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+/* Headings */
+h2 {
+    color: #333;
+}
+
+/* Buttons */
+button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+/* Input Fields */
+input, select {
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid transparent; /*not working (getback) */
+    border-radius: 5px;
+}
+
+/* Login Page */
+.loginregister{
+    background: url('/assets/loginregister/background.png') no-repeat center center ;
+    background-size: cover;
+}
+.login-container {
+    background: url('/assets/loginregister/lContainer.png') no-repeat center center ;
+    background: cover;
+    width: 300px;
+    margin: 100px auto;
+    padding: 200px 100px 100px 100px;
+    background-size: cover;
+    border-radius: 50px;
+}
+.input-field {
+    background: url('/assets/loginregister/field.png') no-repeat center center;
+    background-size: cover;
+    width: 90%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+}
+.loginbtn {
+    background: url('/assets/loginregister/loginBtn.png') no-repeat center center;
+    background-size: cover;
+    width: 40%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+}
+
+#loginForm{
+    margin-top: 60px;
+}
+
+
+/* Register Page */
+.register-container {
+    background: url('/assets/loginregister/rContainer.png') no-repeat center center ;
+    background-size: 80% 100%; /* Stretches it to fit */
+    width: 300px;
+    height: auto;
+    min-height: 580px;
+    margin: 100px auto;
+    padding: 350px 175px 10px 150px;
+    background-size: cover;
+    border-radius: 20px;
+}
+.select-field {
+    background: url('/assets/loginregister/field.png') no-repeat center center;
+    background-size: cover;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+}
+
+.registerbtn {
+    background: url('/assets/loginregister/rbutton.png') no-repeat center center;
+    background-size: contain;
+    width: 80%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+}
+
+/* Reset Page */
+.reset-container {
+    background: url('/assets/loginregister/resetContainer.png') no-repeat center center ;
+    background-size: cover; /* Stretches it to fit */
+    width: 600px;
+    height: auto;
+    min-height: 580px;
+    margin: 100px auto;
+    padding: 450px 175px 10px 150px;
+    background-size: cover;
+    border-radius: 20px;
+}
+.input-fieldreset {
+    background: url('/assets/loginregister/field.png') no-repeat center center;
+    background-size: cover;
+    width: 50%;
+    padding: 18px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 16px; /* Slightly reduce font size */
+    color: #333;
+}
+.resetbtn {
+    background: url('/assets/loginregister/resetBtn.png') no-repeat center center;
+    background-size: contain;
+    width: 20%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+}
+
+/* Main menu Page */
+.mainmenu-backgrd {
+    background: url('/assets/mainmenu/mainmenubg.png') no-repeat center center;
+    background-size: cover;
+}
+
+/* Guild page*/
+.guildbg {
+    background: url('/assets/guild/guildbg.png') no-repeat center center;
+    background-size: cover;
+}
+.gcontainer {  
+    background: url('/assets/guild/gcontainer.png') no-repeat center top;
+    background-size: contain;
+    width: 600px;
+    height: auto;
+    min-height: 800px;
+    margin: 100px auto;
+    padding: 500px 155px 20px 150px;
+    border-radius: 20px;
+}
+.ginputfield {
+    background: url('/assets/guild/sbar.png') no-repeat center center;
+    background-size: cover;
+    width: 80%;
+    padding: 30px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+}
+.gjoinguildbtn {
+    background: url('/assets/guild/jgbtn.png') no-repeat center center;
+    background-size: contain;
+    width: 60%;
+    padding: 30px;
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+    color:#000
+}
+.gleaveguildbtn {
+    background: url('/assets/guild/lgbtn.png') no-repeat center center;
+    background-size: contain;
+    width: 60%;
+    padding: 20px;
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+    color:#000
+}
+
+.sbackground {
+    background: url('/assets/settings/sbackground.png') no-repeat center center ;
+    background-size: cover;
+}
+
+.scontainer {
+    background: url('/assets/settings/scontainer.png') no-repeat center top ;
+    background-size: contain;
+    width: 300px;
+    height: 570px;
+    margin: 100px auto;
+    padding: 300px 250px 150px 250px;
+    background-size: cover;
+    border-radius: 50px;
+    color:#aaa;
+}
+.bthbtn {
+    background: url('/assets/settings/bthbtn.png') no-repeat center center;
+    background-size: contain;
+    padding: 80px 80px 300px 80px;
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+    color:#000
+}
+/****************************************************************************************************************************/
+.top-buttons {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+.top-buttons .logout-btn{
+    background: url(/assets/mainmenu/Lgoutbtn.png) no-repeat center;
+    background-size: cover;
+    position: absolute;
+    top: 80px; /* Distance from the top */
+    right: 30px; /* Distance from the right */
+    padding: 40px 250px 30px 50px ;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transform: scale(1.1);
+
+}
+/* Centered Character & Buttons */
+.main-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+}
+
+.menu-buttons {
+    display: flex;
+    gap: 30px;
+}
+
+/*Nav container*/
+.menu-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+/* Circular Buttons */
+.menu-button {
+    background: url('/assets/mainmenu/button.png') no-repeat center;
+    background-size: cover;
+    width: 150px;
+    height: 140px;
+    border-radius: 60%;
+    color: white;
+    font-size: 18px;
+    font-family: 'Arial';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.menu-button:hover {
+    transform: scale(1.1);
+}
+
+.profilebtn {
+    width: 450px;
+    height: 450px;
+    background: url('/assets/mainmenu/profile.png') no-repeat center;
+    background-size: cover;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.profilebtn:hover {
+    transform: scale(1.1);
+}
+
+.bottom-buttons {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+.bottom-buttons .settings-btn{
+    background: url(/assets/mainmenu/setbtn.png) no-repeat center;
+    background-size: cover;
+    position: absolute;
+    bottom: 10px; /* Distance from the bottom */
+    right: 100px; /* Distance from the right */
+    padding: 40px 250px 30px 50px ;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.settings-btn:hover {
+    transform: scale(1.1);
+}
+/****************************************************************************************************************************/
+
+/* Placeholder styling */
+.input-field::placeholder {
+    color: #666;
+    opacity: 1;
+}
+
+
+/* Placeholder styling */
+.input-field::placeholder {
+    color: #666;
+    opacity: 1;
+}
+
+/* Ensure text is visible when typing */
+input::placeholder {
+    color: #666;
+    opacity: 1;
+}
+
+
+/* Game Page */
+.game-container {
+    width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+/* PVE & PVP Page */
+#question {
+    font-size: 24px;
+    margin: 20px 0;
+}
+
+/* Statistics Page */
+canvas {
+    margin-top: 20px;
+    max-width: 500px;
+}
+
+/* Guild-specific styles */
+#createGuildSection, #joinGuildSection, #guildInfo {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#guildInfo {
+    background-color: #f8f9fa;
+}
+
+#currentGuildDetails {
+    margin: 10px 0;
+}
+
+/* Add these styles to your existing CSS file */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+#allGuildsSection {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+}
+
+/* Add these styles */
+textarea {
+    width: 80%;
+    height: 100px;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 5px;
+    width: 80%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: black;
+}
+
+.member-list {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+/* Add these styles */
+.danger-button {
+    background-color: #dc3545;
+    color: white;
+}
+
+.danger-button:hover {
+    background-color: #c82333;
+}
+
+#guildActions {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+}
+
+/* Add these navigation styles */
+.nav-bar {
+    background-color: #333;
+    padding: 10px;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+}
+
+.nav-link:hover {
+    background-color: #555;
+}
+
+/* Add these styles */
+.user-info {
+    color: white;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logout-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+}
+
+.member-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.leader-badge {
+    background-color: #ffd700;
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+}
+
+.guild-members-list {
+    margin-bottom: 20px;
+}
+
+.add-member-section {
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+}
+
+.primary-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.primary-button:hover, .danger-button:hover {
+    opacity: 0.8;
+}
+
+.guild-item {
+    background-color: white;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}

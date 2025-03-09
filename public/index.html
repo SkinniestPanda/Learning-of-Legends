@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning of Legends</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .nav-container {
+            width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .nav-item {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-align: center;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .nav-item h3 {
+            margin: 0;
+            color: #28a745;
+        }
+
+        .nav-item p {
+            margin: 10px 0 0;
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body class="mainmenu-backgrd">
+    <div class="nav-bar">
+        <a href="/" class="nav-link">Home</a>
+        <div class="user-info">
+            <span id="userDisplay">Not logged in</span>
+            <button id="logoutBtn" class="logout-btn" style="display: none;" onclick="logout()">Logout</button>
+        </div>
+    </div>
+        <!-- Top Navigation -->
+        <div class="top-buttons">
+            <a href="" class="username"></a>
+        </div>
+    <div class="menu-container">        
+        <div id="guest-nav" class="nav-grid">
+            <a href="/login.html" class="nav-item">
+                <h3>Login</h3>
+                <p>Sign in to your account</p>
+            </a>
+            <a href="/register.html" class="nav-item">
+                <h3>Register</h3>
+                <p>Create a new account</p>
+            </a>
+        </div>
+        <a href="/student.html" class="profilebtn"></a>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="menu-buttons">
+            <a href="/guild.html" class="menu-button">Guild</a>
+            <a href="/pve.html" class="menu-button">PVE</a>
+            <a href="/pvp.html" class="menu-button">PVP</a>
+            <a href="/settings.html" class="menu-button">Game<br>Settings</a>
+        </div> 
+
+        <div id="parent-nav" class="nav-grid" style="display: none;">
+            <a href="/parent_home.html" class="nav-item">
+                <h3>Parent Dashboard</h3>
+                <p>Monitor your child's progress</p>
+            </a>
+            <a href="/parent_analysis.html" class="nav-item">
+                <h3>Analysis</h3>
+                <p>View detailed analytics</p>
+            </a>
+            <a href="/settings.html" class="nav-item">
+                <h3>Settings</h3>
+                <p>Customize your experience</p>
+            </a>
+        </div>
+        
+        <div id="admin-nav" class="nav-grid" style="display: none;">
+            <a href="/admin.html" class="nav-item">
+                <h3>Admin Dashboard</h3>
+                <p>Manage users and content</p>
+            </a>
+            <a href="/guild.html" class="nav-item">
+                <h3>Guild System</h3>
+                <p>Manage and monitor guilds</p>
+            </a>
+            <a href="/pve.html" class="nav-item">
+                <h3>PVE Mode</h3>
+                <p>Test and manage PVE content</p>
+            </a>
+            <a href="/pvp.html" class="nav-item">
+                <h3>PVP Mode</h3>
+                <p>Monitor PVP activities</p>
+            </a>
+            <a href="/statistics.html" class="nav-item">
+                <h3>Statistics</h3>
+                <p>View system-wide statistics</p>
+            </a>
+            <a href="/settings.html" class="nav-item">
+                <h3>Settings</h3>
+                <p>Configure system settings</p>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function logout() {
+            localStorage.clear();
+            window.location.href = '/login.html';
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            const role = localStorage.getItem('role');
+            const username = localStorage.getItem('username');
+            
+            const guestNav = document.getElementById('guest-nav');
+            const studentNav = document.getElementById('student-nav');
+            const parentNav = document.getElementById('parent-nav');
+            const adminNav = document.getElementById('admin-nav');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userDisplay = document.getElementById('userDisplay');
+            
+            if (token) {
+                // Update user display
+                userDisplay.textContent = `Logged in as: ${username || 'User'} (${role || 'unknown'})`;
+                logoutBtn.style.display = 'inline-block';
+                
+                // Hide guest nav
+                guestNav.style.display = 'none';
+                
+                // Show role-specific nav
+                if (role === 'admin') {
+                    adminNav.style.display = 'grid';
+                } else if (role === 'student') {
+                    studentNav.style.display = 'grid';
+                } else if (role === 'parent') {
+                    parentNav.style.display = 'grid';
+                }
+            } else {
+                // Show guest nav
+                guestNav.style.display = 'grid';
+                
+                // Protect routes that require authentication
+                const protectedPages = [
+                    '/guild.html', '/pve.html', '/pvp.html', '/statistics.html', 
+                    '/settings.html', '/admin.html', '/student.html', '/parent_home.html',
+                    '/parent_analysis.html'
+                ];
+                const currentPath = window.location.pathname;
+                
+                if (protectedPages.includes(currentPath)) {
+                    window.location.href = '/login.html';
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

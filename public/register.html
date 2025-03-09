@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - Learning of Legends</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class = "loginregister">
+    <div class="register-container">
+        <form id="registerForm">
+            <input type="text" id="username" class="input-field" placeholder="Username" required>
+            <input type="password" id="password" class="input-field" placeholder="Password" required>
+            <input type="password" id="confirmPassword" class="input-field" placeholder="Confirm Password" required>
+            <select id="role" class="select-field">
+                <option value="student">Student</option>
+                <option value="parent">Parent</option>
+                <option value="admin">Administrator</option>
+            </select>
+            <button type="submit" class="registerbtn"></button>
+        </form>
+        <p>Already have an account? <a href="/login.html">Login here</a></p>
+        <p>Forgot your password? <a href="/reset-password.html">Reset it here</a></p>
+    </div>
+    <script src="/js/auth.js"></script>
+</body>
+</html> 

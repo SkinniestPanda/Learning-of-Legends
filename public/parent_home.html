@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Parent Home</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Welcome, Parent!</h2>
+    <h3>Your Children</h3>
+    <div id="childrenContainer">
+      <!-- Child information will be dynamically loaded here -->
+    </div>
+    <nav>
+      <a href="parent_settings.html">Settings</a> |
+      <a href="parent_analysis.html">Analysis</a> |
+      <a href="parent_login.html">Logout</a>
+    </nav>
+    <br>
+    <a href="test_JY.html">Back to Role Selection</a>
+  </div>
+  <script>
+    // Sample children data; replace with real data when available
+    const childrenData = [
+      { name: "Alice", total: 20, correct: 15, wrong: 5 },
+      { name: "Bob", total: 25, correct: 20, wrong: 5 }
+    ];
+    const container = document.getElementById('childrenContainer');
+    childrenData.forEach(child => {
+      const childDiv = document.createElement('div');
+      childDiv.className = 'child-result';
+      childDiv.innerHTML = `
+        <h4>${child.name}</h4>
+        <p>Total Questions Attempted: ${child.total}</p>
+        <p>Correct Answers: ${child.correct}</p>
+        <p>Wrong Answers: ${child.wrong}</p>
+        <p>Percentage Correct: ${Math.round((child.correct / child.total) * 100)}%</p>
+      `;
+      container.appendChild(childDiv);
+    });
+  </script>
+</body>
+</html>

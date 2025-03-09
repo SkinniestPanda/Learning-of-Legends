@@ -1,0 +1,141 @@
+/* pve.css */
+body {
+    background: url('/assets/mainmenu/mainmenubg.png') no-repeat center center;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #222;
+    font-family: Arial, sans-serif;
+    color: white;
+}
+
+.container {
+    text-align: center;
+}
+
+#gameplay-screen {
+    display: none;
+    text-align: center;
+}
+
+canvas {
+    border: 2px solid #444;
+    background-image: url("../images/background/30.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Turn Order Container - Blue Box at Top Center */
+#turn-order-container {
+    position: absolute;
+    top: 10px; /* Adjust vertical spacing as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #3498db; /* Blue background */
+    padding: 10px 20px;
+    border-radius: 10px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    z-index: 100; /* Ensure it appears on top */
+  }
+  
+  /* Each Turn Order Item */
+  .turn-order-item {
+    text-align: center;
+  }
+  
+  .turn-order-item img {
+    width: 40px; /* Adjust icon size */
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+  }
+  
+  .turn-order-item.current img {
+    border-color: #f1c40f; /* Yellow border for current turn */
+  }
+  
+  .turn-order-item p {
+    margin: 5px 0 0 0;
+    font-size: 0.9rem;
+    color: #fff;
+  }
+  
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #444;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+button:active {
+    background-color: #666;
+}
+
+/* Quiz UI styling (similar to your PvP mode) */
+.question-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.question-box {
+    width: 300px;
+    height: 80px;
+    background-color: #ffbb00;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.answer-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.answer-buttons button {
+    padding: 10px 20px;
+    background-color: #0984e3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.answer-buttons button:hover {
+    background-color: #0066cc;
+}
+
+.timer {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: red;
+    margin-top: 10px;
+}
+
+/* Utility class to hide elements */
+.hidden {
+    display: none;
+}

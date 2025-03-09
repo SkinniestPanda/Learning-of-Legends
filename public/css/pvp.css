@@ -1,0 +1,77 @@
+/* pvp.css */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #222;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  .pvp-homepage {
+    margin-top: 50px;
+  }
+  
+  .play-circle button {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 50%;
+    background-color: #ffbb00;
+    cursor: pointer;
+  }
+  
+  canvas {
+    border: 2px solid #444;
+    background-color: #000;
+    margin: 20px auto;
+    display: block;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .question-container {
+    margin-top: 20px;
+  }
+  
+  .question-box {
+    width: 300px;
+    height: 60px;
+    background-color: #ffbb00;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 5px;
+    margin: 0 auto 15px;
+  }
+  
+  .answer-buttons button {
+    padding: 10px 20px;
+    margin: 5px;
+    background-color: #0984e3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .answer-buttons button:hover {
+    background-color: #0066cc;
+  }
+  
+  .back-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    background-color: grey;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  

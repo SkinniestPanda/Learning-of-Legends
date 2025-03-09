@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PVP Mode with PVE Animations</title>
+  <link rel="stylesheet" href="css/pvp.css">
+</head>
+<body>
+  <!-- Homepage / Mode Selection -->
+  <div id="homepage" class="pvp-homepage">
+    <h1>Rankings #1257</h1>
+    <div class="play-circle">
+      <button onclick="goToPlay()">PLAY</button>
+    </div>
+  </div>
+
+  <div id="play-mode" class="hidden">
+    <h2>Choose Your Mode</h2>
+    <button onclick="start1v1()">1v1</button>
+    <button onclick="start3v3()">3v3</button>
+    <button onclick="goBack()">Back</button>
+  </div>
+
+  <!-- 1v1 Gameplay Screen -->
+  <div id="game-1v1" class="hidden">
+    <h2>PVP 1v1 Battle</h2>
+    <!-- The canvas where animated sprites will be drawn -->
+    <canvas id="pvp-canvas-1v1"></canvas>
+    <!-- Question & Answer Section -->
+    <div class="question-container">
+      <div class="question-box" id="question-box-1v1"></div>
+      <div class="answer-buttons" id="answer-buttons-1v1"></div>
+    </div>
+    <!-- (Optional) Health information may be drawn on the canvas -->
+    <button class="back-button" onclick="goBackToMode()">Back</button>
+  </div>
+
+  <!-- 3v3 Gameplay Screen -->
+  <div id="game-3v3" class="hidden">
+    <h2>PVP 3v3 Battle</h2>
+    <canvas id="pvp-canvas-3v3"></canvas>
+    <!-- Question & Answer Section -->
+    <div class="question-container">
+      <div class="question-box" id="question-box-3v3"></div>
+      <div class="answer-buttons" id="answer-buttons-3v3"></div>
+    </div>
+    <button class="back-button" onclick="goBackToMode()">Back</button>
+  </div>
+
+  <!-- Include your question files -->
+  <script src="questions/addition.js"></script>
+  <script src="questions/subtraction.js"></script>
+  <script src="questions/multiplication.js"></script>
+  <script src="questions/division.js"></script>
+
+  <!-- Include shared PVE files for sprites and UI animations -->
+  <script src="js/sprites.js"></script>
+  <script src="js/ui.js"></script>
+
+  <!-- Our main PVP code -->
+  <script src="js/pvp.js"></script>
+</body>
+</html>
