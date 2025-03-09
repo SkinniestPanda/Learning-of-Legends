@@ -6,6 +6,9 @@ const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
+//jy
+const attemptsRouter = require('./routes/attempts');
+
 // Middleware
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -30,6 +33,10 @@ const authRouter = require('./routes/auth');
 
 app.use('/api/guild', guildRouter);
 app.use('/api/auth', authRouter);
+
+//JY
+// Use the attempts API routes
+app.use('/api/attempts', attemptsRouter);
 
 // PVP Game Logic
 const pvpQueue = {

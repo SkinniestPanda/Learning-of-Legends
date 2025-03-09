@@ -5,9 +5,9 @@ const { authenticateToken } = require('../middleware/auth');
 
 // Create a new guild
 router.post('/create', authenticateToken, (req, res) => {
-    // Check if user is admin
-    if (req.user.role !== 'admin') {
-        return res.status(403).json({ error: "Only administrators can create guilds" });
+    // Allow both students and admins to create guilds
+    if (req.user.role !== 'student' && req.user.role !== 'admin') {
+        return res.status(403).json({ error: "Only students and administrators can create guilds" });
     }
 
     const { name, password, description } = req.body;
@@ -118,7 +118,7 @@ router.get('/all', authenticateToken, (req, res) => {
 });
 
 // Add a new route to get guild details including members
-router.get('/details/:guildId', (req, res) => {
+router.get('/details/:guildId', authenticateToken, (req, res) => {
     const guildId = req.params.guildId;
     
     // First get guild info
@@ -148,11 +148,12 @@ router.get('/details/:guildId', (req, res) => {
 });
 
 // Add this new route for deleting a guild
-router.delete('/delete/:guildId', (req, res) => {
+router.delete('/delete/:guildId', authenticateToken, (req, res) => {
     const { guildId } = req.params;
-    const { userId } = req.body;
+    const userId = req.user.userId;
+    const userRole = req.user.role;
     
-    // First check if user is the guild leader
+    // First check if user is the guild leader or an admin
     db.get('SELECT leader_id FROM guilds WHERE id = ?', [guildId], (err, guild) => {
         if (err) {
             return res.status(400).json({ error: err.message });
@@ -160,8 +161,10 @@ router.delete('/delete/:guildId', (req, res) => {
         if (!guild) {
             return res.status(404).json({ error: "Guild not found" });
         }
-        if (guild.leader_id !== userId) {
-            return res.status(403).json({ error: "Only guild leader can delete the guild" });
+        
+        // Allow deletion if user is guild leader OR an admin
+        if (guild.leader_id !== userId && userRole !== 'admin') {
+            return res.status(403).json({ error: "Only guild leaders and administrators can delete guilds" });
         }
 
         // Delete guild members first (due to foreign key constraint)
@@ -175,6 +178,7 @@ router.delete('/delete/:guildId', (req, res) => {
                 if (err) {
                     return res.status(400).json({ error: err.message });
                 }
+                
                 res.json({ message: "Guild successfully deleted" });
             });
         });

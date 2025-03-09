@@ -1,95 +1,88 @@
-// student.js
+/**********************************
+ * Student Flash Questions Logic
+ **********************************/
 
-// If using ES modules:
-import { additionQuestions } from '../questions/addition.js';
-import { subtractionQuestions } from '../questions/subtraction.js';
-import { multiplicationQuestions } from '../questions/multiplication.js';
-import { divisionQuestions } from '../questions/division.js';
-
-// Merge all questions into one array
-let questions = [
-  ...additionQuestions,
-  ...subtractionQuestions,
-  ...multiplicationQuestions,
-  ...divisionQuestions
-];
-
-// Shuffle the questions array using Fisher-Yates algorithm
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    // Swap elements array[i] and array[j]
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-
-// Shuffle the questions array
-questions = shuffle(questions);
-
-let currentQuestionIndex = 0;
-
-// Retrieve the current user ID from localStorage
-const currentUserId = localStorage.getItem("userId");
-
-function loadQuestion() {
-  if (currentQuestionIndex >= questions.length) {
-    currentQuestionIndex = 0; // Optionally, you can reshuffle if you want a new order for each cycle
-  }
-  const currentQuestion = questions[currentQuestionIndex];
-  document.getElementById("questionText").textContent = currentQuestion.question;
-  document.getElementById("answerInput").value = "";
-  document.getElementById("feedback").textContent = "";
-  document.getElementById("nextQuestionBtn").style.display = "none";
-}
-
-async function recordAttempt(attempt) {
-  try {
-    const response = await fetch('/api/attempts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(attempt)
-    });
-    const data = await response.json();
-    console.log("Attempt recorded with ID:", data.id);
-  } catch (err) {
-    console.error("Error recording attempt:", err);
-  }
-}
-
-function checkAnswer() {
-  const currentQuestion = questions[currentQuestionIndex];
-  const answer = Number(document.getElementById("answerInput").value);
-  const isCorrect = answer === currentQuestion.correctAnswer;
+// Define a sample set of arithmetic questions.
+const questions = [
+    { id: 1, question: "5 + 3 = ?", correctAnswer: 8, operation: "addition" },
+    { id: 2, question: "10 - 4 = ?", correctAnswer: 6, operation: "subtraction" },
+    { id: 3, question: "3 * 4 = ?", correctAnswer: 12, operation: "multiplication" },
+    { id: 4, question: "16 / 4 = ?", correctAnswer: 4, operation: "division" }
+  ];
   
-  const feedbackEl = document.getElementById("feedback");
-  if (isCorrect) {
-    feedbackEl.textContent = "Correct!";
-    feedbackEl.style.color = "green";
-  } else {
-    feedbackEl.textContent = `Incorrect. The correct answer is ${currentQuestion.correctAnswer}.`;
-    feedbackEl.style.color = "red";
+  let currentQuestionIndex = 0;
+  
+  // Function to save an attempt (the student's answer) to localStorage.
+  function saveAttempt(attempt) {
+    // Retrieve existing attempts (if any), then add the new one.
+    let attempts = JSON.parse(localStorage.getItem("attempts")) || [];
+    attempts.push(attempt);
+    localStorage.setItem("attempts", JSON.stringify(attempts));
   }
   
-  const attempt = {
-    studentId: currentUserId, // now dynamic
-    question: currentQuestion.question,
-    correctAnswer: currentQuestion.correctAnswer,
-    studentAnswer: answer,
-    isCorrect: isCorrect,
-    operation: currentQuestion.operation,
-    source: "questions/" + currentQuestion.operation + ".js", // Optional: indicates file source
-    timestamp: Date.now()
-  };
+  // Function to load and display the current question.
+  function loadQuestion() {
+    if (currentQuestionIndex >= questions.length) {
+      // Restart from the first question if we've gone through all.
+      currentQuestionIndex = 0;
+    }
+    const questionObj = questions[currentQuestionIndex];
+    document.getElementById("questionText").textContent = questionObj.question;
+    document.getElementById("answerInput").value = "";
+    document.getElementById("feedback").textContent = "";
+    document.getElementById("nextQuestionBtn").style.display = "none";
+  }
+  
+  // Function to check the student's answer.
+  function checkAnswer() {
+    const questionObj = questions[currentQuestionIndex];
+    const answer = Number(document.getElementById("answerInput").value);
+    const isCorrect = answer === questionObj.correctAnswer;
+    const feedbackEl = document.getElementById("feedback");
+    
+    if (isCorrect) {
+      feedbackEl.style.color = "green";
+      feedbackEl.textContent = "Correct!";
+    } else {
+      feedbackEl.style.color = "red";
+      feedbackEl.textContent = `Incorrect. The correct answer is ${questionObj.correctAnswer}.`;
+    }
+    
+    // Create an object to record the student's attempt.
+    const attempt = {
+      id: questionObj.id,
+      question: questionObj.question,
+      correctAnswer: questionObj.correctAnswer,
+      studentAnswer: answer,
+      isCorrect: isCorrect,
+      operation: questionObj.operation,
+      timestamp: Date.now()
+    };
+    
+    // Save the attempt to our "rough database" (localStorage).
+    saveAttempt(attempt);
+    
+    // Show the "Next Question" button so the student can continue.
+    document.getElementById("nextQuestionBtn").style.display = "inline-block";
+  }
 
-  recordAttempt(attempt);
-  document.getElementById("nextQuestionBtn").style.display = "block";
-}
-
-document.getElementById("submitAnswerBtn").addEventListener("click", checkAnswer);
-document.getElementById("nextQuestionBtn").addEventListener("click", () => {
-  currentQuestionIndex++;
-  loadQuestion();
-});
-
-window.addEventListener("load", loadQuestion);
+  function recordAnswer(question, answer, status) {
+    // Retrieve previously recorded answers or start with an empty array.
+    let results = JSON.parse(localStorage.getItem("studentResults")) || [];
+    // Push the new answer into the array.
+    results.push({ question, answer, status });
+    // Save the updated results back to localStorage.
+    localStorage.setItem("studentResults", JSON.stringify(results));
+  }
+  
+  
+  // Set up event listeners.
+  document.getElementById("submitAnswerBtn").addEventListener("click", checkAnswer);
+  document.getElementById("nextQuestionBtn").addEventListener("click", () => {
+    currentQuestionIndex++;
+    loadQuestion();
+  });
+  
+  // Load the first question when the page loads.
+  window.onload = loadQuestion;
+  

@@ -1,184 +1,325 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learning of Legends</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <style>
-        .nav-container {
-            width: 600px;
-            margin: 50px auto;
-            padding: 30px;
-            background: white;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-        }
-
-        .nav-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .nav-item {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            color: #333;
-            transition: transform 0.2s, box-shadow 0.2s;
-            text-align: center;
-        }
-
-        .nav-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .nav-item h3 {
-            margin: 0;
-            color: #28a745;
-        }
-
-        .nav-item p {
-            margin: 10px 0 0;
-            font-size: 0.9em;
-            color: #666;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning of Legends</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <audio id="bg-music" autoplay loop>
+    <source src="music/ALittleR&R.ogg" type="audio/ogg">
+    Your browser does not support the audio element.
+  </audio>
+  <style>
+    /* Navigation Styles */
+    .nav-container {
+      width: 600px;
+      margin: 50px auto;
+      padding: 30px;
+      background: white;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+    }
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .nav-item {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #333;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-align: center;
+    }
+    .nav-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .nav-item h3 {
+      margin: 0;
+      color: #28a745;
+    }
+    .nav-item p {
+      margin: 10px 0 0;
+      font-size: 0.9em;
+      color: #666;
+    }
+    
+    /* Modal Styles */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 10px;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
 </head>
-<body class="mainmenu-backgrd">
-    <div class="nav-bar">
-        <a href="/" class="nav-link">Home</a>
-        <div class="user-info">
-            <span id="userDisplay">Not logged in</span>
-            <button id="logoutBtn" class="logout-btn" style="display: none;" onclick="logout()">Logout</button>
-        </div>
+<body>
+  <div class="nav-bar">
+    <a href="/" class="nav-link">Home</a>
+    <div class="user-info">
+      <span id="userDisplay">Not logged in</span>
+      <button id="logoutBtn" class="logout-btn" style="display: none;" onclick="logout()">Logout</button>
     </div>
-        <!-- Top Navigation -->
-        <div class="top-buttons">
-            <a href="" class="username"></a>
-        </div>
-    <div class="menu-container">        
-        <div id="guest-nav" class="nav-grid">
-            <a href="/login.html" class="nav-item">
-                <h3>Login</h3>
-                <p>Sign in to your account</p>
-            </a>
-            <a href="/register.html" class="nav-item">
-                <h3>Register</h3>
-                <p>Create a new account</p>
-            </a>
-        </div>
-        <a href="/student.html" class="profilebtn"></a>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <div class="menu-buttons">
-            <a href="/guild.html" class="menu-button">Guild</a>
-            <a href="/pve.html" class="menu-button">PVE</a>
-            <a href="/pvp.html" class="menu-button">PVP</a>
-            <a href="/settings.html" class="menu-button">Game<br>Settings</a>
-        </div> 
-
-        <div id="parent-nav" class="nav-grid" style="display: none;">
-            <a href="/parent_home.html" class="nav-item">
-                <h3>Parent Dashboard</h3>
-                <p>Monitor your child's progress</p>
-            </a>
-            <a href="/parent_analysis.html" class="nav-item">
-                <h3>Analysis</h3>
-                <p>View detailed analytics</p>
-            </a>
-            <a href="/settings.html" class="nav-item">
-                <h3>Settings</h3>
-                <p>Customize your experience</p>
-            </a>
-        </div>
-        
-        <div id="admin-nav" class="nav-grid" style="display: none;">
-            <a href="/admin.html" class="nav-item">
-                <h3>Admin Dashboard</h3>
-                <p>Manage users and content</p>
-            </a>
-            <a href="/guild.html" class="nav-item">
-                <h3>Guild System</h3>
-                <p>Manage and monitor guilds</p>
-            </a>
-            <a href="/pve.html" class="nav-item">
-                <h3>PVE Mode</h3>
-                <p>Test and manage PVE content</p>
-            </a>
-            <a href="/pvp.html" class="nav-item">
-                <h3>PVP Mode</h3>
-                <p>Monitor PVP activities</p>
-            </a>
-            <a href="/statistics.html" class="nav-item">
-                <h3>Statistics</h3>
-                <p>View system-wide statistics</p>
-            </a>
-            <a href="/settings.html" class="nav-item">
-                <h3>Settings</h3>
-                <p>Configure system settings</p>
-            </a>
-        </div>
+  </div>
+  
+  <div class="nav-container">
+    <h1>Learning of Legends</h1>
+    <p>Welcome to our math learning game!</p>
+    
+    <!-- Guest Navigation -->
+    <div id="guest-nav" class="nav-grid">
+      <a href="/login.html" class="nav-item">
+        <h3>Login</h3>
+        <p>Sign in to your account</p>
+      </a>
+      <a href="/register.html" class="nav-item">
+        <h3>Register</h3>
+        <p>Create a new account</p>
+      </a>
     </div>
-
-    <script>
-        function logout() {
-            localStorage.clear();
-            window.location.href = '/login.html';
+    
+    <!-- Student Navigation -->
+    <div id="student-nav" class="nav-grid" style="display: none;">
+      <a href="/student.html" class="nav-item">
+        <h3>Student Dashboard</h3>
+        <p>View your dashboard</p>
+      </a>
+      <a href="/guild.html" class="nav-item">
+        <h3>Guild System</h3>
+        <p>Create or join a guild</p>
+      </a>
+      <a href="/pve.html" class="nav-item">
+        <h3>PVE Mode</h3>
+        <p>Practice your math skills</p>
+      </a>
+      <a href="/pvp.html" class="nav-item">
+        <h3>PVP Mode</h3>
+        <p>Challenge other players</p>
+      </a>
+      <a href="/statistics.html" class="nav-item">
+        <h3>Statistics</h3>
+        <p>View your progress</p>
+      </a>
+      <a onclick="toggleSettings()" class="nav-item">
+        <h3>Settings</h3>
+        <p>Customize your experience</p>
+      </a>
+      <a href="/settings.html" class="nav-item">
+        <h3>Settings</h3>
+        <p>Customize your experience</p>
+      </a>
+    </div>
+    
+    <!-- Parent Navigation -->
+    <div id="parent-nav" class="nav-grid" style="display: none;">
+      <a href="/parent_home.html" class="nav-item">
+        <h3>Parent Dashboard</h3>
+        <p>Monitor your child's progress</p>
+      </a>
+      <a href="/parent_analysis.html" class="nav-item">
+        <h3>Analysis</h3>
+        <p>View detailed analytics</p>
+      </a>
+      <a href="/settings.html" class="nav-item">
+        <h3>Settings</h3>
+        <p>Customize your experience</p>
+      </a>
+    </div>
+    
+    <!-- Admin Navigation -->
+    <div id="admin-nav" class="nav-grid" style="display: none;">
+      <a href="/admin.html" class="nav-item">
+        <h3>Admin Dashboard</h3>
+        <p>Manage users and content</p>
+      </a>
+      <a href="/guild.html" class="nav-item">
+        <h3>Guild System</h3>
+        <p>Manage and monitor guilds</p>
+      </a>
+      <a href="/pve.html" class="nav-item">
+        <h3>PVE Mode</h3>
+        <p>Test and manage PVE content</p>
+      </a>
+      <a href="/pvp.html" class="nav-item">
+        <h3>PVP Mode</h3>
+        <p>Monitor PVP activities</p>
+      </a>
+      <a href="/statistics.html" class="nav-item">
+        <h3>Statistics</h3>
+        <p>View system-wide statistics</p>
+      </a>
+      <a onclick="toggleSettings()" class="nav-item">
+        <h3>Settings</h3>
+        <p>Customize your experience</p>
+    </a>
+    </div>
+  </div>
+  
+  <!-- Floating Settings Modal -->
+  <div id="settingsModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="toggleSettings()">&times;</span>
+      <h2>Settings</h2>
+      <div class="settings-row">
+        <label for="musicToggle">Background Music:</label>
+        <input type="checkbox" id="musicToggle">
+      </div>
+      <div class="settings-row">
+        <label for="musicVolume">Music Volume:</label>
+        <input type="range" id="musicVolume" min="0" max="100" value="50">
+      </div>
+      <button id="saveSettingsBtn">Save Settings</button>
+      <!-- Button to navigate to the Terms & Conditions page -->
+      <button onclick="window.location.href='terms.html'">Terms & Conditions</button>
+    </div>
+  </div>
+  
+  <script src="/js/session.js"></script>
+  <script>
+    function logout() {
+      localStorage.clear();
+      window.location.href = '/login.html';
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('token');
+      const role = localStorage.getItem('role');
+      const username = localStorage.getItem('username');
+      
+      const guestNav = document.getElementById('guest-nav');
+      const studentNav = document.getElementById('student-nav');
+      const parentNav = document.getElementById('parent-nav');
+      const adminNav = document.getElementById('admin-nav');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const userDisplay = document.getElementById('userDisplay');
+      
+      if (token) {
+        userDisplay.textContent = `Logged in as: ${username || 'User'} (${role || 'unknown'})`;
+        logoutBtn.style.display = 'inline-block';
+        guestNav.style.display = 'none';
+        if (role === 'admin') {
+          adminNav.style.display = 'grid';
+        } else if (role === 'student') {
+          studentNav.style.display = 'grid';
+        } else if (role === 'parent') {
+          parentNav.style.display = 'grid';
         }
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            const token = localStorage.getItem('token');
-            const role = localStorage.getItem('role');
-            const username = localStorage.getItem('username');
-            
-            const guestNav = document.getElementById('guest-nav');
-            const studentNav = document.getElementById('student-nav');
-            const parentNav = document.getElementById('parent-nav');
-            const adminNav = document.getElementById('admin-nav');
-            const logoutBtn = document.getElementById('logoutBtn');
-            const userDisplay = document.getElementById('userDisplay');
-            
-            if (token) {
-                // Update user display
-                userDisplay.textContent = `Logged in as: ${username || 'User'} (${role || 'unknown'})`;
-                logoutBtn.style.display = 'inline-block';
-                
-                // Hide guest nav
-                guestNav.style.display = 'none';
-                
-                // Show role-specific nav
-                if (role === 'admin') {
-                    adminNav.style.display = 'grid';
-                } else if (role === 'student') {
-                    studentNav.style.display = 'grid';
-                } else if (role === 'parent') {
-                    parentNav.style.display = 'grid';
-                }
-            } else {
-                // Show guest nav
-                guestNav.style.display = 'grid';
-                
-                // Protect routes that require authentication
-                const protectedPages = [
-                    '/guild.html', '/pve.html', '/pvp.html', '/statistics.html', 
-                    '/settings.html', '/admin.html', '/student.html', '/parent_home.html',
-                    '/parent_analysis.html'
-                ];
-                const currentPath = window.location.pathname;
-                
-                if (protectedPages.includes(currentPath)) {
-                    window.location.href = '/login.html';
-                }
-            }
+      } else {
+        guestNav.style.display = 'grid';
+        const protectedPages = [
+          '/guild.html', '/pve.html', '/pvp.html', '/statistics.html', 
+          '/settings.html', '/admin.html', '/student.html', '/parent_home.html',
+          '/parent_analysis.html'
+        ];
+        const currentPath = window.location.pathname;
+        if (protectedPages.includes(currentPath)) {
+          window.location.href = '/login.html';
+        }
+      }
+    });
+    
+    // Background Music and Settings
+    let audioCtx;
+    const settingsModal = document.getElementById("settingsModal");
+    const musicToggle = document.getElementById("musicToggle");
+    const musicVolume = document.getElementById("musicVolume");
+    const bgMusic = document.getElementById("bg-music");
+    
+    // Load saved settings
+    const savedMusicOn = localStorage.getItem("musicOn");
+    const savedMusicVolume = localStorage.getItem("musicVolume");
+    musicToggle.checked = savedMusicOn !== null ? (savedMusicOn === 'true') : true;
+    if (savedMusicVolume !== null) {
+      musicVolume.value = savedMusicVolume;
+    }
+    
+    musicVolume.addEventListener('input', () => {
+      if (bgMusic) {
+        bgMusic.volume = musicVolume.value / 100;
+      }
+    });
+    
+    musicToggle.addEventListener('input', () => {
+      if (bgMusic) {
+        bgMusic.muted = !musicToggle.checked;
+      }
+    });
+    
+    function toggleSettings() {
+      settingsModal.style.display = (settingsModal.style.display === "block") ? "none" : "block";
+    }
+    
+    document.getElementById("saveSettingsBtn").addEventListener("click", () => {
+      localStorage.setItem("musicOn", musicToggle.checked);
+      localStorage.setItem("musicVolume", musicVolume.value);
+      if (bgMusic) {
+        bgMusic.muted = !musicToggle.checked;
+        bgMusic.volume = musicVolume.value / 100;
+      }
+      alert("Settings Saved!");
+      toggleSettings();
+    });
+    
+    window.addEventListener("load", () => {
+      const musicOn = localStorage.getItem("musicOn");
+      const musicVol = localStorage.getItem("musicVolume");
+      if (musicOn !== null) {
+        bgMusic.muted = (musicOn !== 'true');
+      }
+      if (musicVol !== null) {
+        bgMusic.volume = musicVol / 100;
+      }
+    });
+    
+    // Resume AudioContext on first user interaction
+    document.addEventListener('click', function resumeAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const audioElement = document.getElementById('bg-music');
+        const track = audioCtx.createMediaElementSource(audioElement);
+        track.connect(audioCtx.destination);
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume().then(() => {
+          console.log('AudioContext resumed!');
         });
-    </script>
+      }
+      if (bgMusic.paused) {
+        bgMusic.play().catch(err => console.error("Playback error:", err));
+      }
+      document.removeEventListener('click', resumeAudio);
+    });
+  </script>
 </body>
-</html> 
+</html>

@@ -12,6 +12,7 @@ body {
     width: 400px;
     margin: 100px auto;
     padding: 20px;
+    background: white;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
 }
@@ -43,317 +44,19 @@ input, select {
     width: 80%;
     padding: 10px;
     margin: 10px 0;
-    border: 1px solid transparent; /*not working (getback) */
+    border: 1px solid #ccc;
     border-radius: 5px;
 }
 
 /* Login Page */
-.loginregister{
-    background: url('/assets/loginregister/background.png') no-repeat center center ;
-    background-size: cover;
-}
 .login-container {
-    background: url('/assets/loginregister/lContainer.png') no-repeat center center ;
-    background: cover;
     width: 300px;
-    margin: 100px auto;
-    padding: 200px 100px 100px 100px;
-    background-size: cover;
-    border-radius: 50px;
-}
-.input-field {
-    background: url('/assets/loginregister/field.png') no-repeat center center;
-    background-size: cover;
-    width: 90%;
-    padding: 12px;
-    border: none;
-    border-radius: 5px;
-    text-align: center;
-    font-size: 16px;
-    color: #333;
-}
-.loginbtn {
-    background: url('/assets/loginregister/loginBtn.png') no-repeat center center;
-    background-size: cover;
-    width: 40%;
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    text-align: center;
-    font-size: 16px;
-    color: #333;
-    cursor: pointer;
-}
-
-#loginForm{
-    margin-top: 60px;
-}
-
-
-/* Register Page */
-.register-container {
-    background: url('/assets/loginregister/rContainer.png') no-repeat center center ;
-    background-size: 80% 100%; /* Stretches it to fit */
-    width: 300px;
-    height: auto;
-    min-height: 580px;
-    margin: 100px auto;
-    padding: 350px 175px 10px 150px;
-    background-size: cover;
-    border-radius: 20px;
-}
-.select-field {
-    background: url('/assets/loginregister/field.png') no-repeat center center;
-    background-size: cover;
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    text-align: center;
-    font-size: 16px;
-    color: #333;
-}
-
-.registerbtn {
-    background: url('/assets/loginregister/rbutton.png') no-repeat center center;
-    background-size: contain;
-    width: 80%;
-    padding: 15px;
-    border: none;
-    border-radius: 10px;
-    text-align: center;
-}
-
-/* Reset Page */
-.reset-container {
-    background: url('/assets/loginregister/resetContainer.png') no-repeat center center ;
-    background-size: cover; /* Stretches it to fit */
-    width: 600px;
-    height: auto;
-    min-height: 580px;
-    margin: 100px auto;
-    padding: 450px 175px 10px 150px;
-    background-size: cover;
-    border-radius: 20px;
-}
-.input-fieldreset {
-    background: url('/assets/loginregister/field.png') no-repeat center center;
-    background-size: cover;
-    width: 50%;
-    padding: 18px;
-    border: none;
-    border-radius: 5px;
-    text-align: center;
-    font-size: 16px; /* Slightly reduce font size */
-    color: #333;
-}
-.resetbtn {
-    background: url('/assets/loginregister/resetBtn.png') no-repeat center center;
-    background-size: contain;
-    width: 20%;
-    padding: 15px;
-    border: none;
-    border-radius: 10px;
-    text-align: center;
-}
-
-/* Main menu Page */
-.mainmenu-backgrd {
-    background: url('/assets/mainmenu/mainmenubg.png') no-repeat center center;
-    background-size: cover;
-}
-
-/* Guild page*/
-.guildbg {
-    background: url('/assets/guild/guildbg.png') no-repeat center center;
-    background-size: cover;
-}
-.gcontainer {  
-    background: url('/assets/guild/gcontainer.png') no-repeat center top;
-    background-size: contain;
-    width: 600px;
-    height: auto;
-    min-height: 800px;
-    margin: 100px auto;
-    padding: 500px 155px 20px 150px;
-    border-radius: 20px;
-}
-.ginputfield {
-    background: url('/assets/guild/sbar.png') no-repeat center center;
-    background-size: cover;
-    width: 80%;
-    padding: 30px;
-    border: none;
-    border-radius: 5px;
-    text-align: center;
-    font-size: 16px;
-    color: #333;
-}
-.gjoinguildbtn {
-    background: url('/assets/guild/jgbtn.png') no-repeat center center;
-    background-size: contain;
-    width: 60%;
-    padding: 30px;
-    border: none;
-    border-radius: 10px;
-    text-align: center;
-    color:#000
-}
-.gleaveguildbtn {
-    background: url('/assets/guild/lgbtn.png') no-repeat center center;
-    background-size: contain;
-    width: 60%;
+    margin: 150px auto;
     padding: 20px;
-    border: none;
+    background: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
-    text-align: center;
-    color:#000
 }
-
-.sbackground {
-    background: url('/assets/settings/sbackground.png') no-repeat center center ;
-    background-size: cover;
-}
-
-.scontainer {
-    background: url('/assets/settings/scontainer.png') no-repeat center top ;
-    background-size: contain;
-    width: 300px;
-    height: 570px;
-    margin: 100px auto;
-    padding: 300px 250px 150px 250px;
-    background-size: cover;
-    border-radius: 50px;
-    color:#aaa;
-}
-.bthbtn {
-    background: url('/assets/settings/bthbtn.png') no-repeat center center;
-    background-size: contain;
-    padding: 80px 80px 300px 80px;
-    border: none;
-    border-radius: 10px;
-    text-align: center;
-    color:#000
-}
-/****************************************************************************************************************************/
-.top-buttons {
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
-}
-.top-buttons .logout-btn{
-    background: url(/assets/mainmenu/Lgoutbtn.png) no-repeat center;
-    background-size: cover;
-    position: absolute;
-    top: 80px; /* Distance from the top */
-    right: 30px; /* Distance from the right */
-    padding: 40px 250px 30px 50px ;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-    transform: scale(1.1);
-
-}
-/* Centered Character & Buttons */
-.main-menu {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 80vh;
-}
-
-.menu-buttons {
-    display: flex;
-    gap: 30px;
-}
-
-/*Nav container*/
-.menu-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-}
-
-/* Circular Buttons */
-.menu-button {
-    background: url('/assets/mainmenu/button.png') no-repeat center;
-    background-size: cover;
-    width: 150px;
-    height: 140px;
-    border-radius: 60%;
-    color: white;
-    font-size: 18px;
-    font-family: 'Arial';
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-.menu-button:hover {
-    transform: scale(1.1);
-}
-
-.profilebtn {
-    width: 450px;
-    height: 450px;
-    background: url('/assets/mainmenu/profile.png') no-repeat center;
-    background-size: cover;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.3s;
-}
-
-.profilebtn:hover {
-    transform: scale(1.1);
-}
-
-.bottom-buttons {
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
-}
-.bottom-buttons .settings-btn{
-    background: url(/assets/mainmenu/setbtn.png) no-repeat center;
-    background-size: cover;
-    position: absolute;
-    bottom: 10px; /* Distance from the bottom */
-    right: 100px; /* Distance from the right */
-    padding: 40px 250px 30px 50px ;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: 0.3s;
-}
-.settings-btn:hover {
-    transform: scale(1.1);
-}
-/****************************************************************************************************************************/
-
-/* Placeholder styling */
-.input-field::placeholder {
-    color: #666;
-    opacity: 1;
-}
-
-
-/* Placeholder styling */
-.input-field::placeholder {
-    color: #666;
-    opacity: 1;
-}
-
-/* Ensure text is visible when typing */
-input::placeholder {
-    color: #666;
-    opacity: 1;
-}
-
 
 /* Game Page */
 .game-container {
@@ -576,9 +279,37 @@ textarea {
 }
 
 .guild-item {
-    background-color: white;
-    padding: 15px;
-    margin: 10px 0;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+}
+
+.guild-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.guild-buttons button {
+    flex: 1;
+}
+
+.danger-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.danger-button:hover {
+    background-color: #c82333;
+}
+
+.delete-guild-section {
+    margin-top: 20px;
+    padding-top: 10px;
 }
