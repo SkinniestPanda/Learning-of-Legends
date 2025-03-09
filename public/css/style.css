@@ -162,6 +162,79 @@ input, select {
     background: url('/assets/mainmenu/mainmenubg.png') no-repeat center center;
     background-size: cover;
 }
+
+/* Guild page*/
+.guildbg {
+    background: url('/assets/guild/guildbg.png') no-repeat center center;
+    background-size: cover;
+}
+.gcontainer {  
+    background: url('/assets/guild/gcontainer.png') no-repeat center top;
+    background-size: contain;
+    width: 600px;
+    height: auto;
+    min-height: 800px;
+    margin: 100px auto;
+    padding: 500px 155px 20px 150px;
+    border-radius: 20px;
+}
+.ginputfield {
+    background: url('/assets/guild/sbar.png') no-repeat center center;
+    background-size: cover;
+    width: 80%;
+    padding: 30px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+}
+.gjoinguildbtn {
+    background: url('/assets/guild/jgbtn.png') no-repeat center center;
+    background-size: contain;
+    width: 60%;
+    padding: 30px;
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+    color:#000
+}
+.gleaveguildbtn {
+    background: url('/assets/guild/lgbtn.png') no-repeat center center;
+    background-size: contain;
+    width: 60%;
+    padding: 20px;
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+    color:#000
+}
+
+.sbackground {
+    background: url('/assets/settings/sbackground.png') no-repeat center center ;
+    background-size: cover;
+}
+
+.scontainer {
+    background: url('/assets/settings/scontainer.png') no-repeat center top ;
+    background-size: contain;
+    width: 300px;
+    height: 570px;
+    margin: 100px auto;
+    padding: 300px 250px 150px 250px;
+    background-size: cover;
+    border-radius: 50px;
+    color:#aaa;
+}
+.bthbtn {
+    background: url('/assets/settings/bthbtn.png') no-repeat center center;
+    background-size: contain;
+    padding: 80px 80px 300px 80px;
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+    color:#000
+}
 /****************************************************************************************************************************/
 .top-buttons {
     display: flex;

@@ -1,13 +1,13 @@
 /* pve.css */
 body {
+    background: url('/assets/mainmenu/mainmenubg.png') no-repeat center center;
+    background-size: cover;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
 }
 
 .container {
@@ -48,6 +48,8 @@ body {
 .gameplay-screen {
     display: none;
     text-align: center;
+    color: white;
+
 }
 
 #game-canvas {
@@ -59,9 +61,13 @@ body {
 
 .question {
     margin-top: 20px;
+    color: white;
+
 }
 
 .timer {
+    color: white;
+
     margin-top: 20px;
     font-size: 20px;
 }
