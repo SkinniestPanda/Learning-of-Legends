@@ -33,13 +33,6 @@
             <button onclick="joinGuild()">Join Guild</button>
         </div>
 
-        <!-- Current Guild Info -->
-        <div id="guildInfo">
-            <h3>Current Guild</h3>
-            <div id="currentGuildDetails"></div>
-            <button onclick="leaveGuild()" id="leaveGuildBtn">Leave Guild</button>
-        </div>
-
         <!-- All Guilds Section -->
         <div id="allGuildsSection">
             <h3>All Guilds</h3>
@@ -50,11 +43,11 @@
         <!-- Guild Details Modal -->
         <div id="guildDetailsModal" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
+                <span class="close" onclick="closeModal('guildDetailsModal')">&times;</span>
                 <h3>Guild Details</h3>
                 <div id="guildDetailsContent"></div>
                 <div id="guildActions">
-                    <button id="deleteGuildBtn" onclick="deleteGuild()" class="danger-button">Delete Guild</button>
+                    <button id="deleteGuildBtn" onclick="deleteGuild()" class="danger-button" style="display: none;">Delete Guild</button>
                 </div>
             </div>
         </div>

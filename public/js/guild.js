@@ -85,6 +85,7 @@ async function createGuild() {
     }
 }
 
+// Update the joinGuild function to refresh the current guild display
 async function joinGuild() {
     const guildId = document.getElementById('guildId').value;
     const password = document.getElementById('joinPassword').value;
@@ -133,6 +134,7 @@ async function joinGuild() {
     }
 }
 
+// Update leaveGuild function
 async function leaveGuild() {
     const guildId = document.getElementById('guildId').value;
 
@@ -158,15 +160,21 @@ async function leaveGuild() {
     }
 }
 
-// Update the viewGuildDetails function to store guild infol
+// Update the viewGuildDetails function to store guild info
 async function viewGuildDetails(guildId) {
+    const token = localStorage.getItem('token');
     try {
-        const response = await fetch(`/api/guild/details/${guildId}`);
+        const response = await fetch(`/api/guild/details/${guildId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         const data = await response.json();
         
         if (response.ok) {
-            // currentGuildId = data.guild.id;
-            // currentGuildLeaderId = data.guild.leader_id;
+            // Store the current guild ID and leader ID
+            window.currentGuildId = data.guild.id;
+            window.currentGuildLeaderId = data.guild.leader_id;
             
             const modal = document.getElementById('guildDetailsModal');
             const content = document.getElementById('guildDetailsContent');
@@ -186,8 +194,12 @@ async function viewGuildDetails(guildId) {
                 </div>
             `;
             
-            // Show delete button only for guild leader
-            // deleteBtn.style.display = currentGuildLeaderId === TEST_USER_ID ? 'block' : 'none';
+            // Show delete button for guild leader or admin
+            const userId = parseInt(localStorage.getItem('userId'));
+            const isGuildLeader = window.currentGuildLeaderId === userId;
+            const isAdmin = localStorage.getItem('role') === 'admin';
+            
+            deleteBtn.style.display = (isGuildLeader || isAdmin) ? 'block' : 'none';
             
             modal.style.display = 'block';
         } else {
@@ -198,22 +210,29 @@ async function viewGuildDetails(guildId) {
     }
 }
 
-// Add the deleteGuild function
+// Update the deleteGuild function
 async function deleteGuild() {
-    if (!currentGuildId) return;
+    if (!window.currentGuildId) {
+        alert('No guild selected');
+        return;
+    }
     
     if (!confirm('Are you sure you want to delete this guild? This action cannot be undone.')) {
         return;
     }
 
+    const token = localStorage.getItem('token');
+    const userId = parseInt(localStorage.getItem('userId'));
+
     try {
-        const response = await fetch(`/api/guild/delete/${currentGuildId}`, {
+        const response = await fetch(`/api/guild/delete/${window.currentGuildId}`, {
             method: 'DELETE',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                userId: TEST_USER_ID
+                userId: userId
             })
         });
         
@@ -255,7 +274,9 @@ async function refreshGuilds() {
                     <p>Members: ${guild.member_count}</p>
                     <p>Created: ${new Date(guild.created_at).toLocaleDateString()}</p>
                     <p>ID: ${guild.id}</p>
-                    <button onclick="viewGuildMembers(${guild.id})" class="primary-button">View Members</button>
+                    <div class="guild-buttons">
+                        <button onclick="viewGuildMembers(${guild.id})" class="primary-button">View Members</button>
+                    </div>
                 `;
                 guildsList.appendChild(guildElement);
             });
@@ -299,6 +320,9 @@ async function viewGuildMembers(guildId) {
 
         const data = await response.json();
         if (response.ok) {
+            // Store the current guild ID for delete functionality
+            window.currentGuildId = guildId;
+            
             const membersListHtml = data.members.map(member => `
                 <div class="member-item">
                     <span>${member.username}</span>
@@ -310,6 +334,12 @@ async function viewGuildMembers(guildId) {
                 </div>
             `).join('');
 
+            // Check if user is guild leader or admin
+            const userId = parseInt(localStorage.getItem('userId'));
+            const isAdmin = localStorage.getItem('role') === 'admin';
+            const isGuildLeader = data.members.some(member => member.is_leader && member.user_id === userId);
+            const canDeleteGuild = isGuildLeader || isAdmin;
+            
             // Update the modal content
             const content = document.getElementById('guildMembersContent');
             content.innerHTML = `
@@ -322,6 +352,11 @@ async function viewGuildMembers(guildId) {
                     <input type="text" id="newMemberUsername" placeholder="Username">
                     <button onclick="addMember(${guildId})" class="primary-button">Add Member</button>
                 </div>
+                ${canDeleteGuild ? `
+                <div class="delete-guild-section">
+                    <button onclick="deleteGuild()" class="danger-button">Delete Guild</button>
+                </div>
+                ` : ''}
             `;
 
             // Open the modal

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PVP Gamemode</title>
     <link rel="stylesheet" href="css/pvp.css">
+    <link rel="stylesheet" href="css/style.css">
     <script src="questions/addition.js"></script>
     <script src="questions/subtraction.js"></script>
     <script src="questions/multiplication.js"></script>
@@ -13,16 +14,26 @@
 </head>
 
 <body>
+    <!-- Navigation bar with home link and user info -->
+    <div class="nav-bar">
+        <div>
+            <a href="/" class="nav-link">Home</a>
+            <a href="/guild.html" class="nav-link">Guild</a>
+            <a href="/pve.html" class="nav-link">PVE</a>
+            <a href="/pvp.html" class="nav-link">PVP</a>
+            <a href="/statistics.html" class="nav-link">Statistics</a>
+            <a href="/settings.html" class="nav-link">Settings</a>
+        </div>
+        <div class="user-info">
+            <span id="userDisplay">Not logged in</span>
+            <button id="logoutBtn" class="logout-btn" style="display: none;" onclick="logout()">Logout</button>
+        </div>
+    </div>
+    
     <!-- Homepage -->
     <div id="homepage" class="pvp-homepage">
-        <h1>Rankings #1257</h1>
         <div class="play-circle">
             <button onclick="goToPlay()">PLAY</button>
-        </div>
-        <div class="menu-buttons">
-            <button disabled>GUILD</button>
-            <button disabled>PVE</button>
-            <button disabled>SETTINGS</button>
         </div>
     </div>
 
@@ -42,16 +53,20 @@
         <!-- Battle Arena -->
         <div class="battlefield">
             <div class="player-area">
+                <div class="username player-username">You</div>
                 <div class="character player"></div>
                 <div class="health-bar player-health">
                     <div class="health-fill"></div>
+                    <div class="health-text">10/10</div>
                 </div>
             </div>
 
             <div class="enemy-area">
+                <div class="username enemy-username">Opponent</div>
                 <div class="character enemy"></div>
                 <div class="health-bar enemy-health">
                     <div class="health-fill"></div>
+                    <div class="health-text">10/10</div>
                 </div>
             </div>
         </div>

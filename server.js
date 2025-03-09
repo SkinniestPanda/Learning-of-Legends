@@ -42,10 +42,27 @@ const activeGames = {};
 io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
     
+    // Store username for the socket
+    socket.username = 'Player';  // Default username
+    
+    // Handle username setting
+    socket.on('setUsername', (data) => {
+        if (data.username) {
+            socket.username = data.username;
+            console.log(`Username set for ${socket.id}: ${socket.username}`);
+        }
+    });
+    
     // Handle player joining queue
     socket.on('joinQueue', (data) => {
         const mode = data.mode || '1v1';
         console.log(`Player ${socket.id} joined ${mode} queue`);
+        
+        // Update username if provided in the joinQueue data
+        if (data.username) {
+            socket.username = data.username;
+            console.log(`Updated username for ${socket.id} to ${socket.username} from joinQueue`);
+        }
         
         // Remove player from any existing queues
         removePlayerFromQueues(socket.id);
@@ -152,39 +169,62 @@ function removePlayerFromQueues(playerId) {
 }
 
 function matchPlayers(mode) {
-    // Check if we have enough players to start a game
-    const requiredPlayers = mode === '1v1' ? 2 : 6;
-    
-    if (pvpQueue[mode].length >= requiredPlayers) {
-        // Get the players for the game
-        const players = pvpQueue[mode].splice(0, requiredPlayers);
+    if (pvpQueue[mode].length >= 2) {
+        const player1Id = pvpQueue[mode].shift();
+        const player2Id = pvpQueue[mode].shift();
         
-        // Create a new game
-        const gameId = generateGameId();
-        activeGames[gameId] = {
-            id: gameId,
-            mode: mode,
-            players: players,
-            questions: generateQuestions(),
-            currentQuestionIndex: 0
-        };
+        const player1Socket = io.sockets.sockets.get(player1Id);
+        const player2Socket = io.sockets.sockets.get(player2Id);
         
-        // Notify all players that a match has been found
-        players.forEach(playerId => {
-            const playerSocket = io.sockets.sockets.get(playerId);
-            if (playerSocket) {
-                playerSocket.emit('matchFound', { gameId: gameId });
-            }
-        });
-        
-        // Send the first question
-        sendQuestionToPlayers(activeGames[gameId]);
+        if (player1Socket && player2Socket) {
+            const gameId = `game_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+            
+            // Create game instance with questions
+            activeGames[gameId] = {
+                players: [player1Id, player2Id],
+                mode: mode,
+                questions: generateQuestions(),
+                currentQuestionIndex: 0
+            };
+            
+            console.log(`Matching players: ${player1Id} (${player1Socket.username}) vs ${player2Id} (${player2Socket.username})`);
+            
+            // Send match found event to both players with opponent usernames
+            player1Socket.emit('matchFound', {
+                gameId: gameId,
+                opponent: player2Socket.username || 'Opponent'
+            });
+            
+            player2Socket.emit('matchFound', {
+                gameId: gameId,
+                opponent: player1Socket.username || 'Opponent'
+            });
+            
+            // Also send specific opponent info events
+            player1Socket.emit('opponentInfo', { username: player2Socket.username || 'Opponent' });
+            player2Socket.emit('opponentInfo', { username: player1Socket.username || 'Opponent' });
+            
+            // Send initial question
+            sendQuestionToPlayers(activeGames[gameId]);
+        }
     }
 }
 
 function sendQuestionToPlayers(game) {
+    // Make sure the game has questions
+    if (!game.questions || !Array.isArray(game.questions) || game.questions.length === 0) {
+        console.error('Game has no questions:', game);
+        game.questions = generateQuestions();
+        game.currentQuestionIndex = 0;
+    }
+    
     // Get the next question
     const question = game.questions[game.currentQuestionIndex];
+    
+    if (!question) {
+        console.error('Invalid question at index', game.currentQuestionIndex);
+        return;
+    }
     
     // Increment the question index for next time
     game.currentQuestionIndex = (game.currentQuestionIndex + 1) % game.questions.length;

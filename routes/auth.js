@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { authenticateToken, authenticateAdmin } = require('../middleware/auth');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key'; // In production, use environment variable
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key'; 
 
 // Register new student
 router.post('/register', async (req, res) => {

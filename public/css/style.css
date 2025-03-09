@@ -279,9 +279,37 @@ textarea {
 }
 
 .guild-item {
-    background-color: white;
-    padding: 15px;
-    margin: 10px 0;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+}
+
+.guild-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.guild-buttons button {
+    flex: 1;
+}
+
+.danger-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.danger-button:hover {
+    background-color: #c82333;
+}
+
+.delete-guild-section {
+    margin-top: 20px;
+    padding-top: 10px;
 }

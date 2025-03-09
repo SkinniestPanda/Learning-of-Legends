@@ -10,16 +10,16 @@ body {
 h1,
 h2 {
     color: #ffbb00;
+    margin: 10px 0;
 }
 
 h1 {
     font-size: 2.5rem;
-    margin-top: 20px;
 }
 
 h2 {
-    font-size: 1.8rem;
-    margin-top: 20px;
+    font-size: 1.6rem;
+    margin: 5px 0;
 }
 
 .hidden {
@@ -31,11 +31,11 @@ h2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 20px auto;
-    padding: 20px;
+    margin: 5px auto;
+    padding: 10px;
     background-color: #e4e4f4;
     border-radius: 10px;
-    height: 200px;
+    height: 130px;
     width: 60%;
 }
 
@@ -84,9 +84,38 @@ h2 {
     border-radius: 5px;
 }
 
+/* Username and Health Text */
+.username {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 14px;
+}
+
+.player-username {
+    color: #3498db;
+}
+
+.enemy-username {
+    color: #e74c3c;
+}
+
+.health-text {
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 2px 5px;
+    border-radius: 3px;
+}
+
 /* Question Box */
 .question-container {
-    margin-top: 40px;
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -94,7 +123,7 @@ h2 {
 
 .question-box {
     width: 200px;
-    height: 60px;
+    height: 50px;
     background-color: #ffbb00;
     display: flex;
     justify-content: center;
@@ -102,7 +131,7 @@ h2 {
     font-size: 1.2rem;
     font-weight: bold;
     border-radius: 5px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 /* Answer Buttons */
@@ -128,8 +157,8 @@ h2 {
 
 /* Back Button */
 .back-button {
-    margin-top: 20px;
-    padding: 10px 20px;
+    margin-top: 15px;
+    padding: 8px 16px;
     border: none;
     background-color: grey;
     color: white;
@@ -141,7 +170,7 @@ h2 {
     font-size: 1.2rem;
     font-weight: bold;
     color: red;
-    margin-top: 10px;
+    margin: 5px 0;
 }
 
 .battlefield {
@@ -157,19 +186,19 @@ h2 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 80vh;
+    min-height: 40vh;
 }
 
 /* Play Circle Button */
 .play-circle {
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     background-color: #ffbb00;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 30px 0;
+    margin: 10px 0;
     transition: transform 0.3s ease;
 }
 
@@ -178,7 +207,7 @@ h2 {
 }
 
 .play-circle button {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     font-weight: bold;
     background: none;
     border: none;

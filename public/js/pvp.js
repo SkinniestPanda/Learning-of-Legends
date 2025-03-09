@@ -1,4 +1,4 @@
-// PVP Game System for Math Challenge
+  // PVP Game System for Math Challenge
 // This script handles 1v1 matchmaking and gameplay
 
 // Socket connection for real-time communication
@@ -9,6 +9,8 @@ let playerHealth = 10;
 let opponentHealth = 10;
 let currentQuestion = null;
 let gameMode = '1v1'; // Default to 1v1 mode
+let playerUsername = 'You';
+let opponentUsername = 'Opponent';
 
 // Connect to the server when the page loads
 document.addEventListener('DOMContentLoaded', () => {
@@ -20,6 +22,17 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Setup UI event listeners
     setupEventListeners();
+    
+    // Get player username from localStorage if available
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+        playerUsername = storedUsername;
+        // Update the display name in the nav bar
+        const userDisplay = document.getElementById('userDisplay');
+        if (userDisplay) {
+            userDisplay.textContent = storedUsername;
+        }
+    }
 });
 
 function initializeSocket() {
@@ -30,6 +43,11 @@ function initializeSocket() {
     socket.on('connect', () => {
         console.log('Connected to server');
         updateStatus('Connected to server');
+        
+        // Send the player's username to the server upon connection
+        if (playerUsername !== 'You') {
+            socket.emit('setUsername', { username: playerUsername });
+        }
     });
     
     socket.on('matchFound', handleMatchFound);
@@ -37,6 +55,17 @@ function initializeSocket() {
     socket.on('opponentAnswer', handleOpponentAnswer);
     socket.on('gameOver', handleGameOver);
     socket.on('opponentDisconnect', handleOpponentDisconnect);
+    
+    // Add new event listener for opponent info updates
+    socket.on('opponentInfo', (data) => {
+        console.log('Received opponentInfo event:', data);
+        if (data && data.username) {
+            opponentUsername = data.username;
+            console.log('Updated opponent username to:', opponentUsername);
+            // Update the display if we're in a game
+            updateOpponentDisplay();
+        }
+    });
 }
 
 function setupEventListeners() {
@@ -81,7 +110,10 @@ function joinQueue() {
     if (!socket || inQueue) return;
     
     inQueue = true;
-    socket.emit('joinQueue', { mode: gameMode });
+    socket.emit('joinQueue', { 
+        mode: gameMode,
+        username: playerUsername // Send username when joining queue
+    });
     updateStatus('Joining queue for ' + gameMode + '...');
     
     // Show loading/waiting UI
@@ -114,6 +146,18 @@ function handleMatchFound(data) {
     currentGame = data.gameId;
     updateStatus('Match found! Game starting...');
     
+    console.log('Match found data:', data);
+    
+    // Update opponent username if provided in match data
+    if (data.opponent) {
+        if (typeof data.opponent === 'string') {
+            opponentUsername = data.opponent;
+        } else if (data.opponent && data.opponent.username) {
+            opponentUsername = data.opponent.username;
+        }
+        console.log('Opponent username set to:', opponentUsername);
+    }
+    
     // Show the game UI
     document.getElementById('play-mode').classList.add('hidden');
     document.getElementById('game-1v1').classList.remove('hidden');
@@ -121,6 +165,11 @@ function handleMatchFound(data) {
     // Reset health bars
     playerHealth = 10;
     opponentHealth = 10;
+    
+    // Update usernames display
+    document.querySelector('.player-username').textContent = playerUsername;
+    document.querySelector('.enemy-username').textContent = opponentUsername;
+    
     updateHealthBars();
 }
 
@@ -205,9 +254,32 @@ function submitAnswer(answer) {
 function updateHealthBars() {
     const playerHealthBar = document.querySelector('.player-health .health-fill');
     const enemyHealthBar = document.querySelector('.enemy-health .health-fill');
+    const playerHealthText = document.querySelector('.player-health .health-text');
+    const enemyHealthText = document.querySelector('.enemy-health .health-text');
     
     playerHealthBar.style.width = (playerHealth / 10 * 100) + '%';
     enemyHealthBar.style.width = (opponentHealth / 10 * 100) + '%';
+    
+    // Update the health text displays
+    playerHealthText.textContent = `${playerHealth}/10`;
+    enemyHealthText.textContent = `${opponentHealth}/10`;
+    
+    // Change color based on health level
+    if (playerHealth <= 3) {
+        playerHealthBar.style.backgroundColor = 'red';
+    } else if (playerHealth <= 6) {
+        playerHealthBar.style.backgroundColor = 'orange';
+    } else {
+        playerHealthBar.style.backgroundColor = 'green';
+    }
+    
+    if (opponentHealth <= 3) {
+        enemyHealthBar.style.backgroundColor = 'red';
+    } else if (opponentHealth <= 6) {
+        enemyHealthBar.style.backgroundColor = 'orange';
+    } else {
+        enemyHealthBar.style.backgroundColor = 'green';
+    }
 }
 
 function showAttackAnimation(attacker) {
@@ -253,9 +325,14 @@ function endGame(result) {
     
     if (result) {
         const resultMessage = result === 'win' ? 'You Won!' : 'You Lost!';
+        const opponentInfo = result === 'win' ? 
+            `You defeated ${opponentUsername}!` : 
+            `${opponentUsername} defeated you!`;
+            
         gameUI.innerHTML += `
             <div class="game-result">
                 <h2>${resultMessage}</h2>
+                <p>${opponentInfo}</p>
                 <button onclick="goBackToMode()">Back to Menu</button>
             </div>
         `;
@@ -289,4 +366,13 @@ function shuffleArray(array) {
         [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
     }
     return newArray;
+}
+
+// Helper function to update opponent display in the UI
+function updateOpponentDisplay() {
+    const enemyUsernameElement = document.querySelector('.enemy-username');
+    if (enemyUsernameElement) {
+        enemyUsernameElement.textContent = opponentUsername;
+        console.log('Updated enemy username element to:', opponentUsername);
+    }
 }

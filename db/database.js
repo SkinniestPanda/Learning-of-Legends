@@ -14,7 +14,7 @@ db.serialize(() => {
 
     // Guilds table
     db.run(`CREATE TABLE IF NOT EXISTS guilds (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY,
         name TEXT UNIQUE NOT NULL,
         password TEXT NOT NULL,
         description TEXT,
