@@ -29,6 +29,9 @@ questions = shuffle(questions);
 
 let currentQuestionIndex = 0;
 
+// Retrieve the current user ID from localStorage
+const currentUserId = localStorage.getItem("userId");
+
 function loadQuestion() {
   if (currentQuestionIndex >= questions.length) {
     currentQuestionIndex = 0; // Optionally, you can reshuffle if you want a new order for each cycle
@@ -69,7 +72,7 @@ function checkAnswer() {
   }
   
   const attempt = {
-    studentId: "student_001", // Replace with a dynamic identifier if available
+    studentId: currentUserId, // now dynamic
     question: currentQuestion.question,
     correctAnswer: currentQuestion.correctAnswer,
     studentAnswer: answer,

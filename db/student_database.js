@@ -33,13 +33,15 @@ function all(query, params = []) {
   });
 }
 
+
+
 // Initialize the database by creating the attempts table and indexes
 async function initializeDatabase() {
   try {
     await run(`
       CREATE TABLE IF NOT EXISTS attempts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        studentId TEXT,
+        studentId INTEGER,
         question TEXT,
         correctAnswer INTEGER,
         studentAnswer INTEGER,
