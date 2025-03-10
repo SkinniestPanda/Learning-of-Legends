@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <title>Settings</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class = "sbackground">
-    <div class="scontainer">
-        <label>Game Volume:</label>
+<body>
+    <h2>Settings</h2>
+    <label>Game Volume:</label>
     <input type="range" min="0" max="100">
     <label>Difficulty:</label>
     <select>
@@ -15,9 +15,6 @@
         <option>Hard</option>
     </select>
     <button onclick="saveSettings()">Save</button>
-    <br>
-
-    <a href="/index.html" class="bthbtn"></a>
     <script>
         function saveSettings() { alert("Settings Saved!"); }
     </script>

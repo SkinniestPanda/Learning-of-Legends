@@ -1,99 +1,46 @@
-/* General Styling */
+/* pvp.css */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f9;
-    text-align: center;
     margin: 0;
     padding: 0;
-}
-
-h1,
-h2 {
-    color: #ffbb00;
-}
-
-h1 {
-    font-size: 2.5rem;
-    margin-top: 20px;
-}
-
-h2 {
-    font-size: 1.8rem;
-    margin-top: 20px;
-}
-
-.hidden {
+    background-color: #222;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  
+  .hidden {
     display: none;
-}
-
-/* Battlefield Container */
-.battlefield {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #e4e4f4;
-    border-radius: 10px;
-    height: 200px;
-    width: 60%;
-}
-
-/* Player & Enemy Areas */
-.player-area,
-.enemy-area {
-    display: flex;
-    flex-direction: column-reverse;
-    /* Moves health bar above the character */
-    align-items: center;
-    gap: 15px;
-}
-
-/* Player & Enemy Characters */
-.character {
-    width: 50px;
-    height: 50px;
+  }
+  
+  .pvp-homepage {
+    position: center center;
+    padding: 400px 400px 400px 500px;
+  }
+  
+  .play-circle button {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border: none;
     border-radius: 50%;
-    position: relative;
-}
-
-.character.player {
-    background-color: #3498db;
-}
-
-.character.enemy {
-    background-color: #e74c3c;
-}
-
-/* Health Bar */
-.health-bar {
-    width: 100px;
-    height: 10px;
-    background-color: lightgray;
-    border-radius: 5px;
-    margin-top: 10px;
-    position: relative;
-    border: 2px solid white;
-    /* White border to make it stand out */
-}
-
-.health-fill {
-    width: 100%;
-    height: 100%;
-    background-color: green;
-    border-radius: 5px;
-}
-
-/* Question Box */
-.question-container {
-    margin-top: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.question-box {
-    width: 200px;
+    background-color: #ffbb00;
+    cursor: pointer;
+  }
+  
+  canvas {
+    border: 2px solid #444;
+    background-color: #000;
+    margin: 20px auto;
+    display: block;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .question-container {
+    margin: 50px;
+  }
+  
+  .question-box {
+    width: 300px;
     height: 60px;
     background-color: #ffbb00;
     display: flex;
@@ -102,32 +49,24 @@ h2 {
     font-size: 1.2rem;
     font-weight: bold;
     border-radius: 5px;
-    margin-bottom: 15px;
-}
-
-/* Answer Buttons */
-.answer-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
-.answer-buttons button {
+    margin: 0 auto 15px;
+  }
+  
+  .answer-buttons button {
     padding: 10px 20px;
+    margin: 5px;
     background-color: #0984e3;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 1rem;
-}
-
-.answer-buttons button:hover {
+  }
+  
+  .answer-buttons button:hover {
     background-color: #0066cc;
-}
-
-/* Back Button */
-.back-button {
+  }
+  
+  .back-button {
     margin-top: 20px;
     padding: 10px 20px;
     border: none;
@@ -135,142 +74,37 @@ h2 {
     color: white;
     border-radius: 5px;
     cursor: pointer;
-}
+  }
 
-.timer {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: red;
-    margin-top: 10px;
-}
-
-.battlefield {
+  .pvp-backgrd {
+    background: url('/assets/guild/guildbg.png') no-repeat center center;
     background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    transition: background-image 0.5s ease-in-out;
-}
+    width: 90vw;  /* Ensures it spans the full viewport width */
+    height: 90vh; /* Ensures it spans the full viewport height */
+  }
+  #play-mode {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+  }
 
-/* PVP Homepage */
-.pvp-homepage {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 80vh;
-}
+  #play-mode h2 {
+      margin-bottom: 20px;
+  }
 
-/* Play Circle Button */
-.play-circle {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    background-color: #ffbb00;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 30px 0;
-    transition: transform 0.3s ease;
-}
+  #play-mode button-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px; /* Adds spacing between buttons */
+  }
 
-.play-circle:hover {
-    transform: scale(1.1);
-}
+  #play-mode button {
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+  }
 
-.play-circle button {
-    font-size: 1.8rem;
-    font-weight: bold;
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-}
 
-/* Menu Buttons */
-.menu-buttons {
-    display: flex;
-    gap: 20px;
-    margin-top: 20px;
-}
-
-.menu-buttons button {
-    padding: 10px 20px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.menu-buttons button:disabled {
-    background-color: #95a5a6;
-    cursor: not-allowed;
-}
-
-/* Loader Animation for Queue */
-.loader {
-    width: 50px;
-    height: 50px;
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #ffbb00;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 20px auto;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Attack Animation */
-.character.attack {
-    animation: attack-animation 0.5s ease;
-}
-
-@keyframes attack-animation {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.3); }
-    100% { transform: scale(1); }
-}
-
-/* Game Result Overlay */
-.game-result {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-}
-
-.game-result h2 {
-    color: white;
-    font-size: 3rem;
-    margin-bottom: 30px;
-}
-
-.game-result button {
-    padding: 15px 30px;
-    background-color: #ffbb00;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.2rem;
-    cursor: pointer;
-}
-
-/* Timer Animation */
-.timer.warning {
-    animation: warning-pulse 0.5s infinite alternate;
-}
-
-@keyframes warning-pulse {
-    from { opacity: 1; }
-    to { opacity: 0.5; }
-}
+  

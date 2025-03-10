@@ -8,66 +8,134 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background-color: #222;
+    font-family: Arial, sans-serif;
+    color: white;
 }
 
 .container {
     text-align: center;
 }
 
-.play-button {
-    padding: 15px 30px;
-    font-size: 24px;
-    background-color: #4CAF50;
+#gameplay-screen {
+    display: none;
+    text-align: center;
+}
+
+canvas {
+    border: 2px solid #444;
+    background-image: url("../images/background/30.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Turn Order Container - Blue Box at Top Center */
+#turn-order-container {
+    position: absolute;
+    top: 10px; /* Adjust vertical spacing as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #3498db; /* Blue background */
+    padding: 10px 20px;
+    border-radius: 10px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    z-index: 100; /* Ensure it appears on top */
+  }
+  
+  /* Each Turn Order Item */
+  .turn-order-item {
+    text-align: center;
+  }
+  
+  .turn-order-item img {
+    width: 40px; /* Adjust icon size */
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+  }
+  
+  .turn-order-item.current img {
+    border-color: #f1c40f; /* Yellow border for current turn */
+  }
+  
+  .turn-order-item p {
+    margin: 5px 0 0 0;
+    font-size: 0.9rem;
+    color: #fff;
+  }
+  
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #444;
     color: white;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 20px;
+    transition: background-color 0.3s ease;
 }
 
-.additional-buttons {
+button:hover {
+    background-color: #555;
+}
+
+button:active {
+    background-color: #666;
+}
+
+/* Quiz UI styling (similar to your PvP mode) */
+.question-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.question-box {
+    width: 300px;
+    height: 80px;
+    background-color: #ffbb00;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.answer-buttons {
     display: flex;
     justify-content: center;
     gap: 10px;
 }
 
-.guild-button, .pvp-button, .settings-button {
+.answer-buttons button {
     padding: 10px 20px;
-    font-size: 18px;
-    background-color: #008CBA;
+    background-color: #0984e3;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 1rem;
 }
 
-.guild-button:hover, .pvp-button:hover, .settings-button:hover, .play-button:hover {
-    opacity: 0.8;
-}
-
-.gameplay-screen {
-    display: none;
-    text-align: center;
-    color: white;
-
-}
-
-#game-canvas {
-    display: block;
-    margin: 0 auto;
-    background-color: #008CBA;
-    border: 2px solid #000;
-}
-
-.question {
-    margin-top: 20px;
-    color: white;
-
+.answer-buttons button:hover {
+    background-color: #0066cc;
 }
 
 .timer {
-    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: red;
+    margin-top: 10px;
+}
 
-    margin-top: 20px;
-    font-size: 20px;
+/* Utility class to hide elements */
+.hidden {
+    display: none;
 }

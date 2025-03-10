@@ -1,118 +1,128 @@
-/**********************************
- * Parent Analysis Dashboard Logic
- **********************************/
+// parent_analysis.js
 
-function loadDashboard() {
-  // Get the selected filter value from the dropdown.
-  const filter = document.getElementById("filterDropdown").value;
-  
-  // Retrieve your child's attempts from localStorage.
-  let attempts = JSON.parse(localStorage.getItem("attempts")) || [];
-  
-  // If a specific type is selected, filter the attempts.
-  if (filter !== "all") {
-    attempts = attempts.filter(a => a.operation.toLowerCase() === filter.toLowerCase());
-  }
-  
-  // Compute summary data.
-  const totalQuestions = attempts.length;
-  const correctAnswers = attempts.filter(a => a.isCorrect).length;
-  const wrongAnswers = totalQuestions - correctAnswers;
-  const percentageCorrect = totalQuestions ? ((correctAnswers / totalQuestions) * 100).toFixed(1) : 0;
-  
-  // Update overall statistics.
-  document.getElementById("totalQuestions").textContent = totalQuestions;
-  document.getElementById("correctAnswers").textContent = correctAnswers;
-  document.getElementById("wrongAnswers").textContent = wrongAnswers;
-  document.getElementById("percentageCorrect").textContent = percentageCorrect;
-  
-  // Compute overall text analysis for your child's performance.
-  let overallAnalysis = "";
-  if (percentageCorrect >= 70) {
-    overallAnalysis = "Overall, your child has an excellent understanding of the question types.";
-  } else if (percentageCorrect >= 40) {
-    overallAnalysis = "Overall, your child has a good understanding but could improve in some areas.";
-  } else if (percentageCorrect >= 10) {
-    overallAnalysis = "Overall, your child shows a weak understanding and may need more practice.";
-  } else {
-    overallAnalysis = "Overall, your child has little understanding and should seek additional help.";
-  }
-  
-  // Group attempts by question type.
-  const typeResults = {};
-  attempts.forEach(attempt => {
-    const op = attempt.operation;
-    if (!typeResults[op]) {
-      typeResults[op] = { correct: 0, wrong: 0, total: 0 };
+// Helper function to capitalize the first letter of a string
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// Main function to load and process student attempt data
+async function loadDashboard() {
+  try {
+    // Fetch all attempts from the API endpoint
+    const response = await fetch('/api/attempts');
+    const attempts = await response.json();
+
+    // Apply filtering based on dropdown selection (if any)
+    const filterDropdown = document.getElementById("filterDropdown");
+    let filteredAttempts = attempts;
+    if (filterDropdown && filterDropdown.value !== "all") {
+      filteredAttempts = attempts.filter(a => {
+        const op = a.operation ? a.operation.toLowerCase() : "unknown";
+        return op === filterDropdown.value.toLowerCase();
+      });
     }
-    typeResults[op].total++;
-    if (attempt.isCorrect) {
-      typeResults[op].correct++;
+
+    // Compute overall statistics
+    const totalQuestions = filteredAttempts.length;
+    const correctAnswers = filteredAttempts.filter(a => a.isCorrect).length;
+    const wrongAnswers = totalQuestions - correctAnswers;
+    const percentageCorrect = totalQuestions ? ((correctAnswers / totalQuestions) * 100).toFixed(1) : 0;
+
+    // Update overall stats in the DOM
+    document.getElementById("totalQuestions").textContent = totalQuestions;
+    document.getElementById("correctAnswers").textContent = correctAnswers;
+    document.getElementById("wrongAnswers").textContent = wrongAnswers;
+    document.getElementById("percentageCorrect").textContent = percentageCorrect;
+
+    // Build overall performance analysis summary (parent perspective)
+    let overallAnalysis = "";
+    if (percentageCorrect >= 70) {
+      overallAnalysis = "Overall, your child has an excellent understanding of the question types.";
+    } else if (percentageCorrect >= 40) {
+      overallAnalysis = "Overall, your child has a good understanding but could improve in some areas.";
+    } else if (percentageCorrect >= 10) {
+      overallAnalysis = "Overall, your child shows a weak understanding and may need more practice.";
     } else {
-      typeResults[op].wrong++;
+      overallAnalysis = "Overall, your child shows little understanding and should seek additional help.";
     }
-  });
-  
-  // Build a detailed type summary.
-  let detailedTypeSummary = "";
-  for (const op in typeResults) {
-    const total = typeResults[op].total;
-    const correct = typeResults[op].correct;
-    const percent = total ? ((correct / total) * 100).toFixed(1) : 0;
-    let opAnalysis = "";
-    if (percent >= 70) {
-      opAnalysis = "has an excellent understanding";
-    } else if (percent >= 40) {
-      opAnalysis = "has a good understanding with room for improvement";
-    } else {
-      opAnalysis = "needs significant improvement";
-    }
-    detailedTypeSummary += `<br><strong>${op.charAt(0).toUpperCase() + op.slice(1)}:</strong> ${correct}/${total} (${percent}%) - your child ${opAnalysis}.`;
-  }
-  
-  // Combine overall and detailed type summaries.
-  document.getElementById("textAnalysis").innerHTML = overallAnalysis + detailedTypeSummary;
-  
-  // Build a list of wrong attempts details.
-  const wrongAttempts = attempts.filter(a => !a.isCorrect);
-  const wrongAttemptsList = document.getElementById("wrongAttemptsList");
-  wrongAttemptsList.innerHTML = "";
-  if (wrongAttempts.length > 0) {
-    wrongAttempts.forEach(attempt => {
-      const li = document.createElement("li");
-      const attemptDate = new Date(attempt.timestamp);
-      li.innerHTML = `
-        <strong>Question:</strong> "${attempt.question}"<br>
-        <strong>Type:</strong> ${attempt.operation}<br>
-        <strong>Your Child's Answer:</strong> ${attempt.studentAnswer}<br>
-        <strong>Correct Answer:</strong> ${attempt.correctAnswer}<br>
-        <strong>Attempted on:</strong> ${attemptDate.toLocaleString()}
-      `;
-      wrongAttemptsList.appendChild(li);
+
+    // Group attempts by question type (using 'unknown' if operation is missing)
+    const typeResults = {};
+    filteredAttempts.forEach(attempt => {
+      const op = attempt.operation ? attempt.operation.toLowerCase() : "unknown";
+      if (!typeResults[op]) {
+        typeResults[op] = { correct: 0, wrong: 0, total: 0 };
+      }
+      typeResults[op].total++;
+      if (attempt.isCorrect) typeResults[op].correct++;
+      else typeResults[op].wrong++;
     });
-  } else {
-    wrongAttemptsList.innerHTML = "<li>No wrong attempts recorded.</li>";
-  }
-  
-  // Render the overall performance pie chart.
-  renderOverallChart(correctAnswers, wrongAnswers);
-  
-  // Create type-specific charts and text summaries.
-  createTypeCharts(attempts);
-  
-  // Populate the questions answered list.
-  const questionsAnsweredList = document.getElementById("questionsAnsweredList");
-  if (questionsAnsweredList) {
+
+    // Build detailed type-specific analysis with extensive feedback
+    let detailedTypeSummary = "";
+    for (const op in typeResults) {
+      const total = typeResults[op].total;
+      const correct = typeResults[op].correct;
+      const percent = total ? ((correct / total) * 100).toFixed(1) : 0;
+      let opFeedback = "";
+      if (percent >= 90) {
+        opFeedback = "Excellent mastery! Your child has a strong command of this topic—challenge them with more complex problems.";
+      } else if (percent >= 70) {
+        opFeedback = "Very good performance. Your child understands most concepts well but could benefit from reviewing a few minor details.";
+      } else if (percent >= 50) {
+        opFeedback = "Fair understanding. Key concepts are grasped, yet some areas need focused review and additional practice.";
+      } else if (percent >= 30) {
+        opFeedback = "Below average performance. It is recommended that your child revisits foundational concepts and practices more problems in this area.";
+      } else {
+        opFeedback = "Poor performance. Your child is struggling with this topic and should receive targeted help and extensive practice.";
+      }
+      detailedTypeSummary += `<br><strong>${capitalize(op)}:</strong> ${correct} out of ${total} (${percent}%) – ${opFeedback} <br>`;
+    }
+
+    // Combine overall analysis and detailed breakdown, and update the analysis container
+    document.getElementById("analysisSummary").innerHTML = overallAnalysis + detailedTypeSummary;
+
+    // Render the overall performance pie chart
+    renderOverallChart(correctAnswers, wrongAnswers);
+
+    // Render pie charts for each question type
+    renderTypeCharts(typeResults);
+
+    // Populate wrong attempts list
+    const wrongAttempts = filteredAttempts.filter(a => !a.isCorrect);
+    const wrongAttemptsList = document.getElementById("wrongAttemptsList");
+    wrongAttemptsList.innerHTML = "";
+    if (wrongAttempts.length > 0) {
+      wrongAttempts.forEach(attempt => {
+        const li = document.createElement("li");
+        const attemptDate = new Date(attempt.timestamp);
+        li.innerHTML = `
+          <strong>Question:</strong> "${attempt.question}"<br>
+          <strong>Type:</strong> ${attempt.operation || "unknown"}<br>
+          <strong>Your Child's Answer:</strong> ${attempt.studentAnswer}<br>
+          <strong>Correct Answer:</strong> ${attempt.correctAnswer}<br>
+          <strong>Attempted on:</strong> ${attemptDate.toLocaleString()}
+        `;
+        wrongAttemptsList.appendChild(li);
+      });
+    } else {
+      wrongAttemptsList.innerHTML = "<li>No wrong attempts recorded.</li>";
+    }
+
+    // Populate questions answered list
+    const questionsAnsweredList = document.getElementById("questionsAnsweredList");
     questionsAnsweredList.innerHTML = "";
-    attempts.forEach(result => {
+    filteredAttempts.forEach(result => {
       const li = document.createElement("li");
       li.innerHTML = `<strong>Question:</strong> ${result.question} - <strong>Your Child's Answer:</strong> ${result.studentAnswer} - <strong>Status:</strong> ${result.isCorrect ? "Correct" : "Wrong"}`;
       questionsAnsweredList.appendChild(li);
     });
+  } catch (err) {
+    console.error("Error loading dashboard:", err);
   }
 }
 
-// Function to render the overall performance pie chart.
+// Render overall performance pie chart using Chart.js
 function renderOverallChart(correct, wrong) {
   const ctx = document.getElementById('resultsChart').getContext('2d');
   if (window.resultsChartInstance) {
@@ -123,7 +133,6 @@ function renderOverallChart(correct, wrong) {
     data: {
       labels: ['Correct', 'Wrong'],
       datasets: [{
-        label: 'Child Performance',
         data: [correct, wrong],
         backgroundColor: [
           'rgba(75, 192, 192, 0.7)',
@@ -140,52 +149,40 @@ function renderOverallChart(correct, wrong) {
       responsive: true,
       plugins: {
         legend: { position: 'top' },
-        title: { display: true, text: 'Overall Child Performance' }
+        title: { display: true, text: 'Overall Student Performance' }
       }
     }
   });
 }
 
-// Function to create pie charts and text summaries for each question type.
-function createTypeCharts(attempts) {
-  const typeResults = {};
-  attempts.forEach(attempt => {
-    const op = attempt.operation;
-    if (!typeResults[op]) {
-      typeResults[op] = { correct: 0, wrong: 0, total: 0 };
-    }
-    typeResults[op].total++;
-    if (attempt.isCorrect) {
-      typeResults[op].correct++;
-    } else {
-      typeResults[op].wrong++;
-    }
-  });
-  
+// Render doughnut charts for each question type
+function renderTypeCharts(typeResults) {
   const chartsContainer = document.getElementById("chartsContainer");
-  chartsContainer.innerHTML = "";
-  
-  const analysisSummary = document.getElementById("analysisSummary");
-  analysisSummary.innerHTML = "";
-  
+  chartsContainer.innerHTML = ""; // Clear previous charts
   for (const op in typeResults) {
-    // Create a container for the chart.
-    const opContainer = document.createElement("div");
-    opContainer.style.marginBottom = "20px";
-    opContainer.style.border = "1px solid #ccc";
-    opContainer.style.padding = "10px";
+    // Create a container for this type's chart
+    const chartDiv = document.createElement("div");
+    chartDiv.style.width = "180px";
+    chartDiv.style.height = "180px";
     
-    // Create a canvas for the chart.
+    // Add a heading for the type
+    const heading = document.createElement("h4");
+    heading.textContent = capitalize(op);
+    chartDiv.appendChild(heading);
+    
+    // Create a canvas for the chart
     const canvas = document.createElement("canvas");
     canvas.id = `chart-${op}`;
-    canvas.width = 300;
-    canvas.height = 300;
-    opContainer.appendChild(canvas);
-    chartsContainer.appendChild(opContainer);
+    canvas.width = 180;
+    canvas.height = 180;
+    chartDiv.appendChild(canvas);
     
+    chartsContainer.appendChild(chartDiv);
+    
+    // Render a doughnut chart for this question type
     const ctx = canvas.getContext("2d");
     new Chart(ctx, {
-      type: 'pie',
+      type: 'doughnut',
       data: {
         labels: ['Correct', 'Wrong'],
         datasets: [{
@@ -204,35 +201,46 @@ function createTypeCharts(attempts) {
       options: {
         responsive: true,
         plugins: {
-          legend: { position: 'top' },
-          title: { 
-            display: true, 
-            text: `Performance in ${op.charAt(0).toUpperCase() + op.slice(1)}` 
-          }
+          legend: { position: 'bottom' },
+          title: { display: true, text: `${capitalize(op)} Performance` }
         }
       }
     });
-    
-    // Create a text summary for this type.
-    const total = typeResults[op].total;
-    const correct = typeResults[op].correct;
-    const percent = total ? ((correct / total) * 100).toFixed(1) : 0;
-    const summaryText = document.createElement("p");
-    summaryText.innerHTML = `<strong>${op.charAt(0).toUpperCase() + op.slice(1)}:</strong> Total Attempts: ${total}, Correct: ${correct}, Wrong: ${typeResults[op].wrong}, Percentage Correct: ${percent}%`;
-    analysisSummary.appendChild(summaryText);
   }
 }
 
-// Set up the dropdown event listener to filter the dashboard.
-document.getElementById("filterDropdown").addEventListener("change", loadDashboard);
-
-// Set up the "Clear Data" button functionality.
-document.getElementById("clearDataBtn").addEventListener("click", () => {
-  if (confirm("Are you sure you want to clear all child data?")) {
-    localStorage.removeItem("attempts");
-    loadDashboard();
+// Expand/Minimize functionality for wrong attempts and questions answered
+function toggleSection(containerId, buttonId) {
+  const container = document.getElementById(containerId);
+  const button = document.getElementById(buttonId);
+  if (container.style.display === "none" || container.style.display === "") {
+    container.style.display = "block";
+    button.textContent = "Minimize";
+  } else {
+    container.style.display = "none";
+    button.textContent = "Expand";
   }
-});
+}
 
-// Load the dashboard when the page loads.
-window.onload = loadDashboard;
+// Add event listeners for the expand/minimize buttons if they exist
+const toggleWrongBtn = document.getElementById("toggleWrongAttempts");
+if (toggleWrongBtn) {
+  toggleWrongBtn.addEventListener("click", () => {
+    toggleSection("wrongAttemptsContainer", "toggleWrongAttempts");
+  });
+}
+const toggleQABtn = document.getElementById("toggleQuestionsAnswered");
+if (toggleQABtn) {
+  toggleQABtn.addEventListener("click", () => {
+    toggleSection("questionsAnsweredContainer", "toggleQuestionsAnswered");
+  });
+}
+
+// Listen for filter dropdown changes
+const filterDropdown = document.getElementById("filterDropdown");
+if (filterDropdown) {
+  filterDropdown.addEventListener("change", loadDashboard);
+}
+
+// Load the dashboard on page load
+window.addEventListener("load", loadDashboard);

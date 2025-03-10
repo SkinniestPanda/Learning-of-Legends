@@ -4,7 +4,7 @@
     <title>Guild Mode</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="guildbg">
+<body class = "mainmenu-backgrd">
     <!-- Add this navigation section -->
     <div class="nav-bar">
         <a href="/" class="nav-link">Home</a>
@@ -13,7 +13,9 @@
             <button id="logoutBtn" class="logout-btn" style="display: none;">Logout</button>
         </div>
     </div>
-    <div class="gcontainer">        
+    <div class="container">
+        <h2>Guild Mode</h2>
+        
         <!-- Create Guild Section -->
         <div id="createGuildSection" style="display: none;">
             <h3>Create a Guild</h3>
@@ -26,16 +28,9 @@
         <!-- Join Guild Section -->
         <div id="joinGuildSection">
             <h3>Join a Guild</h3>
-            <input type="text" id="guildId" class="ginputfield" placeholder="Guild ID">
-            <input type="password" id="joinPassword" class="ginputfield" placeholder="Guild Password">
-            <button onclick="joinGuild()" class="gjoinguildbtn">Join Guild</button>
-        </div>
-
-        <!-- Current Guild Info -->
-        <div id="guildInfo">
-            <h3>Current Guild</h3>
-            <div id="currentGuildDetails"></div>
-            <button onclick="leaveGuild()" id="leaveGuildBtn" class ="gleaveguildbtn">Leave Guild</button>
+            <input type="text" id="guildId" placeholder="Guild ID">
+            <input type="password" id="joinPassword" placeholder="Guild Password">
+            <button onclick="joinGuild()">Join Guild</button>
         </div>
 
         <!-- All Guilds Section -->
@@ -48,11 +43,11 @@
         <!-- Guild Details Modal -->
         <div id="guildDetailsModal" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
+                <span class="close" onclick="closeModal('guildDetailsModal')">&times;</span>
                 <h3>Guild Details</h3>
                 <div id="guildDetailsContent"></div>
                 <div id="guildActions">
-                    <button id="deleteGuildBtn" onclick="deleteGuild()" class="danger-button">Delete Guild</button>
+                    <button id="deleteGuildBtn" onclick="deleteGuild()" class="danger-button" style="display: none;">Delete Guild</button>
                 </div>
             </div>
         </div>
