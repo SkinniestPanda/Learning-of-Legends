@@ -10,3 +10,14 @@ Team 66 Group Project
 -testuser1 : test1
 -testuser2 : testuser2
 -testuser3 : testuser3
+
+====================================================
+Instructions to install
+====================================================
+npm install node
+npm init -y
+
+====================================================
+to launch code
+====================================================
+node server.js
