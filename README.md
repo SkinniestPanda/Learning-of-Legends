@@ -37,7 +37,7 @@ The key files and folders in this project are:
 
 # Accounts 
 username || password 
-admin || admin
-testuser1 || testuser1 (parents)
-testuser2 || testuser2 (students)
-testuser3 || testuser3 (teachers)
+- admin || admin
+- testuser1 || testuser1 (parents)
+- testuser2 || testuser2 (students)
+- testuser3 || testuser3 (teachers)
